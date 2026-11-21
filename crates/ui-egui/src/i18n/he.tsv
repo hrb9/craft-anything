@@ -228,7 +228,7 @@ Change…	שינוי…
 Check	בדיקה
 Check .NET native calls	בדיקת קריאות Native של .NET
 Check a rebuild claim	בדיקת טענת בנייה מחדש
-Check a scripted web session	בדיקת הפעלת אינטרנט מתוסרטת
+Check a scripted web session	בדיקת הפעלה מתוסרטת בדפדפן
 Check an answer	בדיקת תשובה
 Check decompiled C#	בדיקת קוד C# לאחר דה-קומפילציה
 Check my build	בדיקת הבנייה שלי
@@ -261,7 +261,7 @@ Close	סגירה
 Close a Frida session	סגירת הפעלת Frida
 Close a GDB session	סגירת הפעלת GDB
 Close a Rizin debug session	סגירת הפעלת ניפוי שגיאות ב-Rizin
-Close a pinned build	סגירת בנייה נעוצה
+Close a pinned build	סגירת בנייה מוצמדת
 Close it	סגור זאת
 Close it first.	סגור זאת קודם.
 Close the website	סגירת האתר
@@ -951,16 +951,16 @@ Resources	משאבים
 Restart	הפעל מחדש
 Restore	שחזר
 Result	תוצאה
-Resume a Frida session	המשך סשן Frida
+Resume a Frida session	חידוש הפעלת Frida
 Rizin command	פקודת Rizin
 Rizin debug command	פקודת ניפוי שגיאות ב-Rizin
-Rizin debug session status	מצב סשן ניפוי השגיאות ב-Rizin
+Rizin debug session status	מצב הפעלת ניפוי השגיאות ב־Rizin
 Rough guide:	מדריך כללי:
 Run	הרץ
 Run a Frida script	הרץ סקריפט Frida
 Run a build command	הרץ פקודת בנייה
-Run a scripted Electron session	הרץ סשן Electron מבוסס-סקריפט
-Run a scripted web session	הרץ סשן אינטרנט מבוסס-סקריפט
+Run a scripted Electron session	הרצת הפעלה מתוסרטת ב־Electron
+Run a scripted web session	הרצת הפעלה מתוסרטת בדפדפן
 Run a tool from the command palette (Ctrl/⌘ K), or pick a finding in the Evidence panel.	הרץ כלי מלוח הפקודות (Ctrl/⌘ K), או בחר ממצא בחלונית הראיות.
 Run and watch a program	הרץ תוכנית ועקוב אחריה
 Run to study	הרץ לצורך חקירה
@@ -1012,7 +1012,7 @@ Send	שלח
 Send (Enter)	שלח (Enter)
 Send now	שלח עכשיו
 Server address	כתובת שרת
-Session status	מצב הסשן
+Session status	מצב ההפעלה
 Set a project's asset budget	הגדר תקציב נכסים לפרויקט
 Set an AI's folder	הגדר תיקייה עבור AI
 Set an AI's program	הגדר תוכנית עבור AI
@@ -1052,9 +1052,9 @@ Something a program or library offers for other programs to use.	דבר שתוכ
 Source	מקור
 Standard	סטנדרטי
 Start	התחל
-Start a Frida session	התחל סשן Frida
-Start a GDB session	התחל סשן GDB
-Start a Rizin debug session	התחל סשן ניפוי שגיאות ב-Rizin
+Start a Frida session	התחלת הפעלת Frida
+Start a GDB session	התחלת הפעלת GDB
+Start a Rizin debug session	התחלת הפעלת ניפוי שגיאות ב־Rizin
 Start a rebuild	התחל בנייה מחדש
 Start a stand-in backend	הפעל צד-שרת חלופי
 Start an activity	הפעל Activity
