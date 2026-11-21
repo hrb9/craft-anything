@@ -8,7 +8,7 @@ OpenCode model	מודל OpenCode
 Remote program	תוכנית מרוחקת
 Reload models	טעינת מודלים מחדש
 Apply	החלה
-No chat models are visible in {agent}. Check its setup, then reload.	לא נראים מודלי צ'אט ב-{agent}. בדוק את ההגדרה שלו וטען מחדש.
+No chat models are visible in {agent}. Check its setup, then reload.	לא מוצגים מודלי צ'אט ב־{agent}. בדקו את ההגדרות שלו וטענו מחדש.
 The saved model is no longer visible. Choose another model or the {agent} default.	המודל השמור אינו גלוי עוד. בחר מודל אחר או את ברירת המחדל של {agent}.
 OpenCode has no visible chat models. Connect a provider in OpenCode, then reload.	ל-OpenCode אין מודלי צ'אט גלויים. חבר ספק ב-OpenCode וטען מחדש.
 The saved model is no longer visible. Choose another model or the OpenCode default.	המודל השמור אינו גלוי עוד. בחר מודל אחר או את ברירת המחדל של OpenCode.
@@ -98,7 +98,7 @@ Add a brain	הוספת AI
 Add a fal.ai key	הוספת מפתח fal.ai
 Add a folder…	הוספת תיקייה…
 Add a plugin	הוספת תוסף
-Add an AI brain and I'll read this evidence for you, answer follow-up questions and point at the proof.	הוסף AI ואקרא עבורך את הראיות האלה, אענה על שאלות המשך ואצביע על ההוכחה.
+Add an AI brain and I'll read this evidence for you, answer follow-up questions and point at the proof.	הוסיפו מודל AI כדי שאוכל לנתח עבורכם את הראיות, לענות על שאלות המשך ולהציג את הראיות התומכות.
 Add an AI by its address	הוספת AI לפי כתובת
 Add another	הוספת נוסף
 Add it again, to choose another account's folder for it.	הוסף אותו שוב, כדי לבחור עבורו תיקייה של חשבון אחר.
@@ -203,7 +203,7 @@ Building	בבנייה
 Building needs a coding agent on this computer (Claude Code, Codex or Gemini CLI: install one and sign in to it once in its own window), or an AI with an API key. Craft Anything never sees your account.	הבנייה דורשת סוכן תכנות במחשב זה (Claude Code, Codex או Gemini CLI: התקן אחד והתחבר אליו פעם אחת בחלון שלו), או AI עם מפתח API. Craft Anything לעולם אינה רואה את החשבון שלך.
 Building needs a coding agent such as Claude Code, or an AI with an API key.	הבנייה דורשת סוכן תכנות כמו Claude Code, או AI עם מפתח API.
 Builds	בניות
-Builds and answers may use it again.	בניות ותשובות רשאיות להשתמש בו שוב.
+Builds and answers may use it again.	אפשר להשתמש בו שוב בתהליכי בנייה ובתשובות.
 Builds at once	בונה מיד
 Builds keep going without stopping to ask you before an action. The builder still never deletes outside its project, changes system settings or publishes anything, and stays within each project's asset budget.	בניות ממשיכות לרוץ מבלי לעצור ולשאול אותך לפני פעולה. הבונה עדיין לעולם אינו מוחק מחוץ לפרויקט שלו, אינו משנה הגדרות מערכת ואינו מפרסם דבר, ונשאר במסגרת תקציב הנכסים של כל פרויקט.
 Builds use this one. Click to choose automatically again.	בניות משתמשות בזה. לחץ כדי לחזור לבחירה אוטומטית.
@@ -227,7 +227,7 @@ Change it	שנה זאת
 Change…	שינוי…
 Check	בדיקה
 Check .NET native calls	בדיקת קריאות Native של .NET
-Check a rebuild claim	בדיקת טענת בנייה מחדש
+Check a rebuild claim	אימות טענה על בנייה מחדש
 Check a scripted web session	בדיקת הפעלת אינטרנט מתוסרטת
 Check an answer	בדיקת תשובה
 Check decompiled C#	בדיקת קוד C# לאחר דה-קומפילציה
@@ -718,11 +718,11 @@ New project	פרויקט חדש
 New projects go in	פרויקטים חדשים נשמרים ב
 Next address	הכתובת הבאה
 No AI (built-in engines only)	ללא AI (מנועים מובנים בלבד)
-No AI brain is set up, so answers come straight from the built-in engines. Add one any time for plain-words explanations.	לא הוגדר מוח AI, ולכן התשובות מגיעות ישירות מהמנועים המובנים. אפשר להוסיף אחד בכל עת לקבלת הסברים במילים פשוטות.
+No AI brain is set up, so answers come straight from the built-in engines. Add one any time for plain-words explanations.	לא הוגדר מודל AI, לכן התשובות מגיעות ישירות מהמנועים המובנים. אפשר להוסיף מודל בכל עת לקבלת הסברים בשפה פשוטה.
 No AI for now	ללא AI בינתיים
-No AI is set up yet. The built-in engines still work; an AI adds plain-words answers.	עדיין לא הוגדר AI. המנועים המובנים עדיין עובדים; AI מוסיף תשובות במילים פשוטות.
+No AI is set up yet. The built-in engines still work; an AI adds plain-words answers.	עדיין לא הוגדר מודל AI. המנועים המובנים ממשיכים לפעול; הוספת מודל AI תאפשר לקבל תשובות בשפה פשוטה.
 No Unreal or Unity archives were found. Pick the folder the game is installed in.	לא נמצאו ארכיונים של Unreal או Unity. בחר את התיקייה שבה המשחק מותקן.
-No coding agent was found on this computer yet.	עדיין לא נמצא סוכן קידוד (coding agent) במחשב זה.
+No coding agent was found on this computer yet.	עדיין לא נמצא סוכן תכנות במחשב הזה.
 No evidence yet	עדיין אין ראיות
 No game files here	אין כאן קובצי משחק
 No jobs yet. Long tasks show their progress here, and you can cancel them.	עדיין אין משימות. משימות ארוכות מציגות כאן את התקדמותן, ואפשר לבטל אותן.
@@ -773,7 +773,7 @@ Only its name changes; its folder stays where it is.	רק השם שלו משתנ
 Only take pictures out of games you made, or whose owner allows it. A game's art is usually protected by copyright and by the game's licence.	הוצא תמונות רק ממשחקים שיצרת, או שהבעלים שלהם מתיר זאת. הגרפיקה של משחק מוגנת בדרך כלל בזכויות יוצרים וברישיון המשחק.
 Only the pin goes; the project and its app stay as they are.	רק ההצמדה מוסרת; הפרויקט והאפליקציה שלו נשארים כפי שהם.
 Open	פתיחה
-Open "Show me the proof" to see the exact code we found, and how sure we are.	פתח את "הראה לי את ההוכחה" כדי לראות את הקוד המדויק שמצאנו, ועד כמה אנחנו בטוחים.
+Open "Show me the proof" to see the exact code we found, and how sure we are.	פתחו את "הצגת הראיות" כדי לראות את הקוד המדויק שנמצא ואת רמת הוודאות של הממצאים.
 Open Ghidra's release page	פתיחת דף הגרסאות של Ghidra
 Open Unity Hub	פתיחת Unity Hub
 Open a calculator app and find the code behind one button.	פתח אפליקציית מחשבון ומצא את הקוד שמאחורי כפתור אחד.
@@ -798,7 +798,7 @@ Open log	פתיחת יומן
 Open one of the files inside it to see its bytes.	פתח את אחד הקבצים שבתוכו כדי לראות את הבתים שלו.
 Open questions	שאלות פתוחות
 Open something	פתח משהו
-Open something first: drop a file or app here, or choose "Just look inside" on New project. Then I can look inside it.	פתח משהו קודם: גרור קובץ או אפליקציה לכאן, או בחר "רק להציץ פנימה" בפרויקט חדש. אז אוכל להציץ לתוכו.
+Open something first: drop a file or app here, or choose "Just look inside" on New project. Then I can look inside it.	כדי להתחיל, גררו לכאן קובץ או יישום, או בחרו "רק להציץ פנימה" בעת יצירת פרויקט חדש. כך אוכל לבדוק את התוכן.
 Open something to start	פתח משהו כדי להתחיל
 Open the Epic Games Launcher	פתיחת Epic Games Launcher
 Open the app	פתיחת האפליקציה
@@ -1018,14 +1018,14 @@ Set an AI's folder	הגדר תיקייה עבור AI
 Set an AI's program	הגדר תוכנית עבור AI
 Set model options	הגדר אפשרויות מודל
 Set one up	הגדר אחד
-Set up a brain…	הגדר מוח AI…
+Set up a brain…	הגדרת מודל AI…
 Set up a builder	הגדר בונה
 Settings	הגדרות
 Show a build's activity	הצג פעילות של בנייה
 Show a project	הצג פרויקט
 Show folder	הצג תיקייה
 Show me everything	הראה לי הכול
-Show me the proof	הראה לי את ההוכחה
+Show me the proof	הצגת הראיות
 Show model options	הצג אפשרויות מודל
 Show pinned builds	הצג בניות מוצמדות
 Show settings	הצג הגדרות
@@ -1131,7 +1131,7 @@ The {name} view isn't available yet in this build.	התצוגה {name} עדיי�
 The {} view isn't available yet in this build.	התצוגה {} עדיין אינה זמינה בגרסת בנייה זו.
 Theme	ערכת נושא
 There's no /{name} command. You can use {commands}.	אין פקודה /{name}. ניתן להשתמש ב-{commands}.
-There's no AI brain set up yet, so here's what the built-in engines found:	עדיין לא הוגדר מוח AI, אז הנה מה שהמנועים המובנים מצאו:
+There's no AI brain set up yet, so here's what the built-in engines found:	עדיין לא הוגדר מודל AI. אלה הממצאים של המנועים המובנים:
 There's no picture on the clipboard to paste.	אין תמונה בלוח העריכה להדבקה.
 They're my app: edit them in place	זו האפליקציה שלי: ערוך אותם במקום
 Things a program borrows from the operating system or libraries, like "open a file" or "draw a window".	דברים שתוכנית שואלת ממערכת ההפעלה או מספריות, כמו "לפתוח קובץ" או "לצייר חלון".
