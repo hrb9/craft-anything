@@ -115,12 +115,12 @@ Advanced	מתקדם
 After installing one, look for it again.	לאחר התקנת אחד מהם, חפש אותו שוב.
 Agent	סוכן
 Allow generated assets	התרת נכסים מחוללים
-Allow once	אפשר פעם אחת
-Allowed for this project	אושר לפרויקט זה
-Allowed for this project.	אושר לפרויקט זה.
+Allow once	אפשר הפעם בלבד
+Allowed for this project	אושר לשימוש בפרויקט הזה
+Allowed for this project.	אושר לשימוש בפרויקט הזה.
 Allowed in	מותר ב
-Allowed once	אושר פעם אחת
-Allowed once.	אושר פעם אחת.
+Allowed once	אושר להפעלה אחת
+Allowed once.	אושר להפעלה אחת.
 Also list projects from	הצג גם פרויקטים מתוך
 Always for this project	תמיד לפרויקט זה
 An Android app	אפליקציית Android
@@ -158,9 +158,9 @@ Ask about the build	שאל על הבנייה
 Ask about the build, e.g. "where are the latest files?" Nothing changes and no build starts.	שאל על הבנייה, למשל "איפה הקבצים העדכניים ביותר?" דבר לא משתנה ושום בנייה לא מתחילה.
 Ask about this game	שאל על המשחק הזה
 Ask anything, e.g. "What does this program do?"	שאל כל דבר, למשל "מה התוכנית הזו עושה?"
-Ask before running anything	לשאול לפני הרצת כל דבר
-Ask each time	לשאול בכל פעם
-Ask first	לשאול תחילה
+Ask before running anything	בקשת אישור לפני הפעלת כל פעולה
+Ask each time	בקשת אישור בכל פעם
+Ask first	בקשת אישור מראש
 Ask for a change	בקש שינוי
 Ask for a change, e.g. "bigger buttons" or "add a dark mode"	בקש שינוי, למשל "כפתורים גדולים יותר" או "הוסף מצב כהה"
 Ask for a change, e.g. "make it faster" or "add a high-score table"	בקש שינוי, למשל "הפוך את זה למהיר יותר" או "הוסף טבלת שיאים"
@@ -366,7 +366,7 @@ Do you have permission?	האם יש לך רשות?
 Does it talk to the internet?	האם זה מתקשר עם האינטרנט?
 Does it track me?	האם זה עוקב אחריי?
 Don't allow	אל תאפשר
-Don't ask again (you can change this in Settings)	אל תשאל שוב (תוכל לשנות זאת בהגדרות)
+Don't ask again (you can change this in Settings)	לא לשאול שוב (אפשר לשנות זאת בהגדרות)
 Done	סיום
 Download	הורדה
 Download Godot {v}	הורדת Godot {v}
@@ -599,7 +599,7 @@ For example: add a dark mode	לדוגמה: הוסף מצב כהה
 Pick your project's folder first.	בחר תחילה את תיקיית הפרויקט שלך.
 Pick your project's folder	בחר את תיקיית הפרויקט שלך
 That folder is empty. Pick the folder your project's files are in.	התיקייה הזו ריקה. בחר את התיקייה שבה נמצאים קובצי הפרויקט שלך.
-Keep going without asking	המשך בלי לשאול
+Keep going without asking	המשך ללא בקשת אישור
 Keep it	להשאיר
 Keep it in the sidebar to open any time, whatever later builds change.	השאר בסרגל הצד כדי לפתוח בכל עת, ללא קשר למה שבניות מאוחרות יותר ישנו.
 Keep the build as it is and stop offering to carry on.	השאר את הבנייה כפי שהיא והפסק להציע להמשיך.
@@ -740,7 +740,7 @@ Not available yet	עדיין לא זמין
 Not compared yet: {what}	עדיין לא הושווה: {what}
 Not installed	לא מותקן
 Not now	לא עכשיו
-Nothing allowed yet.	עדיין לא הותר דבר.
+Nothing allowed yet.	עדיין לא אושרה אף פעולה.
 Nothing can build yet: install Claude Code (and sign in to it once), or add an AI with an API key below.	עדיין אי אפשר לבנות דבר: התקן את Claude Code (והתחבר אליו פעם אחת), או הוסף AI עם מפתח API למטה.
 Nothing found	לא נמצא דבר
 Nothing found yet. We look for API keys, local model servers (Ollama, LM Studio) and agent apps you already have. One on another port or computer can be added by its address below.	עדיין לא נמצא דבר. אנחנו מחפשים מפתחות API, שרתי מודלים מקומיים (Ollama, LM Studio) ואפליקציות סוכנים שכבר קיימות אצלך. שרת בפורט אחר או במחשב אחר אפשר להוסיף לפי הכתובת שלו למטה.
@@ -968,7 +968,7 @@ Running	פועל
 Running processes	תהליכים פועלים
 Running programs	תוכניות פועלות
 Running {id}	{id} פועל
-Runs its tools without asking	מריץ את הכלים שלו בלי לשאול
+Runs its tools without asking	מריץ את הכלים שלו ללא בקשת אישור
 Runs the first-run steps next time.	מריץ את שלבי ההפעלה הראשונה בפעם הבאה.
 Rust program details	פרטי תוכנית Rust
 SHA-256	SHA-256
@@ -1154,7 +1154,7 @@ Those aren't pictures we can use (PNG, JPEG, WebP or GIF, up to 20 MB).	אלו �
 Time spent	זמן שהושקע
 Tip: press Ctrl/⌘ K to run any tool.	טיפ: לחץ על Ctrl/⌘ K כדי להריץ כל כלי.
 Tokens	טוקנים
-Tools may now run code from what you open without asking. Turn this back on unless you're sure.	כלים רשאים כעת להריץ קוד מתוך מה שאתה פותח בלי לשאול. הפעל הגדרה זו מחדש אלא אם אתה בטוח.
+Tools may now run code from what you open without asking. Turn this back on unless you're sure.	הכלים יכולים כעת להריץ קוד מתוך התכנים שתפתחו ללא בקשת אישור. הפעילו מחדש את דרישת האישור אלא אם אתם בטוחים בהחלטתכם.
 Tools that run code from a target or change a phone always ask first, unless you allowed them for a project.	כלים שמריצים קוד מיעד או משנים טלפון תמיד שואלים תחילה, אלא אם התרת אותם עבור פרויקט.
 Trace a UI action	עקוב אחר פעולת ממשק
 Trace a feature	עקוב אחר תכונה
