@@ -138,7 +138,7 @@ Android class	מחלקת Android
 Android method bytecode	Bytecode של מתודת Android
 Android resources	משאבי Android
 Annotate function	הוספת הערות לפונקציה
-Another build is working, so this one waits its turn.	בנייה אחרת פועלת כרגע, לכן זו ממתינה לתורה.
+Another build is working, so this one waits its turn.	תהליך בנייה אחר פועל כעת, ולכן התהליך הזה ממתין לתורו.
 Answer a project's question	מענה לשאלה של פרויקט
 Answer any of them in a message below.	ענה על כל אחת מהן בהודעה למטה.
 Answered by {name}	נענה על ידי {name}
@@ -199,14 +199,14 @@ Build with {name}	בנה עם {name}
 Build with {name} instead	בנה עם {name} במקום
 Build without it	בנה בלעדיו
 Builder's questions:	שאלות הבונה:
-Building	בבנייה
+Building	בתהליך בנייה
 Building needs a coding agent on this computer (Claude Code, Codex or Gemini CLI: install one and sign in to it once in its own window), or an AI with an API key. Craft Anything never sees your account.	הבנייה דורשת סוכן תכנות במחשב זה (Claude Code, Codex או Gemini CLI: התקן אחד והתחבר אליו פעם אחת בחלון שלו), או AI עם מפתח API. Craft Anything לעולם אינה רואה את החשבון שלך.
 Building needs a coding agent such as Claude Code, or an AI with an API key.	הבנייה דורשת סוכן תכנות כמו Claude Code, או AI עם מפתח API.
-Builds	בניות
+Builds	תהליכי בנייה
 Builds and answers may use it again.	בניות ותשובות רשאיות להשתמש בו שוב.
-Builds at once	בונה מיד
+Builds at once	מתחיל בבנייה מיד
 Builds keep going without stopping to ask you before an action. The builder still never deletes outside its project, changes system settings or publishes anything, and stays within each project's asset budget.	בניות ממשיכות לרוץ מבלי לעצור ולשאול אותך לפני פעולה. הבונה עדיין לעולם אינו מוחק מחוץ לפרויקט שלו, אינו משנה הגדרות מערכת ואינו מפרסם דבר, ונשאר במסגרת תקציב הנכסים של כל פרויקט.
-Builds use this one. Click to choose automatically again.	בניות משתמשות בזה. לחץ כדי לחזור לבחירה אוטומטית.
+Builds use this one. Click to choose automatically again.	תהליכי הבנייה משתמשים באפשרות זו. לחצו כדי לחזור לבחירה אוטומטית.
 Built by	נבנה על ידי
 Built with	נבנה באמצעות
 Built with {stack}, as you asked, so no game engine is needed.	נבנה באמצעות {stack}, כפי שביקשת, כך שאין צורך במנוע משחק.
@@ -604,7 +604,7 @@ Keep it	להשאיר
 Keep it in the sidebar to open any time, whatever later builds change.	השאר בסרגל הצד כדי לפתוח בכל עת, ללא קשר למה שבניות מאוחרות יותר ישנו.
 Keep the build as it is and stop offering to carry on.	השאר את הבנייה כפי שהיא והפסק להציע להמשיך.
 Keep this version in the sidebar to open any time.	השאר גרסה זו בסרגל הצד כדי לפתוח בכל עת.
-Keeps this version exactly as it is now. Later builds can't change or break it, and anything it saves stays with the copy.	שומר על גרסה זו בדיוק כפי שהיא כעת. בניות מאוחרות יותר לא יוכלו לשנות או לשבור אותה, וכל מה שהיא שומרת נשאר עם העותק.
+Keeps this version exactly as it is now. Later builds can't change or break it, and anything it saves stays with the copy.	שומר על הגרסה הזו בדיוק כפי שהיא. תהליכי בנייה עתידיים לא יוכלו לשנות או לפגוע בה, וכל מה שהיא שומרת יישאר בעותק.
 Key saved	המפתח נשמר
 Keyed archive	ארכיון מפתחות (Keyed archive)
 Kind	סוג
@@ -648,7 +648,7 @@ List radio decoders	להציג רשימת מפענחי רדיו
 List segments	להציג רשימת מקטעים
 List shared Cutter sessions	להציג רשימת הפעלות Cutter משותפות
 List strings	להציג רשימת מחרוזות
-Live: the project's latest build	חי: הבנייה האחרונה של הפרויקט
+Live: the project's latest build	פעיל: הבנייה העדכנית של הפרויקט
 Load a picture	לטעון תמונה
 Load a screenshot	לטעון צילום מסך
 Load model options	לטעון אפשרויות מודל
@@ -799,7 +799,7 @@ Open one of the files inside it to see its bytes.	פתח את אחד הקבצי�
 Open questions	שאלות פתוחות
 Open something	פתח משהו
 Open something first: drop a file or app here, or choose "Just look inside" on New project. Then I can look inside it.	פתח משהו קודם: גרור קובץ או אפליקציה לכאן, או בחר "רק להציץ פנימה" בפרויקט חדש. אז אוכל להציץ לתוכו.
-Open something to start	פתח משהו כדי להתחיל
+Open something to start	כדי להתחיל, פתחו פריט
 Open the Epic Games Launcher	פתיחת Epic Games Launcher
 Open the app	פתיחת האפליקציה
 Open the app you're curious about.	פתח את האפליקציה שמעניינת אותך.
@@ -883,7 +883,7 @@ Progress	התקדמות
 Project details	פרטי פרויקט
 Project name	שם הפרויקט
 Projects	פרויקטים
-Projects and builds	פרויקטים ובניות
+Projects and builds	פרויקטים ותהליכי בנייה
 Property list	רשימת מאפיינים (Property list)
 Pseudo-C	פסאודו-C
 Purpose	מטרה
@@ -1100,13 +1100,13 @@ Targets	יעדים
 That folder already has {names}, where Craft Anything keeps its own files. Pick another folder, or move those out first.	בתיקייה זו כבר קיימים {names}, שבהם Craft Anything שומר את הקבצים שלו. בחר תיקייה אחרת, או העבר אותם החוצה קודם.
 That folder is already a project, so it's open now.	תיקייה זו היא כבר פרויקט, ולכן היא פתוחה כעת.
 The Rust toolchain (rustup.rs).	ערכת הכלים של Rust (rustup.rs).
-The builder answers its own questions and says what it chose ("I decided: …"), so you can change it.	הבונה עונה על השאלות של עצמו ואומר מה בחר ("החלטתי: …"), כדי שתוכל לשנות זאת.
+The builder answers its own questions and says what it chose ("I decided: …"), so you can change it.	הבונה משיב על השאלות שלו ומציג מה בחר ("החלטתי: …"), כדי שתוכלו לשנות את ההחלטה.
 The builder makes the game's 3D models and textures from descriptions of original designs, paid from your fal.ai account. Models are low-poly so the game runs fast. A textured model costs {model} and a picture {picture}. Each project has a {budget} budget, and you're asked before it goes over. The key is kept in your system keychain.	הבונה יוצר את מודלי התלת-ממד והטקסטורות של המשחק מתוך תיאורים של עיצובים מקוריים, בתשלום מחשבון ה-fal.ai שלך. המודלים הם דלי פוליגונים כדי שהמשחק ירוץ מהר. מודל עם טקסטורה עולה {model} ותמונה עולה {picture}. לכל פרויקט יש תקציב של {budget}, ותישאל לפני חריגה ממנו. המפתח נשמר בצרור המפתחות של המערכת שלך.
 The builder reads them (code, notes, pictures) and builds the app in a new app folder beside them. Your files stay as they are.	הבונה קורא אותם (קוד, הערות, תמונות) ובונה את האפליקציה בתיקיית אפליקציה חדשה לצדם. הקבצים שלך נשארים כפי שהם.
-The builder will decide its questions and tell you what it chose.	הבונה יחליט בעצמו לגבי השאלות שלו ויספר לך מה בחר.
+The builder will decide its questions and tell you what it chose.	הבונה יענה בעצמו על השאלות ויציין מה בחר.
 The builder works on these files directly and keeps what works. Craft Anything adds a few records of its own beside them.	הבונה עובד ישירות על הקבצים האלה ושומר על מה שעובד. Craft Anything מוסיף כמה רשומות משלו לצדם.
 The builder's questions	השאלות של הבונה
-The builder's questions come to you as cards, and it waits for your answer.	השאלות של הבונה מגיעות אליך ככרטיסיות, והוא ממתין לתשובתך.
+The builder's questions come to you as cards, and it waits for your answer.	שאלות הבונה יוצגו בכרטיסיות, והוא ימתין לתשובתכם.
 The builder's questions will come to you.	השאלות של הבונה יגיעו אליך.
 The built-in engines still show you everything they find.	המנועים המובנים עדיין מציגים לך כל מה שהם מוצאים.
 The clipboard can't be read:	לא ניתן לקרוא את לוח העריכה:
@@ -1138,7 +1138,7 @@ Things a program borrows from the operating system or libraries, like "open a fi
 Things a program or library offers for other programs to use.	דברים שתוכנית או ספרייה מציעה לתוכניות אחרות לשימוש.
 Things we couldn't establish yet are listed here, with what would settle them.	דברים שעדיין לא הצלחנו לקבוע מופיעים כאן, יחד עם מה שיכריע בהם.
 This answer won't be there after a restart:	תשובה זו לא תישמר לאחר הפעלה מחדש:
-This build stopped part-way	בנייה זו נעצרה באמצע
+This build stopped part-way	תהליך הבנייה הזה נעצר לפני שהושלם
 This can't be undone.	לא ניתן לבטל פעולה זו.
 This folder already has files	בתיקייה זו כבר יש קבצים
 This is a big one. You can leave this open and come back later.	זאת משימה גדולה. תוכל להשאיר זאת פתוח ולחזור מאוחר יותר.
@@ -1231,7 +1231,7 @@ What does this contract do?	מה החוזה הזה עושה?
 What does this module do?	מה המודול הזה עושה?
 What does this program do?	מה התוכנית הזו עושה?
 What does {what} do?	מה {what} עושה?
-What happened in this build	מה קרה בבנייה הזו
+What happened in this build	מה התרחש בתהליך הבנייה הזה
 What is it	מה זה
 What is this?	מה זה?
 What it calls	אל מה הוא קורא
