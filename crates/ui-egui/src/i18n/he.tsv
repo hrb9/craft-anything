@@ -63,7 +63,7 @@ A name the program's author gave to a function or variable that survived in the 
 A named piece of a program that does one job, like "add two numbers" or "save the file".	חלק בעל שם מתוך תוכנית שמבצע פעולה אחת, כמו "הוספת שני מספרים" או "שמירת הקובץ".
 A number that says where something is in a program's memory, like a house number.	מספר שמציין היכן דבר מה נמצא בזיכרון של תוכנית, כמו מספר בית.
 A piece of text stored inside a program, like a message, a web address or a file name.	פיסת טקסט השמורה בתוך תוכנית, כמו הודעה, כתובת אתר או שם קובץ.
-A program, an app bundle, an APK, a JavaScript bundle, a folder… or drop it on the window.	תוכנית, חבילת אפליקציה, APK, חבילת JavaScript, תיקייה… או פשוט גרור לכאן לתוך החלון.
+A program, an app bundle, an APK, a JavaScript bundle, a folder… or drop it on the window.	תוכנית, חבילת אפליקציה, APK, חבילת JavaScript, תיקייה… או שניתן לגרור לכאן לתוך החלון.
 A recording of network traffic	הקלטה של תעבורת רשת
 A region of a program as it sits in memory while running.	אזור של תוכנית כפי שהוא מונח בזיכרון בזמן ריצה.
 A region of a program file with one purpose: code, text, pictures, settings.	אזור בקובץ תוכנית בעל מטרה אחת: קוד, טקסט, תמונות, הגדרות.
@@ -112,7 +112,7 @@ Added {n} picture(s). The builder uses them from your next change.	נוספו {n
 Address to file offset	המרת כתובת להיסט בקובץ
 Adds its decompiler to Deep mode. Craft Anything can download and set it up for you.	מוסיף את הדיקומפיילר שלו למצב עמוק. Craft Anything יכולה להוריד ולהגדיר אותו עבורך.
 Advanced	מתקדם
-After installing one, look for it again.	לאחר התקנת אחד מהם, חפש אותו שוב.
+After installing one, look for it again.	לאחר התקנת אחד מהם, יש לחפש אותו שוב.
 Agent	סוכן
 Allow generated assets	התרת נכסים מחוללים
 Allow once	אפשור הפעם בלבד
@@ -178,7 +178,7 @@ Asking for its models…	מבקש את המודלים שלו…
 Asset catalog	קטלוג נכסים
 At most this many rounds of fixes after the first build.	לכל היותר מספר זה של סבבי תיקונים לאחר הבנייה הראשונה.
 Attach pictures	צירוף תמונות
-Attach pictures (or drop or paste them here)	צירוף תמונות (או גרור או הדבק אותן כאן)
+Attach pictures (or drop or paste them here)	צירוף תמונות (או גרירה או הדבקה כאן)
 Auto mode	מצב אוטומטי
 Automatic	אוטומטי
 Automatic ({name})	אוטומטי ({name})
@@ -319,9 +319,9 @@ Craft Anything's records, checks and anything it built in app/ are deleted. Your
 Crash dump	קובץ קריסה (Crash dump)
 Create the project	יצירת הפרויקט
 Critical	קריטי
-Cross-reference: a place in the program that uses or calls the thing you're looking at.	הפניה צולבת: מקום בתוכנית שמשתמש בדבר שאתה מסתכל עליו או קורא לו.
+Cross-reference: a place in the program that uses or calls the thing you're looking at.	הפניה צולבת: מקום בתוכנית שמשתמש בדבר הנצפה כעת או קורא לו.
 Cross-references	הפניות צולבות
-Cross-references: the places in the program that use or call the thing you're looking at.	הפניות צולבות: המקומות בתוכנית שמשתמשים בדבר שאתה מסתכל עליו או קוראים לו.
+Cross-references: the places in the program that use or call the thing you're looking at.	הפניות צולבות: המקומות בתוכנית שמשתמשים בדבר הנצפה כעת או קוראים לו.
 Current document	המסמך הנוכחי
 Cursor address	כתובת הסמן
 Cursor function	הפונקציה שבסמן
@@ -430,14 +430,14 @@ Find a game's files	איתור קובצי משחק
 Find an app	איתור אפליקציה
 Find in-page MCP tools	איתור כלי MCP בדף
 Find it automatically	אתר אוטומטית
-Find out how any software works, then craft your own.	גלה איך כל תוכנה עובדת, ואז צור אחת משלך.
+Find out how any software works, then craft your own.	לגלות איך כל תוכנה עובדת, ואז ליצור אחת חדשה.
 Find the original source line	איתור שורת המקור המקורית
 Firmware regions	אזורי קושחה
 Fold the sidebar	קיפול סרגל הצד
 Folders of projects, and projects started in a folder you picked. Removing one only takes it off the list.	תיקיות של פרויקטים, ופרויקטים שהתחלת בתיקייה שבחרת. הסרת פריט רק מורידה אותו מהרשימה.
 Follow the installer that opened. Come back here when it's done.	פעל לפי הוראות תוכנית ההתקנה שנפתחה. חזור לכאן כשהיא תסתיים.
 Follow the steps on rustup.rs, then come back here.	פעל לפי השלבים באתר rustup.rs, ואז חזור לכאן.
-For everything you make, like the switch in the title bar.	לכל מה שאתה יוצר, כמו המתג שבשורת הכותרת.
+For everything you make, like the switch in the title bar.	לכל מה שנוצר, כמו המתג שבשורת הכותרת.
 For example: a website for my bakery	לדוגמה: אתר אינטרנט למאפייה שלי
 For example: recreate this website	לדוגמה: בנה מחדש את האתר הזה
 For example: the same app, but simpler	לדוגמה: אותה אפליקציה, אבל פשוטה יותר
@@ -485,7 +485,7 @@ Ghidra	Ghidra
 Ghidra folder	תיקיית Ghidra
 Ghidra is ready	Ghidra מוכנה
 Ghidra is ready. Deep mode uses it from now on.	Ghidra מוכנה. מצב עמוק ישתמש בה מעתה ואילך.
-Ghidra isn't installed, so the built-in decompiler stands in. Get it in Settings → Engines.	Ghidra לא מותקנת, ולכן הדה-קומפיילר המובנה משמש במקומה. תוכל להשיג אותה בהגדרות → מנועים.
+Ghidra isn't installed, so the built-in decompiler stands in. Get it in Settings → Engines.	Ghidra לא מותקנת, ולכן הדה-קומפיילר המובנה משמש במקומה. ניתן להתקין אותה תחת הגדרות → מנועים.
 Ghidra isn't on this computer yet, so the built-in decompiler stands in.	Ghidra עדיין לא נמצאת במחשב זה, ולכן הדה-קומפיילר המובנה משמש במקומה.
 Ghidra will use half of this computer's memory (up to {gb} GB).	Ghidra תשתמש במחצית מזיכרון המחשב הזה (עד {gb} GB).
 Ghidra will use up to {gb} GB of memory.	Ghidra תשתמש בעד {gb} GB של זיכרון.
@@ -531,8 +531,8 @@ Import a source folder	ייבוא תיקיית מקור
 Import evidence	ייבוא ראיות
 Imports / Exports	ייבוא / ייצוא
 In Deep mode this one takes a game's own files out after the study. Click to stop.	במצב עמוק, אפשרות זו מחלצת את הקבצים של המשחק עצמו לאחר הסריקה. לחיצה לעצירה.
-In Unity Hub: sign in (or make a free account) and accept the free Personal licence. Then open Installs, press Install Editor and choose the recommended version. About 10 GB.	ב-Unity Hub: התחבר (או צור חשבון חינמי) ואשר את רישיון ה-Personal החינמי. לאחר מכן פתח את Installs, לחץ על Install Editor ובחר את הגרסה המומלצת. כ-10 GB.
-In the launcher: sign in, open Unreal Engine, then Library, and press + next to Engine Versions to install one. About 60 GB.	במפעיל: התחבר, פתח את Unreal Engine, עבור אל Library, ולחץ על + ליד Engine Versions כדי להתקין גרסה. כ-60 GB.
+In Unity Hub: sign in (or make a free account) and accept the free Personal licence. Then open Installs, press Install Editor and choose the recommended version. About 10 GB.	ב-Unity Hub: יש להתחבר (או ליצור חשבון חינמי) ולאשר את רישיון ה-Personal החינמי. לאחר מכן יש לפתוח את Installs, ללחוץ על Install Editor ולבחור את הגרסה המומלצת. כ-10 GB.
+In the launcher: sign in, open Unreal Engine, then Library, and press + next to Engine Versions to install one. About 60 GB.	במפעיל: יש להתחבר, לפתוח את Unreal Engine, לעבור אל Library וללחוץ על + ליד Engine Versions כדי להתקין גרסה. כ-60 GB.
 In use	בשימוש
 Inside	בפנים
 Inspect a Dart AOT snapshot	בדיקת Snapshot של Dart AOT
@@ -611,7 +611,7 @@ Kind	סוג
 Language	שפה
 Last: {what}	אחרון: {what}
 Launch an app	להפעיל אפליקציה
-Leave a few GB for the rest of your computer.	השאר כמה GB עבור שאר המחשב שלך.
+Leave a few GB for the rest of your computer.	יש להשאיר כמה GB עבור שאר המחשב.
 Leave a path empty to use the managed install. We never need environment variables.	השאר נתיב ריק כדי להשתמש בהתקנה המנוהלת. לעולם איננו זקוקים למשתני סביבה.
 Leave empty to use the one Craft Anything sets up.	השאר ריק כדי להשתמש בזו ש-Craft Anything מגדירה.
 Let a project generate assets	לאפשר לפרויקט ליצור נכסים
@@ -751,7 +751,7 @@ Nothing inside the original is read: not its code, files or page source. Craft A
 Nothing made yet. What you make shows up here.	עדיין לא נוצר דבר. מה שתיצור יופיע כאן.
 Nothing matches the filter.	שום דבר לא תואם למסנן.
 Nothing matches.	שום דבר לא תואם.
-Nothing new for {time}. Long steps can be quiet; if it stays like this, press Pause.	שום דבר חדש במשך {time}. שלבים ארוכים עשויים להיות שקטים; אם זה נשאר כך, לחץ על השהיה.
+Nothing new for {time}. Long steps can be quiet; if it stays like this, press Pause.	שום דבר חדש במשך {time}. שלבים ארוכים עשויים להיות שקטים; אם המצב נמשך כך, יש ללחוץ על השהיה.
 Nothing open	שום דבר לא פתוח
 Nothing open yet	עדיין שום דבר לא פתוח
 Nothing selected	לא נבחר דבר
@@ -814,7 +814,7 @@ Opened {name}. Taking a first look…	{name} נפתח. מבצע בדיקה רא�
 Opened {}	{} נפתח
 Opening {name}…	פותח את {name}…
 Open…	פתיחה…
-Or type your answer…	או הקלד את תשובתך…
+Or type your answer…	או להקליד תשובה…
 Original	מקור
 Other pages of a website studied and compared besides the one you gave.	דפים נוספים באתר שנלמדו והושוו מלבד הדף שמסרת.
 Overview	סקירה כללית
@@ -830,8 +830,8 @@ Paste your {name} key	הדבקת מפתח ה-{name}
 Path	נתיב
 Pause	השהיה
 Pausing…	משהה…
-Pause the build first, then delete the project.	השהה תחילה את הבנייה, ולאחר מכן מחק את הפרויקט.
-Pause the build first.	השהה תחילה את הבנייה.
+Pause the build first, then delete the project.	יש להשהות תחילה את הבנייה, ולאחר מכן למחוק את הפרויקט.
+Pause the build first.	יש להשהות תחילה את הבנייה.
 Paused	מושהה
 Paused.	מושהה.
 Pick a folder with projects in it	בחירת תיקייה שבה יש פרויקטים
@@ -988,9 +988,9 @@ Saved	נשמר
 Saved in	נשמר במיקום
 Saves space: copies the program and code, and shares dependencies and media with the project. A shared file rewritten in place changes here too.	חוסך מקום: מעתיק את התוכנית ואת הקוד, ומשתף תלויות ומדיה עם הפרויקט. קובץ משותף שנכתב מחדש במקומו משתנה גם כאן.
 Say what you want	תיאור המבוקש
-Say what you want first.	אמור קודם מה תרצה.
+Say what you want first.	יש לציין קודם מה מבוקש.
 This applies once you choose something to recreate above.	הגדרה זו חלה מרגע שתבחר למעלה משהו לבנייה מחדש.
-Say what you want to make, or drop an app or file on the window to look inside it. Everything runs in Clean room mode unless you switch on Deep.	אמור מה תרצה ליצור, או גרור אפליקציה או קובץ אל החלון כדי להציץ פנימה. הכול רץ במצב חדר נקי, אלא אם תפעיל מצב מעמיק.
+Say what you want to make, or drop an app or file on the window to look inside it. Everything runs in Clean room mode unless you switch on Deep.	ניתן לתאר מה רוצים ליצור, או לגרור אפליקציה או קובץ אל החלון כדי להציץ פנימה. הכול רץ במצב חדר נקי, אלא אם מופעל מצב מעמיק.
 Screenshot	צילום מסך
 Screenshot a page	צלם מסך של דף
 Screenshots of how it should look. The builder opens each one and matches it.	צילומי מסך של איך שזה אמור להיראות. הבונה פותח כל אחד מהם ומתאים את התוצאה אליו.
@@ -1037,10 +1037,10 @@ Show the ones that are met	הצגת הדרישות שמתקיימות
 Show the sidebar	הצגת סרגל הצד
 Show the welcome again	הצגת מסך הפתיחה שוב
 Showing	מוצג
-Sign in and add the Unity Editor	התחבר והוסף את Unity Editor
-Sign in and install Unreal Engine	התחבר והתקן את Unreal Engine
+Sign in and add the Unity Editor	התחברות והוספת Unity Editor
+Sign in and install Unreal Engine	התחברות והתקנת Unreal Engine
 Simple	פשוט
-Simple: say what you want and it's handled for you. Advanced: every tool, the evidence and the logs.	פשוט: אמור מה תרצה והכול יטופל עבורך. מתקדם: כל הכלים, הראיות והיומנים.
+Simple: say what you want and it's handled for you. Advanced: every tool, the evidence and the logs.	פשוט: יש לתאר מה רוצים והכול מטופל אוטומטית. מתקדם: כל הכלים, הראיות והיומנים.
 Since Craft Anything opened.	מאז ש-Craft Anything נפתח.
 Size	גודל
 Skip setup	דלג על ההגדרה
@@ -1056,13 +1056,13 @@ Start	התחלה
 Start a Frida session	התחלת הפעלת Frida
 Start a GDB session	התחלת הפעלת GDB
 Start a Rizin debug session	התחלת הפעלת ניפוי שגיאות ב־Rizin
-Start a rebuild	התחל בנייה מחדש
+Start a rebuild	התחלת בנייה מחדש
 Start a stand-in backend	הפעלת צד-שרת חלופי
 Start an activity	הפעלת Activity
-Start building	התחל לבנות
-Start from them	התחל מהם
+Start building	התחלת בנייה
+Start from them	התחלה מהם
 Start it	התחלה
-Start with Simple mode; you can set up AI later in Settings.	התחל במצב פשוט; תוכל להגדיר AI מאוחר יותר בהגדרות.
+Start with Simple mode; you can set up AI later in Settings.	התחלה במצב פשוט; ניתן להגדיר AI מאוחר יותר בהגדרות.
 Starting…	מתחיל…
 Starting… it opens in its own window.	מתחיל… נפתח בחלון משלו.
 Still working. Bigger jobs can take a few minutes.	עדיין עובד. משימות גדולות יותר עשויות להימשך כמה דקות.
@@ -1102,7 +1102,7 @@ That folder already has {names}, where Craft Anything keeps its own files. Pick 
 That folder is already a project, so it's open now.	תיקייה זו היא כבר פרויקט, ולכן היא פתוחה כעת.
 The Rust toolchain (rustup.rs).	ערכת הכלים של Rust (rustup.rs).
 The builder answers its own questions and says what it chose ("I decided: …"), so you can change it.	הבונה משיב על השאלות שלו ומציג מה בחר ("החלטתי: …"), כדי שתוכלו לשנות את ההחלטה.
-The builder makes the game's 3D models and textures from descriptions of original designs, paid from your fal.ai account. Models are low-poly so the game runs fast. A textured model costs {model} and a picture {picture}. Each project has a {budget} budget, and you're asked before it goes over. The key is kept in your system keychain.	הבונה יוצר את מודלי התלת-ממד והטקסטורות של המשחק מתוך תיאורים של עיצובים מקוריים, בתשלום מחשבון ה-fal.ai שלך. המודלים הם דלי פוליגונים כדי שהמשחק ירוץ מהר. מודל עם טקסטורה עולה {model} ותמונה עולה {picture}. לכל פרויקט יש תקציב של {budget}, ותישאל לפני חריגה ממנו. המפתח נשמר בצרור המפתחות של המערכת שלך.
+The builder makes the game's 3D models and textures from descriptions of original designs, paid from your fal.ai account. Models are low-poly so the game runs fast. A textured model costs {model} and a picture {picture}. Each project has a {budget} budget, and you're asked before it goes over. The key is kept in your system keychain.	הבונה יוצר את מודלי התלת-ממד והטקסטורות של המשחק מתוך תיאורים של עיצובים מקוריים, בתשלום מחשבון ה-fal.ai המחובר. המודלים הם דלי פוליגונים כדי שהמשחק ירוץ מהר. מודל עם טקסטורה עולה {model} ותמונה עולה {picture}. לכל פרויקט יש תקציב של {budget}, ותתבקש הסכמה לפני חריגה ממנו. המפתח נשמר בצרור המפתחות של המערכת.
 The builder reads them (code, notes, pictures) and builds the app in a new app folder beside them. Your files stay as they are.	הבונה קורא אותם (קוד, הערות, תמונות) ובונה את האפליקציה בתיקיית אפליקציה חדשה לצדם. הקבצים שלך נשארים כפי שהם.
 The builder will decide its questions and tell you what it chose.	הבונה יענה בעצמו על השאלות ויציין מה בחר.
 The builder works on these files directly and keeps what works. Craft Anything adds a few records of its own beside them.	הבונה עובד ישירות על הקבצים האלה ושומר על מה שעובד. Craft Anything מוסיף כמה רשומות משלו לצדם.
@@ -1142,11 +1142,11 @@ This answer won't be there after a restart:	תשובה זו לא תישמר לא
 This build stopped part-way	תהליך הבנייה הזה נעצר לפני שהושלם
 This can't be undone.	לא ניתן לבטל פעולה זו.
 This folder already has files	בתיקייה זו כבר יש קבצים
-This is a big one. You can leave this open and come back later.	זאת משימה גדולה. תוכל להשאיר זאת פתוח ולחזור מאוחר יותר.
+This is a big one. You can leave this open and come back later.	זאת משימה גדולה. ניתן להשאיר זאת פתוח ולחזור מאוחר יותר.
 This is outside what the builder may do on its own. Nothing happens until you say so.	פעולה זו חורגת ממה שמותר לבונה לעשות בעצמו. שום דבר לא קורה עד שתאשר.
 This keeps going in the background, and each download is checked against its publisher's checksum before it's used.	התהליך ממשיך ברקע, וכל הורדה נבדקת מול סכום הביקורת של המפיץ שלה לפני השימוש בה.
 This project is waiting its turn. Send your message once it starts.	פרויקט זה ממתין לתורו. יש לשלוח את ההודעה מיד לאחר שיתחיל.
-This runs code from the target or changes a device. Clicking Run is your OK.	פעולה זו מריצה קוד מתוך היעד או משנה מכשיר. לחיצה על הרץ מהווה את האישור שלך.
+This runs code from the target or changes a device. Clicking Run is your OK.	פעולה זו מריצה קוד מתוך היעד או משנה מכשיר. לחיצה על הפעלה מהווה אישור.
 This runs code from the target or changes a device. Nothing runs until you say so.	פעולה זו מריצה קוד מתוך היעד או משנה מכשיר. שום דבר לא ירוץ עד שתאשר.
 This tool takes no settings.	לכלי זה אין הגדרות.
 This updates by itself when it's done.	זה מתעדכן מעצמו בסיום.
@@ -1169,9 +1169,9 @@ Turn on	הפעלה
 Turn on Deep mode	הפעלת מצב מעמיק
 Turn on an AI	הפעלת AI
 Turning a plugin on or off takes effect from the next start.	הפעלה או כיבוי של תוסף נכנסים לתוקף מההפעלה הבאה.
-Type a command or tool…	הקלד פקודה או כלי…
+Type a command or tool…	הקלדת פקודה או כלי…
 Type the website's address:	הזנת כתובת האתר:
-Type your question after /btw.	הקלד את שאלתך אחרי /btw.
+Type your question after /btw.	יש להקליד שאלה אחרי /btw.
 Unity assets	נכסי Unity
 Unity bundle	חבילת Unity
 Unity's own installer. It only opens if Unity's signature checks out.	תוכנית ההתקנה הרשמית של Unity. היא נפתחת רק אם החתימה של Unity תקינה.
@@ -1221,9 +1221,9 @@ What are its main parts?	מהם החלקים העיקריים שלו?
 What brings you here?	מה מביא אותך לכאן?
 What can Craft Anything do?	מה Craft Anything יכול לעשות?
 What data was sent?	אילו נתונים נשלחו?
-What do you want to look inside?	לתוך מה תרצה להציץ?
-What do you want to make?	מה תרצה ליצור?
-What do you want to recreate?	מה תרצה ליצור מחדש?
+What do you want to look inside?	לתוך מה להציץ?
+What do you want to make?	מה ליצור?
+What do you want to recreate?	מה ליצור מחדש?
 What does it need from the page?	מה הוא צריך מהדף?
 What does it send over the internet?	מה הוא שולח דרך האינטרנט?
 What does this app do?	מה האפליקציה הזו עושה?
@@ -1242,15 +1242,15 @@ What pictures and textures are made with.	בעזרת מה תמונות וטקס�
 What settings are in here?	אילו הגדרות יש כאן?
 What tables are in here?	אילו טבלאות יש כאן?
 What we couldn't check	מה שלא יכולנו לבדוק
-What would you like to find out?	מה תרצה לגלות?
-What would you like to know about {name}?	מה תרצה לדעת על {name}?
+What would you like to find out?	מה נדרש לגלות?
+What would you like to know about {name}?	מה נדרש לברר על {name}?
 What's at this address	מה נמצא בכתובת הזו
 What's in this folder?	מה יש בתיקייה הזו?
 What's inside this archive?	מה יש בתוך הארכיון הזה?
 Whatever Settings → AI builds with.	כל מה שהגדרות → AI בונה איתו.
 When a folder you pick has files	כשבתיקייה שבחרת יש קבצים
 When the builder needs a choice made: show it to you and wait, or let it decide and say what it chose. Each project can choose for itself under its prompt box.	כשהבונה צריך לקבל החלטה: להציג לך אותה ולהמתין, או לתת לו להחליט ולציין מה בחר. כל פרויקט יכול לבחור לעצמו מתחת לתיבת ההנחיה שלו.
-When you rebuild an app or game, start it once to picture its window and compare the rebuild with it. It runs that program.	כשאתה בונה מחדש אפליקציה או משחק, הפעל אותם פעם אחת כדי לצלם את החלון ולהשוות מולו את הבנייה מחדש. הפעולה מריצה את התוכנית הזו.
+When you rebuild an app or game, start it once to picture its window and compare the rebuild with it. It runs that program.	בעת בנייה מחדש של אפליקציה או משחק, יש להפעיל אותם פעם אחת כדי לצלם את החלון ולהשוות מולו את הבנייה מחדש. הפעולה מריצה את התוכנית הזו.
 Where am I	איפה אני
 Where is Ghidra installed?	איפה Ghidra מותקן?
 Where is the program?	איפה התוכנית?
@@ -1264,7 +1264,7 @@ Which function is this in	באיזו פונקציה זה נמצא
 Which servers does it talk to?	עם אילו שרתים הוא מתקשר?
 Which servers were contacted?	עם אילו שרתים נוצר קשר?
 Which websites does it load?	אילו אתרים הוא טוען?
-Who builds what you make	מי בונה את מה שאתה יוצר
+Who builds what you make	מי בונה את התוצרים
 Who calls it	מי קורא לו
 Who can move funds?	מי יכול להעביר כספים?
 Who signed this Windows program	מי חתם על תוכנית ה-Windows הזו
@@ -1276,7 +1276,7 @@ Windows resources	משאבי Windows
 Wireshark tools check	בדיקת כלי Wireshark
 Without it, Deep mode uses Craft Anything's own decompiler, which is rougher.	בלעדיו, מצב עמוק משתמש בדקומפילר של Craft Anything עצמו, שהוא גס יותר.
 Work out a copy's size	חשב גודל עותק
-Work out what an installed app is built on	גלה על מה בנויה אפליקציה מותקנת
+Work out what an installed app is built on	גילוי על מה בנויה אפליקציה מותקנת
 Workbench	סביבת עבודה
 Worked it out	הוסק
 Worked it out: computed step by step from things we saw.	הוסק: חושב שלב אחר שלב מדברים שראינו.
@@ -1295,7 +1295,7 @@ Write the brief	כתיבת התדריך
 Write the handoff	כתיבת המסירה
 Wrote {what} to {}	נכתב {what} אל {}
 You answered: {a}	ענית: {a}
-You can add a Claude, ChatGPT or OpenRouter key, a local model (Ollama, LM Studio) or an agent you already use, later in Settings → AI.	תוכל להוסיף בהמשך מפתח של Claude, ChatGPT או OpenRouter, מודל מקומי (Ollama, LM Studio) או סוכן שאתה כבר משתמש בו, בהגדרות → AI.
+You can add a Claude, ChatGPT or OpenRouter key, a local model (Ollama, LM Studio) or an agent you already use, later in Settings → AI.	ניתן להוסיף בהמשך מפתח של Claude, ChatGPT או OpenRouter, מודל מקומי (Ollama, LM Studio) או סוכן קיים, תחת הגדרות → AI.
 You chose:	בחרת:
 You're all set	הכול מוכן
 Your app is ready	האפליקציה שלך מוכנה
@@ -1367,8 +1367,8 @@ your files there are the app, edited in place	הקבצים שלך שם הם הא
 {lbl}  {}	{lbl}  {}
 {line}, and {n} more	{line}, ועוד {n}
 {mb} MB	{mb} MB
-{name} builds what you make.	{name} בונה את מה שאתה יוצר.
-{name} builds what you make; answers come from {brain}.	{name} בונה את מה שאתה יוצר; התשובות מגיעות מ-{brain}.
+{name} builds what you make.	{name} בונה את התוצרים.
+{name} builds what you make; answers come from {brain}.	{name} בונה את התוצרים; התשובות מגיעות מ-{brain}.
 {name} can't be attached: a message takes pictures up to 20 MB.	אי אפשר לצרף את {name}: הודעה מקבלת תמונות עד 20 MB.
 {name} can't be attached: it isn't a PNG, JPEG, GIF or WebP picture.	אי אפשר לצרף את {name}: זו אינה תמונת PNG, JPEG, GIF או WebP.
 {name} can't be kept to only reading, so it isn't asked questions. Ask with Claude Code, or with an AI that has an API key.	אי אפשר להגביל את {name} לקריאה בלבד, ולכן לא מופנות אליו שאלות. שאל עם Claude Code, או עם AI שיש לו מפתח API.
@@ -1413,7 +1413,7 @@ your files there are the app, edited in place	הקבצים שלך שם הם הא
 {}: {state}	{}: {state}
 {}h {:02}m	{} שע' {:02} דק'
 {}m {:02}s	{} דק' {:02} שנ'
-— use the filter to find the rest.	— השתמש במסנן כדי למצוא את השאר.
+— use the filter to find the rest.	— ניתן להשתמש במסנן כדי למצוא את השאר.
 … {n} more	… עוד {n}
 … {n} older	… {n} ישנים יותר
 … {} more	… עוד {}
@@ -1448,7 +1448,7 @@ Show all	הצגת הכול
 Close window	סגירת חלון
 Full screen	מסך מלא
 Zoom	הגדל/הקטן
-Bring all to front	העבר הכול לחזית
+Bring all to front	הבאת הכול לחזית
 Drag to give the plan more or less room; double-click to reset	גרירה נותנת לתוכנית יותר או פחות מקום; לחיצה כפולה מאפסת
 Copy the message	העתקת ההודעה
 Copy the version	העתקת הגרסה
@@ -1463,7 +1463,7 @@ Other tools	כלים אחרים
 Allow	אישור
 Ask	בקשת אישור
 Refuse	דחה
-After /approvals, type a kind and allow, ask, refuse or default, like /approvals publish ask. Kinds: {kinds}.	אחרי /approvals, הקלד סוג ואת allow, ask, refuse או default, לדוגמה /approvals publish ask. סוגים: {kinds}.
+After /approvals, type a kind and allow, ask, refuse or default, like /approvals publish ask. Kinds: {kinds}.	אחרי /approvals, יש להקליד סוג ואת allow, ask, refuse או default, לדוגמה /approvals publish ask. סוגים: {kinds}.
 There's no kind called {name}. Kinds: {kinds}.	אין סוג בשם {name}. סוגים: {kinds}.
 Approvals	אישורים
 In this project, {kind}: {choice}.	בפרויקט הזה, {kind}: {choice}.
@@ -1488,7 +1488,7 @@ Releases	מהדורות
 Save your work and stop running tasks before installing an update.	יש לשמור את העבודה ולעצור משימות פעילות לפני התקנת עדכון.
 The update failed: {error}	העדכון נכשל: {error}
 The update worker stopped unexpectedly. Try checking again.	תהליך העדכון נעצר באופן בלתי צפוי. ניתן לנסות לבדוק שוב.
-This installation is managed externally. Update it with its package manager or open Releases.	התקנה זו מנוהלת חיצונית. עדכן אותה באמצעות מנהל החבילות שלה או פתח את המהדורות.
+This installation is managed externally. Update it with its package manager or open Releases.	התקנה זו מנוהלת חיצונית. יש לעדכן אותה באמצעות מנהל החבילות שלה או לפתוח את המהדורות.
 Update and restart	עדכון והפעלה מחדש
 Update ready. Restarting…	העדכון מוכן. מפעיל מחדש…
 Updated to {version}.	עודכן לגרסה {version}.
@@ -1496,7 +1496,7 @@ Use Releases or your package manager to update this installation.	יש להשת�
 You're up to date.	הגרסה שלך עדכנית.
 {version} is available.	גרסה {version} זמינה.
 Forget a website sign-in	שכח התחברות לאתר
-Sign in to a website	התחבר לאתר
+Sign in to a website	התחברות לאתר
 Some shared files could not be hard-linked and were copied instead ({size}).	לא ניתן היה ליצור קישור קשיח (hard link) לחלק מהקבצים המשותפים, והם הועתקו במקום זאת ({size}).
 This server lists several chat models. Choose one:	שרת זה מציג מספר מודלי צ'אט. יש לבחור אחד:
 Choose a model	בחירת מודל
