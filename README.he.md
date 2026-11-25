@@ -20,8 +20,8 @@
 <div dir="rtl">
 
 <p align="center">
-  <b>ראו כיצד כל אתר, אפליקציה או משחק עובדים, ותנו ל-AI לבנות גרסה משלכם — מנוע קוד פתוח בשיטת חדר נקי (clean-room) שנכתב ב-Rust טהור.</b><br>
-  הצביעו על יעד, תארו מה תרצו לבנות, והוא יחקור את המקור באמצעות כלי בדיקה אמיתיים,<br>
+  <b>ראו כיצד כל אתר, אפליקציה או משחק עובדים, ותנו ל-AI לבנות גרסה משלכם; מנוע קוד פתוח בשיטת חדר נקי (clean-room) שנכתב ב-Rust טהור.</b><br>
+  הצביעו על יעד, ציינו מה תרצו לבנות, והוא יחקור את המקור באמצעות כלי בדיקה אמיתיים,<br>
   יפעיל סוכן קידוד לבניית פרויקט חדש, ישווה את התוצאה למקור וילטש אותה.
 </p>
 
@@ -40,7 +40,7 @@
 </p>
 
 <p align="center">
-  <a href="#הורדות"><b>הורדת Craft Anything</b></a> ·
+  <a href="#downloads"><b>הורדת Craft Anything</b></a> ·
   <a href="https://getartcraft.com/">ArtCraft</a> ·
   <a href="https://getartcraft.com/apps">כל אפליקציות Crafting</a>
 </p>
@@ -48,9 +48,9 @@
 <br>
 
 <p align="center">
-  <img src="docs/images/project-website.png" alt="פרויקט אתר ב-Craft Anything: הבדיקה מפרטת מה טעון התאמה וכמה כל עמוד דומה למקור, הבונה מודיע שהגרסה מוכנה, כרטיס אישור מבקש אישור לפני הרצת פקודה, והתוכנית מציגה שני שלבים שהושלמו מתוך ארבעה" width="100%">
+  <img src="docs/images/project-website.png" alt="פרויקט אתר ב-Craft Anything: הבדיקה מפרטת מה טרם הותאם וכמה כל עמוד דומה למקור, הבונה מודיע שהגרסה מוכנה, כרטיס אישור מבקש אישור לפני הרצת פקודה, והתוכנית מציגה שני שלבים שהושלמו מתוך ארבעה" width="100%">
   <br>
-  <sub>פרויקט אתר: כל בדיקה מראה עד כמה הבנייה דומה למקור, אתם מאשרים כל פעולה החורגת מהכללים, והתוכנית מציגה מה נשאר.</sub>
+  <sub>פרויקט אתר: כל בדיקה מראה עד כמה הבנייה דומה למקור, ניתן לאשר או לדחות כל פעולה החורגת מהכללים, והתוכנית מציגה מה נשאר.</sub>
 </p>
 
 > [!NOTE]
@@ -59,14 +59,14 @@
 > רק בשבוע שעבר. אם אתם יוצרים דברים — מקומכם איתנו. **[בואו לומר שלום ב-Discord.](https://discord.gg/artcraft)**
 
 <p align="center">
-  <a href="#איך-זה-עובד">איך זה עובד</a> ·
-  <a href="#שתי-דרכים-לעבוד">שתי דרכים לעבוד</a> ·
+  <a href="#how-it-works">איך זה עובד</a> ·
+  <a href="#two-ways-to-use-it">שתי דרכים לעבוד</a> ·
   <a href="#ai">AI</a> ·
-  <a href="#בנוי-לסוכנים">סוכנים</a> ·
-  <a href="#מתחת-למכסה">מתחת למכסה</a> ·
-  <a href="#התחלה-מהירה">התחלה מהירה</a> ·
-  <a href="#מצב-הפרויקט">סטטוס</a> ·
-  <a href="#הורדות">הורדות</a> ·
+  <a href="#built-for-agents">סוכנים</a> ·
+  <a href="#under-the-hood">מתחת למכסה</a> ·
+  <a href="#get-started">התחלה מהירה</a> ·
+  <a href="#status">סטטוס</a> ·
+  <a href="#downloads">הורדות</a> ·
   <a href="https://discord.gg/artcraft">Discord</a>
 </p>
 
@@ -76,11 +76,11 @@
   <tr>
     <td width="25%" valign="top">
       <h3>🔍 לחקור כל דבר</h3>
-      אתרים, אפליקציות שולחן עבודה, אפליקציות מובייל, משחקים וקבצים: כלי חקירה אמיתיים חושפים איך הם בנויים ומה הם עושים, עם ראיות מתועדות מאחורי כל תשובה.
+      אתרים, אפליקציות שולחן עבודה, אפליקציות טלפון, משחקים וקבצים: כלי בדיקה אמיתיים מגלים כיצד הם בנויים ומה הם עושים, עם הראיות שמאחורי כל תשובה.
     </td>
     <td width="25%" valign="top">
       <h3>🛠️ לבנות גרסה משלכם</h3>
-      תארו מה אתם רוצים (״לשחזר את האתר הזה״, ״לשחזר את המכניקה של המשחק ב-Rust״), וסוכן קידוד יבנה פרויקט חדש בטכנולוגיה שתבקשו.
+      ציינו מה תרצו (״לשחזר את האתר הזה״, ״לשחזר את המשחקיות של המשחק הזה ב-Rust״), וסוכן קידוד יבנה פרויקט חדש בטכנולוגיה שתבקשו.
     </td>
     <td width="25%" valign="top">
       <h3>✅ נבדק, לא מנוחש</h3>
@@ -88,80 +88,92 @@
     </td>
     <td width="25%" valign="top">
       <h3>🤖 מוכן לסוכנים</h3>
-      320 כלים — כל אחד מהם הוא גם תת-פקודת CLI וגם כלי MCP, כך שכל סוכן יכול להפעיל את אותו מנוע של האפליקציה. אין צורך ב-AI כדי לחקור.
+      320 כלים, כל אחד מהם הוא גם פקודת CLI וגם כלי MCP, כך שכל סוכן יכול להפעיל את אותו מנוע של האפליקציה. אין צורך ב-AI כדי לבצע בדיקה.
     </td>
   </tr>
 </table>
 
 <br>
 
+<a id="how-it-works"></a>
+
 ## איך זה עובד
 
-הצביעו על יעד ב-Craft Anything, תארו מה תרצו לבנות ולחצו **התחלה**. התהליך עובד בארבעה שלבים, ושואל אתכם בשפה פשוטה כשנדרשת הכרעה שלכם:
+הצביעו על יעד ב-Craft Anything, ציינו מה תרצו לבנות ולחצו על **Start**. הכלי עובד בארבעה שלבים, ושואל אתכם בשפה פשוטה כשנדרשת הכרעה שלכם:
 
-1. **חקירה (Study):** בדיקת המקור — עמודים בכל רוחב מסך, קוד, קבצים ואופן הריצה.
-2. **בנייה (Build):** סוכן קידוד בונה פרויקט חדש בשפה, בפריימוורק או במנוע שציינתם בבקשה (או ברירת מחדל מתאימה).
-3. **בדיקה (Check):** השוואת הבנייה למקור והצגת רשימת הפערים שעוד נותר לסגור.
-4. **מוכן (Ready):** פתיחה, הרצה או תצוגה מקדימה של התוצאה, או בקשת שינויים לליטוש נוסף.
+1. **חקירה (Study):** בדיקת המקור — העמודים שלו בכל רוחב מסך, הקוד, הקבצים ואופן הריצה שלו.
+2. **בנייה (Build):** סוכן קידוד בונה פרויקט חדש בשפה, בפריימוורק או במנוע שציינתם בבקשה (או בברירת מחדל הגיונית).
+3. **בדיקה (Check):** השוואת הבנייה למקור והצגת רשימה של מה שעדיין לא תואם.
+4. **מוכן (Ready):** פתיחה, משחק או תצוגה מקדימה של התוצאה, או בקשת שינויים לליטוש נוסף.
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <img src="docs/images/make.png" alt="מסך הבנייה: בחרו אתר, אפליקציה או משחק לשחזור, הזינו כתובת, בחרו Clean room או Deep, תארו מה תרצו ולחצו Start" width="100%"><br>
-      <sub><b>בנייה:</b> בחרו מה לשחזר, כתבו מה תרצו ולחצו התחלה.</sub>
+      <img src="docs/images/make.png" alt="מסך הבנייה: בחירת אתר, אפליקציה או משחק לשחזור, הזנת הכתובת, בחירה בין Clean room ל-Deep, תיאור המטרה ולחיצה על Start" width="100%"><br>
+      <sub><b>בנייה:</b> בוחרים מה לשחזר, מתארים מה רוצים ולוחצים Start.</sub>
     </td>
     <td width="50%" valign="top">
       <img src="docs/images/project-game.png" alt="פרויקט משחק סנייק מוכן עם כל השלבים שהושלמו וכפתור להפעלת המשחק" width="100%"><br>
-      <sub><b>מוכן:</b> הפעילו את המשחק, או בקשו שינויים למטה.</sub>
+      <sub><b>מוכן:</b> מפעילים את המשחק, או מבקשים שינויים למטה.</sub>
     </td>
   </tr>
 </table>
 
+<a id="two-ways-to-use-it"></a>
+
 ## שתי דרכים לעבוד
 
-- **פשוט (Simple, ברירת מחדל):** ״מה תרצו ליצור?״ בוחרים אתר, אפליקציה או משחק, מתארים בקצרה ולוחצים Start. עמוד הפרויקט מציג את ארבעת השלבים (חקירה ← בנייה ← בדיקה ← מוכן), מה הסוכן עושה במילים ברורות, כרטיסי שאלות ואישורים, ציון ההתאמה למקור וכפתורים לפתיחת התוצר או התיקייה שלו. אפשר לבקש שינויים בתיבה למטה. אפשרות ״להסתכל מבפנים בלבד״ פותחת יעד לתשאול בלי לבנות דבר (במצב Deep).
-- **מתקדם (Advanced):** סביבת העבודה המלאה: כל הכלים (Ctrl/Cmd+K), פונקציות, מחרוזות, פסאודו-C, אסמבלי (Disassembly), Hex, גרפי קריאות, ראיות, נעלמים, עבודות, לוגים ומסוף הסוכן.
+- **פשוט (Simple, ברירת מחדל):** ״מה תרצו ליצור?״ בוחרים אתר, אפליקציה או משחק, מתארים מה רוצים ולוחצים Start. עמוד הפרויקט מציג את ארבעת השלבים (חקירה ← בנייה ← בדיקה ← מוכן), מה הסוכן עושה במילים פשוטות, כרטיסי שאלות ואישורים, עד כמה התוצאה דומה למקור, וכפתורים לפתיחת התוצר או התיקייה שלו. ניתן לבקש שינויים בתיבה שבתחתית המסך. אפשרות ״להסתכל מבפנים בלבד״ פותחת יעד לצורך שאלות בלי לבנות דבר (במצב Deep).
+- **מתקדם (Advanced):** סביבת העבודה המלאה — כל כלי (Ctrl/Cmd+K), פונקציות, מחרוזות, פסאודו-C, אסמבלי (Disassembly), Hex, גרפי קריאות, ראיות, נעלמים, עבודות, יומני לוג ומסוף הסוכן.
 
-שני המצבים מפעילים את אותו מנוע.
+שני המצבים מפעילים את אותו המנוע.
 
 ## חדר נקי (Clean room) או עמוק (Deep)
 
-- **Clean room (ברירת מחדל):** דבר מתוך המקור אינו נקרא — לא הקוד, לא הקבצים ולא קוד המקור של העמוד. Craft Anything עובד רק על סמך מה שניתן לראות: תמונות שהוספתם, האתר כפי שגולש רואה אותו (צילומי מסך, טקסט גלוי, מידות פריסה, צבעים, גופנים, מרווחים ותפריטים פתוחים), וכאשר אתם מאשרים זאת — גם צילום חלון האפליקציה. כלים שמבקשים להציץ פנימה נדחים עם הסבר כיצד להפעיל מצב Deep.
-- **Deep:** כל הכלים זמינים לשימושכם הפרטי. קוד התוכנה וקבציה נקראים באמצעות המנועים המובנים (ועם Ghidra אם מותקן), ה-JavaScript של אתר נקרא ועמוד הבית נסרק, והבונה רשאי להשתמש בכל הממצאים.
+- **Clean room (ברירת מחדל):** דבר מתוך המקור אינו נקרא — לא הקוד שלו, לא הקבצים ולא קוד המקור של העמוד. Craft Anything עובד על סמך מה שניתן לראות: תמונות שהוספתם, האתר כפי שמבקר רואה אותו (צילומי מסך, טקסט גלוי, פריסה מדודה, צבעים, גופנים, מרווחים ותפריטים פתוחים), וכאשר תאשרו זאת — תמונה של חלון האפליקציה. כלים שמבקשים להציץ פנימה נדחים עם הסבר כיצד להפעיל את מצב Deep.
+- **Deep:** כל הכלים משמשים אתכם, לשימושכם הפרטי. קוד התוכנה וקבציה נקראים באמצעות המנועים המובנים (ועם Ghidra כשהוא מותקן), ה-JavaScript של אתר נקרא ועמוד הפתיחה שלו מנוטר, והבונה רשאי להשתמש בכל הממצאים.
 
-מצב חדר נקי הוא מדיניות של הכלים ש-Craft Anything מציע ומסרב להם; הוא אינו ארגז חול (sandbox) ברמת מערכת ההפעלה ואינו מבודד את המחשב. סוכן קידוד שאתם מריצים פועל תחת ההרשאות שלכם. האפשרות להגביל את הכלים המובנים של סוכן תלויה בסוכן עצמו; לגבי כלי Claude Code בשיחות ובשאלות, ראו [`docs/claude-code.md`](docs/claude-code.md).
+חדר נקי הוא כלל לגבי מה ש-Craft Anything מציע ומה הוא דוחה. הוא אינו ארגז חול (sandbox) ברמת מערכת ההפעלה ואינו מבודד את המחשב. סוכן קידוד שאתם מריצים עדיין פועל תחת ההרשאות שלכם, ומה שהוא יכול לקרוא, לכתוב או להריץ תלוי בהרשאותיו. היכולת של Craft Anything לחסום כלים של הסוכן עצמו משתנה מסוכן לסוכן; לגבי הכלים של Claude Code בשיחות ובשאלות, ראו [`docs/claude-code.md`](docs/claude-code.md).
 
-אפשר לעבור בין המצבים בשורת הכותרת או בהגדרות, באמצעות `settings_set deep_mode true`, או להרצת CLI חד-פעמית עם `--deep` (או `--clean-room`).
+ניתן להחליף מצב בשורת הכותרת או בהגדרות, באמצעות `settings_set deep_mode true`, או להרצת CLI חד-פעמית עם `--deep` (או `--clean-room`).
 
 <p align="center">
   <img src="docs/images/workbench.png" alt="סביבת העבודה המתקדמת: רשימת פונקציות, פסאודו-C של הפונקציה הנבחרת, הסוכן עונה על שאלה באמצעות קריאת כלי, ויומן הראיות" width="100%">
   <br>
-  <sub><b>מתקדם:</b> פונקציות, פסאודו-C, הסוכן והראיות מאחורי כל תשובה.</sub>
+  <sub><b>מתקדם:</b> פונקציות, פסאודו-C, הסוכן והראיות שמאחורי כל תשובה.</sub>
 </p>
+
+<a id="ai"></a>
 
 ## AI
 
-הבנייה דורשת סוכן קידוד מותקן במחשב שלכם. **Claude Code** נתמך כבחירה ראשונה: Craft Anything מריץ את תוכנת `claude` המקורית והלא-משונה שלכם עם החשבון שלכם; Craft Anything לעולם אינו רואה או שומר את פרטי ההתחברות שלכם, והשימוש כפוף להסכם שלכם מול Anthropic (ראו [docs/claude-code.md](docs/claude-code.md)). קיים גם מתאם ל-Codex שטרם נבדק בהתקנה חיה מלאה. **GitHub Copilot** יכול להשתמש ב-Copilot CLI המותקן דרך ACP (התחברות נפרדת עם `copilot login`). **Grok Build** יכול להשתמש ב-`grok` המותקן דרך ACP (`grok agent stdio`; התחברות נפרדת עם `grok login`, ראו [docs/grok.md](docs/grok.md)). סוכנים נוספים התומכים ב-ACP (Gemini CLI, Qwen Code, opencode, goose, Hermes, Maki, Devin) ניתנים לבחירה בכל מנוע קצה; מביניהם Maki ו-Devin הורצו בשידור חי (Devin מזדהה מול מפתח השרת השמור — התחברות CLI מקומית אינה תקפה דרך ACP). בנוסף ניתן לחבר Anthropic, OpenAI, OpenRouter, xAI (Grok, כשמוגדר `XAI_API_KEY`) ושרתים תואמי OpenAI מקומיים לצורך שאלות וניתוח (הגדרות ← AI).
+הבנייה דורשת סוכן קידוד במחשבכם. **Claude Code** נתמך ראשון: Craft Anything מריץ את תוכנת `claude` המקורית והלא-משונה שלכם, שמשתמשת בהתחברות שלכם; Craft Anything לעולם אינו רואה את החשבון שלכם ואינו מטפל בו. השימוש שלכם בו כפוף להסכם שלכם עם Anthropic. ראו [docs/claude-code.md](docs/claude-code.md) להסבר כיצד ומדוע. מתאם ל-Codex קיים אך טרם אומת בהתקנה אמיתית. **GitHub Copilot** יכול להשתמש ב-Copilot CLI המותקן אצלכם דרך ACP: יש להתחבר בנפרד עם `copilot login`. **Grok Build** יכול להשתמש בתוכנת `grok` המותקנת דרך ACP (`grok agent stdio`): יש להתחבר בנפרד עם `grok login`. ראו [docs/grok.md](docs/grok.md). **Kimi Code CLI** יכול להשתמש בתוכנת `kimi` המותקנת דרך ACP (`kimi acp`): יש להתחבר בנפרד עם `kimi login`; מתאם זה טרם הורץ בשידור חי. סוכנים נוספים שמדברים ACP (Gemini CLI, Qwen Code, opencode, goose, Hermes, Maki, Devin) ניתנים לבחירה בכל מנוע קצה; מביניהם Maki ו-Devin הורצו בשידור חי (Devin מזדהה באמצעות המפתח השמור של מנוע הקצה — ההתחברות ל-CLI שלו אינה תקפה דרך ACP). Anthropic, OpenAI, OpenRouter, xAI (Grok, כשמוגדר `XAI_API_KEY`) ושרתים מקומיים תואמי OpenAI זמינים לצורך שאלות וניתוח (הגדרות ← AI).
+
+<a id="built-for-agents"></a>
 
 ## בנוי לסוכנים
 
-כל כלי הוא גם תת-פקודת CLI וגם כלי MCP, כך שסוכן יכול לחקור יעד או לבצע בנייה מחדש שלמה גם בלי האפליקציה הגרפית:
+כל כלי הוא גם תת-פקודת CLI וגם כלי MCP, כך שסוכן יכול לחקור יעד או להריץ בנייה מחדש שלמה בלי האפליקציה הגרפית:
 
 ```sh
 craft-anything-cli commands                                   # כל הכלים, לפי ערכת כלים
-craft-anything-cli mcp                                        # חשיפתם כשרת MCP לכל לקוח
+craft-anything-cli mcp                                        # הגשת הכלים לכל לקוח MCP
 craft-anything-cli rebuild https://example.com "Recreate this website"
 ```
 
-התוצאות נשמרות כרשומות ראיות עם רמת ביטחון, כיסוי ומגבלות; פלטים גדולים חוזרים תחילה כתקציר וניתנים לדפדוף עם `core_evidence_browse`. הפקודה `craft-anything-cli setup` מחברת את Craft Anything לאפליקציות סוכני קידוד.
+התוצאות הן רשומות ראיות הכוללות רמת ביטחון, כיסוי ומגבלות; תוצאות גדולות חוזרות תחילה כתקציר וניתנות לדפדוף באמצעות `core_evidence_browse`. הפקודה `craft-anything-cli setup` מחברת את Craft Anything לאפליקציות של סוכני קידוד.
+
+<a id="under-the-hood"></a>
 
 ## מתחת למכסה
 
-מנוע הנדסה לאחור ב-Rust טהור עם 320 כלים (300 במנוע והשאר בשכבות ה-AI וההגדרה) לתוכנות נייטיב, ‎.NET, Java, Android, Apple, Electron/JavaScript, אתרים, קושחה, לכידות תעבורה (PCAP), מסדי נתונים וקובצי משחקים. המפענחים, הדיסאסמבלר והדה-קומפילר שלו פועלים ללא תלות חיצונית; מצב Deep משתמש בכולם, וגם ב-Ghidra כשהוא מותקן. אותו מנוע מניע את אפליקציית שולחן העבודה (`egui`), את ה-CLI ואת שרת ה-MCP, וחלקים ממנו רצים גם בדפדפן ב-WebAssembly. הרשימה המלאה זמינה ב-[docs/tools.md](docs/tools.md).
+מנוע הנדסה לאחור ב-Rust טהור עם 320 כלים (300 במנוע והשאר משכבות ה-AI וההגדרה) לתוכנות נייטיב, .NET, Java, Android, Apple, Electron/JavaScript, אתרים, קושחה, לכידות מנות (packet captures), מסדי נתונים וקובצי משחקים. המפענחים, הדיסאסמבלר והדה-קומפילר שלו פועלים ללא כל תוכנה חיצונית; מצב Deep משתמש בכולם, וגם ב-Ghidra כשהוא מותקן. המנוע מניע את אפליקציית שולחן העבודה (`egui`), את ה-CLI ואת שרת ה-MCP, וחלקים ממנו רצים בדפדפן כ-WebAssembly. הרשימה המלאה נמצאת ב-[docs/tools.md](docs/tools.md).
+
+<a id="get-started"></a>
 
 ## התחלה מהירה
 
-דורש Rust בגרסה **1.97 ומעלה** (`rustup update`). ב-Debian או Ubuntu אפליקציית שולחן העבודה דורשת גם:
+דורש Rust בגרסה **1.97 ומעלה** (תלות מסוימת דורשת זאת; `rustup update`). ב-Debian או Ubuntu, אפליקציית שולחן העבודה דורשת גם:
 
 ```sh
 sudo apt-get install build-essential libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgtk-3-dev
@@ -172,11 +184,11 @@ sudo apt-get install build-essential libxkbcommon-dev libxkbcommon-x11-0 libwayl
 ```sh
 git clone https://github.com/storytold/craft-anything && cd craft-anything
 cargo run --release -p craft-anything                # אפליקציית שולחן העבודה
-cargo install --path apps/craft-anything-cli         # כלי שורת הפקודה (`craft-anything-cli`)
-craft-anything-cli doctor                            # בדיקת ההתקנה, הסוכנים והמנועים
+cargo install --path apps/craft-anything-cli         # כלי שורת הפקודה, כ-`craft-anything-cli`
+craft-anything-cli doctor                            # בדיקת ההתקנה, סוכני הקידוד והמנועים
 ```
 
-בנייה דורשת סוכן קידוד מחובר במחשבכם (ראו [AI](#ai)); פקודת `doctor` תפרט מה חסר. הרצה משורת הפקודה (שאלות יופיעו במסוף):
+הבנייה דורשת סוכן קידוד מחובר במחשבכם (ראו [AI](#ai)); פקודת `doctor` תציין מה חסר. הרצה מחדש משורת הפקודה (שאלות מוצגות במסוף):
 
 ```sh
 craft-anything-cli rebuild https://example.com "Recreate this website"
@@ -185,68 +197,116 @@ craft-anything-cli rebuild https://example.com "Make the header blue" --continue
 craft-anything-cli rebuild - "Add a contact form" --project-folder "<your folder>" --existing edit
 ```
 
-פרויקטים חדשים נשמרים ב-`Documents/Craft Anything` (ניתן לשינוי בהגדרות ← כללי). כל תיקיית פרויקט מכילה `craft.json` (בקשה, יעד, סטטוס והיסטוריה), `capture/` (חומרי הקלטה מהיעד), `app/` (הפרויקט שנבנה), `checks/` (השוואות למקור), `investigation.cany/` (ראיות) ו-`inbox/` (שאלות פתוחות).
+פרויקטים חדשים נשמרים ב-`Documents/Craft Anything` (ניתן לשינוי בהגדרות ← כללי). כל תיקיית פרויקט מכילה `craft.json` (הבקשה, היעד, הסטטוס וההיסטוריה), `capture/` (מה שהוקלט מהיעד), `app/` (הפרויקט שנוצר), `checks/` (כל השוואה למקור), `investigation.cany/` (ראיות) ו-`inbox/` (שאלות פתוחות).
 
-ניתן גם להתחיל פרויקט בתיקייה שתבחרו (״בחר תיקייה…״ תחת התחלה, או `--project-folder`). אם כבר יש בה קבצים, ציינו אם מדובר באפליקציה עצמה לעריכה במקום או בחומר גלם שממנו ייבנה הפרויקט בתוך `app/`.
+פרויקט יכול להתחיל גם בתיקייה שתבחרו (Choose a folder… תחת Start, או `--project-folder`). אם כבר יש בה קבצים, יש לציין מה הם: האפליקציה עצמה, שאותה הבונה עורך במקום, או חומר גלם להתחיל ממנו, כשהאפליקציה נבנית ב-`app/` לצד הקבצים (Settings → General יכול לזכור את התשובה). Settings → General מציג גם פרויקטים מתיקיות נוספות; הסרה מהרשימה רק מוציאה את הפרויקט מהרשימה.
 
-## מצב הפרויקט
+<a id="status"></a>
+
+## סטטוס
 
 > [!IMPORTANT]
-> **סטטוס:** Craft Anything נמצא באלפא מוקדמת. מה כבר עובד, מה חלקי ומה הלאה:
+> **סטטוס:** Craft Anything נמצא באלפא מוקדמת. מה עובד היום, מה חלקי ומה הלאה:
 >
-> - **עובד היום:** אפליקציית שולחן העבודה (פשוט ומתקדם), ה-CLI ושרת ה-MCP; תהליך חקירה ← בנייה ← בדיקה ← מוכן עבור אתרים, אפליקציות ומשחקים עם Claude Code; בדיקות אתרים בשלושה רוחבי מסך; שחזורי משחקים ב-Unity, Unreal או Godot; מצב Deep עם Ghidra; יצירת תמונות ומודלי תלת-ממד (אופציונלי, עם מפתח fal.ai אישי); תוספים (שרתי MCP ורכיבי WASM עם האפשרות `wasm-plugins`).
-> - **חלקי:** בנייה עם מפתחות API וסוכני קידוד אחרים (מוכן בקוד, טרם הורץ מקצה לקצה בסביבה חיה), בדיקות התנהגות לאפליקציות ומשחקים, וחלק מכלי המנוע שנבדקו רק מול דגימות מדומות.
-> - **פורסם:** גרסאות אלפא פומביות עם מתקינים ל-Windows, macOS, Linux ו-FreeBSD זמינות ב-[דף השחרורים](https://github.com/storytold/craft-anything/releases).
-> - **הבא בתור:** שכבת הענן המנוהלת.
+> - **עובד היום:** אפליקציית שולחן העבודה (פשוט ומתקדם), ה-CLI ושרת ה-MCP; תהליך חקירה ← בנייה ← בדיקה ← מוכן עבור אתרים, אפליקציות ומשחקים עם Claude Code כבונה; בדיקות אתרים בשלושה רוחבי מסך; שחזורי משחקים ב-Unity, Unreal או Godot; מצב Deep עם Ghidra; תמונות ומודלי תלת-ממד מיוצרים (אופציונלי, עם מפתח fal.ai אישי); תוספים (שרתי MCP, ורכיבי WASM בבניות עם האפשרות `wasm-plugins`).
+> - **חלקי:** בנייה עם מפתחות API וסוכני קידוד אחרים (מוכן בקוד, טרם הורץ בשידור חי), בדיקות התנהגות לאפליקציות ומשחקים, וכמה כלי מנוע שנבדקו רק מול דגימות מדומות.
+> - **פורסם:** גרסאות פומביות עם מתקינים ל-Windows, macOS, Linux ו-FreeBSD מפורסמות ב-[דף הגרסאות (Releases)](https://github.com/storytold/craft-anything/releases); הן עדיין בגרסת אלפא.
+> - **הבא בתור:** השכבה המנוהלת.
 >
-> לפרטים מלאים ראו [docs/STATUS.md](docs/STATUS.md), לרשימת הכלים ראו [docs/tool-status.md](docs/tool-status.md), ולמפת הדרכים ראו [docs/ROADMAP.md](docs/ROADMAP.md). נשמח לדיווחי באגים או הערות ב-[Discord](https://discord.gg/artcraft).
+> ב-[docs/STATUS.md](docs/STATUS.md) נמצאים הפירוט וכיצד כל חלק נבדק,
+> ב-[docs/tool-status.md](docs/tool-status.md) נמצאת הרשימה כלי-אחר-כלי,
+> וב-[docs/ROADMAP.md](docs/ROADMAP.md) נמצאת התוכנית, סעיף אחר סעיף. אנא דווחו על תקלות (issues), או ספרו לנו מה נשבר ב-[Discord](https://discord.gg/artcraft).
 
-**שימוש אחראי.** השתמשו ב-Craft Anything רק בתוכנה שבבעלותכם או שיש לכם רשות לבדוק. הכלי אינו עוקף DRM, מסכי התחברות או מנגנוני אנטי-צ׳יט. שחזורים מפיקים פריסה, סגנון והתנהגות מתוך ראיות; הסוכן מונחה שלא להעתיק סמלילים, תמונות או טקסטים אלא אם אישרתם בעלות או רישיון שימוש.
+**שימוש אחראי.** השתמשו ב-Craft Anything בתוכנה שבבעלותכם או שמותר לכם לבחון. הכלי אינו עוקף DRM, מסכי התחברות או מנגנוני אנטי-צ׳יט. שחזורים משחזרים פריסה, סגנון והתנהגות מתוך ראיות; הסוכן מונחה שלא להעתיק סמלילים, תמונות או טקסטים אלא אם אישרתם שהם בבעלותכם או שיש לכם רשות לכך.
 
-**התקנת תלויות מריצה קוד.** בעת התקנת תלויות בפרויקט שנבנה, הפקודות רצות על המחשב שלכם ועלולות להריץ סקריפטי התקנה (כגון `npm` או build scripts של Rust ו-Python). Craft Anything מבקש אישור מראש לפני הרצת סוג פקודה חדש בפרויקט.
+**התקנת תלויות מריצה קוד.** כאשר בונה מתקין את התלויות של פרויקט, הפקודות רצות על המחשב שלכם, והחבילות עלולות להריץ קוד בזמן ההתקנה. npm מריץ כברירת מחדל את סקריפטי ההתקנה של כל חבילה, וסקריפטי בנייה של Rust וחבילות מקור של Python מריצים קוד הגדרה משלהם. Craft Anything שואל לפני פקודה מסוג שעדיין לא נתקל בו בפרויקט זה (`npm`, `cargo`…). בחירה ב-״always allow״ עבור `npm` תאפשר לכל פקודות npm הבאות לרוץ בלי לשאול, לכן עשו זאת רק בפרויקט שאתם סומכים על התלויות שלו. כדי להתקין חבילות npm בלי סקריפטי ההתקנה שלהן, הריצו `npm install --ignore-scripts`.
+
+<a id="downloads"></a>
 
 ## הורדות
 
-ב-GitHub, [הגרסה האחרונה](https://github.com/storytold/craft-anything/releases/latest) כוללת את כל החבילות שלהלן, ו-[כל הגרסאות](https://github.com/storytold/craft-anything/releases) זמינות עם הערות שחרור ו-`SHA256SUMS.txt`.
+ב-GitHub, [הגרסה האחרונה](https://github.com/storytold/craft-anything/releases/latest) כוללת את כל הבניות המפורטות מטה, וב-[כל הגרסאות](https://github.com/storytold/craft-anything/releases) נמצאות גרסאות קודמות והערות השחרור שלהן. `<ver>` בשמות הקבצים הוא מספר הגרסה, ו-`SHA256SUMS.txt` מפרט סכום ביקורת (checksum) לכל קובץ.
 
 ### Windows
 
-| בנייה | מתקין | גרסה ניידת |
+| בנייה | מתקין | ניידת (Portable) |
 |---|---|---|
 | x64 (Intel/AMD 64-bit) | `craft-anything-<ver>-windows-x64.msi` | `craft-anything-<ver>-windows-x64-portable.zip` |
-| arm64 (ARM / Snapdragon) | `craft-anything-<ver>-windows-arm64.msi` | `craft-anything-<ver>-windows-arm64-portable.zip` |
-| x86 (32-bit) | `craft-anything-<ver>-windows-x86.msi` | `craft-anything-<ver>-windows-x86-portable.zip` |
+| arm64 (Snapdragon ומחשבי ARM אחרים) | `craft-anything-<ver>-windows-arm64.msi` | `craft-anything-<ver>-windows-arm64-portable.zip` |
 
-המתקינים וקובצי ההפעלה חתומים דיגיטלית.
+המתקינים וקובצי ההפעלה חתומים דיגיטלית. קובץ ה-zip הנייד שומר את ההגדרות שלו לצד האפליקציה.
 
 ### macOS
 
 | בנייה | קובץ | הערות |
 |---|---|---|
-| אפליקציה אוניברסלית (Apple silicon + Intel) | `craft-anything-<ver>-macos-universal.dmg` | חתומה ומאושרת נוטריזציה |
-| כלי שורת הפקודה, אוניברסלי | `craft-anything-cli-<ver>-macos-universal.zip` | חתום ומאושר; מגרסה אחרי 0.2.0 ה-CLI כבר כלול באפליקציה |
+| אפליקציה, אוניברסלית (Apple silicon + Intel) | `craft-anything-<ver>-macos-universal.dmg` | חתומה ומאושרת נוטריזציה |
+| כלי שורת פקודה, אוניברסלי | `craft-anything-cli-<ver>-macos-universal.zip` | חתום ומאושר נוטריזציה; ראו מטה אם macOS חוסם אותו |
+
+גרסאות שאחרי 0.2.0 כוללות את כלי שורת הפקודה בתוך האפליקציה, כך שבניות חדשות אינן זקוקות לקובץ ה-zip הנפרד. תצטרכו אותו רק כדי להשתמש בשורת הפקודה בלי האפליקציה.
+
+הורדה של קובץ ה-zip דרך הדפדפן עלולה להיעצר עם ההודעה "Apple could not verify craft-anything-cli" (תוכנה בודדת אינה יכולה לשאת איתה את כרטיס הנוטריזציה, ולכן macOS נדרשת לבדוק אותו מקוונת). הורדה מהמסוף אינה נבדקת בדרך זו, ולכן השתמשו בפקודות הבאות:
+
+```sh
+ver=0.2.0   # החליפו בגרסה הרצויה
+curl -fLO "https://github.com/storytold/craft-anything/releases/download/v$ver/craft-anything-cli-$ver-macos-universal.zip"
+ditto -x -k "craft-anything-cli-$ver-macos-universal.zip" .
+mkdir -p ~/.local/bin
+mv "craft-anything-cli-$ver-macos-universal/craft-anything-cli" ~/.local/bin/
+~/.local/bin/craft-anything-cli --version
+```
+
+כדי להריץ אותו פשוט כ-`craft-anything-cli`, הוסיפו את `~/.local/bin` למשתנה `PATH`.
+
+אם העותק החסום כבר נמצא אצלכם, לחצו Done (ולא Move to Bin), ואז הריצו `xattr -d com.apple.quarantine <path to craft-anything-cli>`, או אשרו אותו תחת System Settings → Privacy & Security → Open Anyway.
+
+#### בדיקה שהורדה ל-Mac חתומה ומאושרת נוטריזציה
+
+כל גרסה ל-Mac חתומה באישור Developer ID ומאושרת נוטריזציה על ידי Apple. כדי לבדוק הורדה בעצמכם, הריצו את הפקודות הבאות במסוף (החליפו את `<ver>` בגרסה ואת הנתיבים בנתיבים שלכם):
+
+```sh
+# תמונת הדיסק: "accepted" ו-"source=Notarized Developer ID" משמעותם שהבדיקה עברה
+spctl --assess --type open --context context:primary-signature -v "craft-anything-<ver>-macos-universal.dmg"
+# כרטיס הנוטריזציה מצורף: מדפיס "The validate action worked!"
+xcrun stapler validate "craft-anything-<ver>-macos-universal.dmg"
+
+# האפליקציה, לאחר פתיחת תמונת הדיסק: החתימה חייבת להתאמת
+codesign --verify --deep --strict --verbose=2 "/Volumes/<disk image name>/Craft Anything.app"
+spctl --assess --type execute --verbose "/Volumes/<disk image name>/Craft Anything.app"
+
+# כלי שורת הפקודה: תוכנה בודדת אינה יכולה לשאת כרטיס, ולכן macOS בודקת אותה מקוונת
+codesign --verify --strict --verbose=2 ~/.local/bin/craft-anything-cli
+codesign -dv --verbose=4 ~/.local/bin/craft-anything-cli 2>&1 | grep Authority
+```
+
+שורות ה-`Authority` צריכות לציין אישור מסוג "Developer ID Application". אם אחת הבדיקות נכשלת, אל תריצו את הקובץ; דווחו על כך בצירוף הפלט ותג הגרסה.
 
 ### Linux
 
 | פורמט | x86_64 | aarch64 (ARM64) | הערות |
 |---|---|---|---|
-| AppImage | `craft-anything-<ver>-linux-x86_64.AppImage` | `craft-anything-<ver>-linux-aarch64.AppImage` | רץ מכל מקום; מתעדכן עם AppImageUpdate |
-| Flatpak | `craft-anything-<ver>-linux-x86_64.flatpak` | `craft-anything-<ver>-linux-aarch64.flatpak` | רץ בארגז חול (בלי גישה לדפדפן מקומי); `flatpak install --user <file>` |
+| AppImage | `craft-anything-<ver>-linux-x86_64.AppImage` | `craft-anything-<ver>-linux-aarch64.AppImage` | רץ מכל מקום; מתעדכן עצמאית עם [AppImageUpdate](https://github.com/AppImageCommunity/AppImageUpdate) (קובצי `.zsync`) |
+| Flatpak | `craft-anything-<ver>-linux-x86_64.flatpak` | `craft-anything-<ver>-linux-aarch64.flatpak` | רץ בארגז חול, ולכן אינו יכול להפעיל דפדפן במחשבכם, דבר שנדרש לבדיקת אתרים (השתמשו בחבילה אחרת לכך); `flatpak install --user <file>` |
 | Debian/Ubuntu | `craft-anything-<ver>-linux-x86_64.deb` | `craft-anything-<ver>-linux-aarch64.deb` | |
 | Fedora/RHEL/openSUSE | `craft-anything-<ver>-linux-x86_64.rpm` | `craft-anything-<ver>-linux-aarch64.rpm` | |
 | Tarball | `craft-anything-<ver>-linux-x86_64.tar.gz` | `craft-anything-<ver>-linux-aarch64.tar.gz` | פריסה לכל תיקייה |
+
+בניות RISC-V (`riscv64`) זמינות כ-`craft-anything-<ver>-linux-riscv64.tar.gz`, `craft-anything-<ver>-linux-riscv64.deb`, ו-`craft-anything-<ver>-linux-riscv64.rpm`.
+
+קובץ ה-AppImage מכיל גם את ה-CLI: הריצו `<AppImage> --cli <command>` (לדוגמה `<AppImage> --cli mcp` עבור לקוח MCP), או צרו קישור אל ה-AppImage בשם `craft-anything-cli` והריצו אותו.
 
 ### FreeBSD
 
 | בנייה | קובץ |
 |---|---|
 | x86_64 | `craft-anything-<ver>-freebsd-x86_64.tar.gz` |
+| aarch64 (ARM64) | `craft-anything-<ver>-freebsd-aarch64.tar.gz` |
 
 ### Web (WebAssembly)
 
 | בנייה | קובץ | הערות |
 |---|---|---|
-| מציג דפדפן | `craft-anything-web-<ver>.zip` | מזהה קבצים בדפדפן מקומית בלי לשלוח אותם לשרת ([packaging/web/README.md](packaging/web/README.md)) |
+| מציג דפדפן | `craft-anything-web-<ver>.zip` | מראה מהו קובץ, ישירות בדפדפן (הקובץ לעולם אינו יוצא ממנו); ארחו את התיקייה בכל שרת אינטרנט סטטי ([packaging/web/README.md](packaging/web/README.md)) |
 
 <br>
 
@@ -257,7 +317,10 @@ craft-anything-cli rebuild - "Add a contact form" --project-folder "<your folder
 <h3 align="center">בואו ליצור איתנו דברים</h3>
 
 <p align="center">
-  שרת ה-Discord שלנו הוא בית ליוצרים ואמנים מכל הסוגים: ציירים, צלמים, מאיירים, עורכי וידאו, מעצבים ומתחילים סקרנים. שתפו פרויקטים, בקשו עזרה או ספרו מה הייתם רוצים שהכלים האלה ידעו לעשות.
+  שרת ה-Discord שלנו הוא מקום המפגש של אמנים ויוצרים מכל סוג: אנשים שמציירים, מצלמים, משרטטים, עורכים סרטים,
+  מסדרים טיפוגרפיה, וגם כאלה שעדיין מגלים מה הם אוהבים ליצור. שתפו במה שאתם עובדים עליו,
+  בקשו עזרה, ספרו לנו מה נשבר, או אילו יכולות הייתם רוצים שהכלים האלה יקבלו.
+  יהא התחום שלכם אשר יהא ויהא הוותק שלכם אשר יהא — ברוכים הבאים.
 </p>
 
 <p align="center">
@@ -296,9 +359,11 @@ craft-anything-cli rebuild - "Add a contact form" --project-folder "<your folder
 Craft Anything מופץ תחת רישיון כפול [MIT](LICENSE-MIT) או [Apache-2.0](LICENSE-APACHE), לפי בחירתכם.
 Copyright (c) 2026 ArtCraft Team ותורמי Craft Anything ([CONTRIBUTORS.md](CONTRIBUTORS.md)). הודעות נדרשות נמצאות ב-[NOTICE](NOTICE).
 
-גופנים, סמלים, תמונות ונכסים אחרים שומרים על רישיונות הקוד הפתוח המקוריים שלהם כמפורט ב-[ATTRIBUTION.md](ATTRIBUTION.md).
+גופנים, סמלים, תמונות ונכסים אחרים הכלולים בחבילה שומרים על רישיונות הקוד הפתוח שלהם; כל אחד מהם מפורט עם יוצרו, מקורו ורישיונו ב-[ATTRIBUTION.md](ATTRIBUTION.md).
 
-השם ArtCraft, הסימן המסחרי והלוגואים בתיקייה [`docs/brand/`](docs/brand/) הם סימנים מסחריים של צוות ArtCraft ואינם מכוסים ברישיון זה (ראו [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)).
+צילומי המסך מציגים פרויקטים לדוגמה שנבנו עבורם: example.com, משחק סנייק ותוכנית מחשבון קטנה.
+
+השם ArtCraft, הסימן המסחרי והלוגואים בתיקייה [`docs/brand/`](docs/brand/) הם סימנים מסחריים של צוות ArtCraft ואינם מכוסים ברישיון זה. ניתן להשתמש בהם רק ללא שינוי, ורק כחלק ממאגר זה ומ-Craft Anything, בכפוף ל-[`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt). פיצולים (forks) וגרסאות ששונו חייבים להסיר אותם.
 
 </div>
 
