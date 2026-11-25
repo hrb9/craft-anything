@@ -9,7 +9,7 @@ use crate::theme::{self, Tokens};
 use crate::{CraftApp, icons, widgets};
 use craft_anything_engine::evidence::ToolError;
 use craft_anything_engine::pins::{Pin, PinMode};
-use egui::{RichText, Ui, Vec2};
+use egui::{Ui, Vec2};
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -193,7 +193,7 @@ pub fn section(app: &mut CraftApp, ui: &mut Ui, fold: bool) {
         })
         .inner
     };
-    let r = r.on_hover_text(tr(if collapsed { "Show pinned builds" } else { "Hide pinned builds" }));
+    let r = r.on_hover_text(crate::i18n::display(&tr(if collapsed { "Show pinned builds" } else { "Hide pinned builds" })).as_ref());
     widgets::named(r.clone(), "Pinned builds");
     if r.clicked() {
         app.state.pins_collapsed = !collapsed;
@@ -230,7 +230,10 @@ pub fn section(app: &mut CraftApp, ui: &mut Ui, fold: bool) {
 /// The right-click menu on a pin.
 fn menu(app: &mut CraftApp, ui: &mut Ui, row: &PinRow) {
     if row.running {
-        if widgets::menu_item(ui, false, tr("Open another copy")).on_hover_text(tr("Copies share the files it saves beside itself.")).clicked() {
+        if widgets::menu_item(ui, false, tr("Open another copy"))
+            .on_hover_text(crate::i18n::display(&tr("Copies share the files it saves beside itself.")).as_ref())
+            .clicked()
+        {
             app.open_pin(row, true);
             ui.close();
         }
@@ -259,7 +262,12 @@ fn menu(app: &mut CraftApp, ui: &mut Ui, row: &PinRow) {
         ui.close();
     }
     ui.separator();
-    if ui.add_enabled_ui(!row.running, |ui| widgets::menu_item(ui, false, tr("Remove…"))).inner.on_disabled_hover_text(tr("Close it first.")).clicked() {
+    if ui
+        .add_enabled_ui(!row.running, |ui| widgets::menu_item(ui, false, tr("Remove…")))
+        .inner
+        .on_disabled_hover_text(crate::i18n::display(&tr("Close it first.")).as_ref())
+        .clicked()
+    {
         app.state.modal = Some(Modal::PinDelete(row.project.clone(), row.pin.id));
         ui.close();
     }
@@ -274,11 +282,11 @@ fn megabytes(bytes: u64) -> String {
 pub fn pin_modal(app: &mut CraftApp, ui: &mut Ui, close: &mut bool) {
     let t = Tokens::get(ui.ctx());
     ui.set_width(560.0);
-    ui.label(theme::heading(tr("Pin this build"), theme::SECTION));
+    crate::i18n::heading(ui, &tr("Pin this build"), theme::SECTION);
     ui.add_space(theme::space::XS);
     crate::i18n::wrapped_label(
         ui,
-        &crate::i18n::tr_logical("Keep it in the sidebar to open any time, whatever later builds change."),
+        &tr("Keep it in the sidebar to open any time, whatever later builds change."),
         egui::TextStyle::Body.resolve(ui.style()),
         |r| r.color(t.text_dim),
     );
@@ -311,15 +319,15 @@ pub fn pin_modal(app: &mut CraftApp, ui: &mut Ui, close: &mut bool) {
     });
     ui.add_space(theme::space::SM);
     let (note, color) = match &app.state.pin_draft.size {
-        None => (crate::i18n::tr_logical("Working out how much space a copy takes…"), t.text_faint),
+        None => (tr("Working out how much space a copy takes…"), t.text_faint),
         Some(Err(e)) => (e.clone(), t.danger),
         Some(Ok((frozen, light))) => {
             let sizes = [("size", megabytes(*frozen)), ("light", megabytes(*light))];
             let sizes = sizes.each_ref().map(|(k, v)| (*k, v.as_str()));
             if *frozen >= BIG_COPY && mode == PinMode::Frozen {
-                (crate::i18n::trf_logical("A frozen copy takes {size}. That's a lot of space: a light copy takes {light}.", &sizes), t.warning)
+                (trf("A frozen copy takes {size}. That's a lot of space: a light copy takes {light}.", &sizes), t.warning)
             } else {
-                (crate::i18n::trf_logical("A frozen copy takes {size}; a light copy takes {light}.", &sizes), t.text_dim)
+                (trf("A frozen copy takes {size}; a light copy takes {light}.", &sizes), t.text_dim)
             }
         }
     };
@@ -351,7 +359,7 @@ pub fn pin_modal(app: &mut CraftApp, ui: &mut Ui, close: &mut bool) {
 
 pub fn rename_modal(app: &mut CraftApp, ui: &mut Ui, project: &Path, id: u32, close: &mut bool) {
     let t = Tokens::get(ui.ctx());
-    ui.label(theme::heading(tr("Rename the pin"), theme::SECTION));
+    crate::i18n::heading(ui, &tr("Rename the pin"), theme::SECTION);
     ui.add_space(theme::space::SM);
     let r = ui.add(egui::TextEdit::singleline(&mut app.state.rename_input).desired_width(f32::INFINITY).frame(widgets::text_field_frame(&t)));
     widgets::named(r.clone(), "Pin name");
@@ -379,18 +387,18 @@ pub fn delete_modal(app: &mut CraftApp, ui: &mut Ui, project: &Path, id: u32, cl
         *close = true;
         return;
     };
-    ui.label(theme::heading(trf("Remove {name}?", &[("name", &row.pin.name)]), theme::SECTION));
+    crate::i18n::heading(ui, &trf("Remove {name}?", &[("name", &row.pin.name)]), theme::SECTION);
     ui.add_space(theme::space::SM);
     // A copy may hold what the program saved; say so, since it can't be brought back.
     let what = if row.pin.mode.keeps_copy() {
-        crate::i18n::tr_logical("Its copy is deleted, with anything it saved there. The project itself stays as it is.")
+        tr("Its copy is deleted, with anything it saved there. The project itself stays as it is.")
     } else {
-        crate::i18n::tr_logical("Only the pin goes; the project and its app stay as they are.")
+        tr("Only the pin goes; the project and its app stay as they are.")
     };
     crate::i18n::wrapped_label(ui, &what, egui::TextStyle::Body.resolve(ui.style()), |r| r.color(t.text_dim));
     if row.pin.mode.keeps_copy() {
         ui.add_space(theme::space::XS);
-        ui.label(RichText::new(tr("This can't be undone.")).color(t.danger).size(theme::SMALL));
+        crate::i18n::rich_label(ui, &tr("This can't be undone."), |r| r.color(t.danger).size(theme::SMALL));
     }
     ui.add_space(theme::space::MD);
     ui.horizontal(|ui| {

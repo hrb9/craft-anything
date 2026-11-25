@@ -40,7 +40,7 @@ impl<'ast> Visit<'ast> for Lookups {
             let name = path.path.segments.last().map(|s| s.ident.to_string()).unwrap_or_default();
             let owner = path.path.segments.iter().rev().nth(1).map(|s| s.ident.to_string()).unwrap_or_default();
             let positions: &[usize] = match (owner.as_str(), name.as_str()) {
-                (_, "tr" | "trf" | "tr_logical" | "trf_logical") => &[0],
+                (_, "tr" | "trf") => &[0],
                 ("widgets", "primary" | "link" | "suggestion" | "caption" | "pill" | "working" | "working_since" | "segmented" | "segmented_sized") => &[1],
                 ("widgets", "named") => &[1],
                 ("widgets", "primary_icon" | "primary_sized" | "secondary") => &[2],
@@ -97,8 +97,8 @@ pub fn check(root: &Path) -> bool {
     };
     let mut catalogs = Vec::new();
     for code in ["zh-hans", "zh-hant", "ru", "ko", "cs", "de", "ka", "es", "it", "vi", "pt-br", "tr", "th", "et", "he"] {
-        let path = source.join("i18n").join(format!("{code}.tsv"));
-        let Ok(text) = std::fs::read_to_string(&path) else {
+        let path = source.join("i18n").join(code);
+        let Some(text) = catalog_text(&path) else {
             eprintln!("i18n: can't read {}", path.display());
             return false;
         };
@@ -112,6 +112,20 @@ pub fn check(root: &Path) -> bool {
         println!("{line}");
     }
     report.problems.is_empty()
+}
+
+/// A language's catalog files (`i18n/<code>/*.tsv`), joined in name order as `build.rs` joins them.
+fn catalog_text(dir: &Path) -> Option<String> {
+    // An entry that can't be read fails the check rather than leaving a file out.
+    let mut files = std::fs::read_dir(dir).ok()?.map(|e| e.map(|e| e.path())).collect::<std::io::Result<Vec<_>>>().ok()?;
+    files.retain(|p| p.extension().is_some_and(|x| x == "tsv"));
+    files.sort();
+    let mut text = String::new();
+    for file in files {
+        text.push_str(&std::fs::read_to_string(file).ok()?);
+        text.push('\n');
+    }
+    Some(text)
 }
 
 /// The list of strings that may be missing from the catalogs for now, beside them in `i18n/`.

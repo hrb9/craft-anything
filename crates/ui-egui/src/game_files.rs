@@ -36,7 +36,7 @@ pub fn show(app: &mut CraftApp, ui: &mut Ui) {
             ui.add_space(pad);
             ui.vertical(|ui| {
                 ui.set_width(w);
-                ui.label(theme::heading(tr("Game files"), theme::TITLE));
+                crate::i18n::heading(ui, &tr("Game files"), theme::TITLE);
                 ui.add_space(theme::space::XS);
                 ui.label(
                     RichText::new(tr("See what a game packs and save its pictures as PNG files. Only for games you made, or whose owner lets you."))
@@ -204,7 +204,7 @@ fn contents(app: &mut CraftApp, ui: &mut Ui) {
     let (_, _, saves) = kind_label(&g.open_kind);
     ui.add_space(theme::space::LG);
     let name = std::path::Path::new(&open).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
-    ui.label(theme::heading(format!("{} {name}", tr("Inside")), theme::SECTION));
+    crate::i18n::heading(ui, &format!("{} {name}", tr("Inside")), theme::SECTION);
     ui.add_space(theme::space::SM);
     if g.loading {
         widgets::working(ui, "Reading what's inside…", None);
@@ -288,7 +288,7 @@ pub fn permission_modal(app: &mut CraftApp, ui: &mut Ui, close: &mut bool) {
     ui.painter().rect_filled(rect, t.radius, t.accent_soft);
     icons::paint(ui, rect, "shield-check", theme::icon::XL, t.accent_ink);
     ui.add_space(theme::space::MD);
-    ui.label(theme::heading(tr("Do you have permission?"), theme::SECTION));
+    crate::i18n::heading(ui, &tr("Do you have permission?"), theme::SECTION);
     ui.add_space(theme::space::XS);
     ui.label(
         RichText::new(tr(
