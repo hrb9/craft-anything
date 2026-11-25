@@ -3,7 +3,11 @@
 //! time. A string with no translation is shown in English. Tool ids, the CLI and MCP never see
 //! translated text.
 //!
-//! Adding a language: put `xx.tsv` in `i18n/` and add one row to [`LANGUAGES`].
+//! Each language's catalog is a folder, `i18n/<code>/`, whose `.tsv` files `build.rs` joins in
+//! name order. Strings a change adds go in a file of its own in each folder (named for its
+//! branch or roadmap item), so two changes that add strings don't conflict (#1465).
+//!
+//! Adding a language: put its strings in `i18n/xx/core.tsv` and add one row to [`LANGUAGES`].
 
 use std::collections::HashMap;
 use std::sync::{OnceLock, RwLock};
@@ -18,24 +22,31 @@ pub struct LangInfo {
     pub source: &'static str,
 }
 
+/// A language's catalog, as `build.rs` joins it from `i18n/<code>/`.
+macro_rules! catalog {
+    ($code:literal) => {
+        include_str!(concat!(env!("OUT_DIR"), "/i18n/", $code, ".tsv"))
+    };
+}
+
 pub static LANGUAGES: &[LangInfo] = &[
     LangInfo { code: "en", name: "English", source: "" },
-    LangInfo { code: "de", name: "Deutsch", source: include_str!("i18n/de.tsv") },
-    LangInfo { code: "ka", name: "ქართული", source: include_str!("i18n/ka.tsv") },
-    LangInfo { code: "fr", name: "Français", source: include_str!("fr.tsv") },
-    LangInfo { code: "it", name: "Italiano", source: include_str!("i18n/it.tsv") },
-    LangInfo { code: "ja", name: "日本語", source: include_str!("ja.tsv") },
-    LangInfo { code: "zh-hans", name: "简体中文", source: include_str!("i18n/zh-hans.tsv") },
-    LangInfo { code: "zh-hant", name: "繁體中文", source: include_str!("i18n/zh-hant.tsv") },
-    LangInfo { code: "ru", name: "Русский", source: include_str!("i18n/ru.tsv") },
-    LangInfo { code: "ko", name: "한국어", source: include_str!("i18n/ko.tsv") },
-    LangInfo { code: "cs", name: "Čeština", source: include_str!("i18n/cs.tsv") },
-    LangInfo { code: "es", name: "Español", source: include_str!("i18n/es.tsv") },
-    LangInfo { code: "vi", name: "Tiếng Việt", source: include_str!("i18n/vi.tsv") },
-    LangInfo { code: "pt-br", name: "Português (Brasil)", source: include_str!("i18n/pt-br.tsv") },
-    LangInfo { code: "tr", name: "Türkçe", source: include_str!("i18n/tr.tsv") },
-    LangInfo { code: "th", name: "ไทย", source: include_str!("i18n/th.tsv") },
-    LangInfo { code: "et", name: "Eesti", source: include_str!("i18n/et.tsv") },
+    LangInfo { code: "de", name: "Deutsch", source: catalog!("de") },
+    LangInfo { code: "ka", name: "ქართული", source: catalog!("ka") },
+    LangInfo { code: "fr", name: "Français", source: catalog!("fr") },
+    LangInfo { code: "it", name: "Italiano", source: catalog!("it") },
+    LangInfo { code: "ja", name: "日本語", source: catalog!("ja") },
+    LangInfo { code: "zh-hans", name: "简体中文", source: catalog!("zh-hans") },
+    LangInfo { code: "zh-hant", name: "繁體中文", source: catalog!("zh-hant") },
+    LangInfo { code: "ru", name: "Русский", source: catalog!("ru") },
+    LangInfo { code: "ko", name: "한국어", source: catalog!("ko") },
+    LangInfo { code: "cs", name: "Čeština", source: catalog!("cs") },
+    LangInfo { code: "es", name: "Español", source: catalog!("es") },
+    LangInfo { code: "vi", name: "Tiếng Việt", source: catalog!("vi") },
+    LangInfo { code: "pt-br", name: "Português (Brasil)", source: catalog!("pt-br") },
+    LangInfo { code: "tr", name: "Türkçe", source: catalog!("tr") },
+    LangInfo { code: "th", name: "ไทย", source: catalog!("th") },
+    LangInfo { code: "et", name: "Eesti", source: catalog!("et") },
 ];
 
 /// Match a locale against `langs`. An explicit script wins over the region, and legacy `iw`
@@ -89,9 +100,15 @@ fn system_language() -> &'static str {
     }
 }
 
-fn current() -> &'static RwLock<(String, HashMap<String, String>)> {
-    static CUR: OnceLock<RwLock<(String, HashMap<String, String>)>> = OnceLock::new();
-    CUR.get_or_init(|| RwLock::new(("en".into(), HashMap::new())))
+struct Catalog {
+    code: String,
+    rtl: bool,
+    map: HashMap<String, String>,
+}
+
+fn current() -> &'static RwLock<Catalog> {
+    static CUR: OnceLock<RwLock<Catalog>> = OnceLock::new();
+    CUR.get_or_init(|| RwLock::new(Catalog { code: "en".into(), rtl: false, map: HashMap::new() }))
 }
 
 fn parse(source: &str) -> HashMap<String, String> {
@@ -108,15 +125,17 @@ fn parse(source: &str) -> HashMap<String, String> {
 pub fn set_language(code: &str) {
     let code = if code.trim().is_empty() { system_language() } else { language_from_tag(code).unwrap_or("en") };
     let lang = LANGUAGES.iter().find(|l| l.code == code);
+    let resolved = lang.map(|l| l.code).unwrap_or("en");
     let map = lang.map(|l| parse(l.source)).unwrap_or_default();
+    let rtl = is_rtl_code(resolved);
     if let Ok(mut g) = current().write() {
-        *g = (lang.map(|l| l.code).unwrap_or("en").to_string(), map);
+        *g = Catalog { code: resolved.to_string(), rtl, map };
     }
 }
 
 /// Activate a language code and TSV catalog directly without registering it in [`LANGUAGES`].
-/// Used by RTL UI tests and offscreen snapshots before a locale catalog is shipped.
-pub fn set_custom_catalog(code: &str, source: &str) {
+/// Used by RTL UI tests before a locale catalog is shipped.
+pub(crate) fn set_custom_catalog(code: &str, source: &str) {
     let tag = code.trim().split(['.', '@']).next().unwrap_or_default().replace('_', "-").to_ascii_lowercase();
     let normalized = if tag == "iw" {
         "he".to_string()
@@ -125,13 +144,14 @@ pub fn set_custom_catalog(code: &str, source: &str) {
     } else {
         tag
     };
+    let rtl = is_rtl_code(&normalized);
     if let Ok(mut g) = current().write() {
-        *g = (normalized, parse(source));
+        *g = Catalog { code: normalized, rtl, map: parse(source) };
     }
 }
 
 pub fn language() -> String {
-    current().read().map(|g| g.0.clone()).unwrap_or_else(|_| "en".into())
+    current().read().map(|g| g.code.clone()).unwrap_or_else(|_| "en".into())
 }
 
 /// Whether `code` names a right-to-left script or language (accepting legacy `iw` tags as Hebrew
@@ -152,7 +172,7 @@ pub fn is_rtl_code(code: &str) -> bool {
 
 /// Whether the active UI language uses right-to-left script direction.
 pub fn is_rtl() -> bool {
-    is_rtl_code(&language())
+    current().read().map(|g| g.rtl).unwrap_or(false)
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -588,23 +608,10 @@ fn visual_rtl(text: &str) -> String {
     out
 }
 
-/// Read a translation and whether its catalog is right-to-left under one lock.
-fn tr_snapshot(s: &str) -> (String, bool) {
-    match current().read() {
-        Ok(g) => (g.1.get(s).cloned().unwrap_or_else(|| s.to_string()), is_rtl_code(&g.0)),
-        Err(_) => (s.to_string(), false),
-    }
-}
-
-/// Translate a UI string, keeping logical order (for search matching, native menus, and wrapping).
-pub fn tr_logical(s: &str) -> String {
-    tr_snapshot(s).0
-}
-
-/// Translate, then fill `{name}` placeholders in one pass, keeping logical order.
-pub fn trf_logical(s: &str, args: &[(&str, &str)]) -> String {
-    let template = tr_snapshot(s).0;
-    if template.contains('{') { craft_anything_platform::text::fill(&template, args) } else { template }
+/// Convert logical reading-order text into visual display order when the active language is RTL.
+/// Left-to-right languages return `logical` borrowed without allocation.
+pub fn display<'a>(logical: &'a str) -> std::borrow::Cow<'a, str> {
+    if is_rtl() && logical.chars().any(is_rtl_script) { std::borrow::Cow::Owned(visual_rtl(logical)) } else { std::borrow::Cow::Borrowed(logical) }
 }
 
 fn wrap_paragraph_logical<'a>(ctx: &egui::Context, paragraph: &'a str, font_id: &egui::FontId, max_width: f32) -> Vec<&'a str> {
@@ -629,19 +636,27 @@ fn wrap_paragraph_logical<'a>(ctx: &egui::Context, paragraph: &'a str, font_id: 
     if in_word {
         spans.push((word_start, paragraph.len()));
     }
-    let Some(&(mut line_start, mut line_end)) = spans.first() else {
+    if spans.is_empty() {
         return vec![paragraph];
-    };
+    }
+    // Single-pass O(words) width measurement under one font-lock acquisition.
+    let (space_w, word_widths): (f32, Vec<f32>) = ctx.fonts_mut(|f| {
+        let space = f.layout_no_wrap(" ".to_owned(), font_id.clone(), Default::default()).rect.width();
+        let widths = spans.iter().map(|&(s, e)| f.layout_no_wrap(paragraph[s..e].to_owned(), font_id.clone(), Default::default()).rect.width()).collect();
+        (space, widths)
+    });
     let mut rows = Vec::new();
-    for &(span_start, span_end) in spans.iter().skip(1) {
-        let candidate = &paragraph[line_start..span_end];
-        let width = ctx.fonts_mut(|f| f.layout_no_wrap(candidate.to_owned(), font_id.clone(), Default::default()).rect.width());
-        if width <= max_w {
+    let (mut line_start, mut line_end) = spans[0];
+    let mut line_w = word_widths[0];
+    for (&(span_start, span_end), &w) in spans.iter().zip(word_widths.iter()).skip(1) {
+        if line_w + space_w + w <= max_w {
             line_end = span_end;
+            line_w += space_w + w;
         } else {
             rows.push(&paragraph[line_start..line_end]);
             line_start = span_start;
             line_end = span_end;
+            line_w = w;
         }
     }
     rows.push(&paragraph[line_start..line_end]);
@@ -672,8 +687,48 @@ pub fn wrapped_visual_lines(ctx: &egui::Context, rtl: bool, logical: &str, font_
     out
 }
 
+/// Render a single-line or default label from logical text, reordering only the painted string
+/// when RTL is active while keeping the screen-reader label in logical reading order.
+pub fn label(ui: &mut egui::Ui, logical: &str) -> egui::Response {
+    rich_label(ui, logical, |r| r)
+}
+
+/// Render a styled label from logical text, reordering only the painted string when RTL is active
+/// while keeping the screen-reader label in logical reading order.
+pub fn rich_label(ui: &mut egui::Ui, logical: &str, style: impl FnOnce(egui::RichText) -> egui::RichText) -> egui::Response {
+    let shown = display(logical);
+    let reordered = matches!(shown, std::borrow::Cow::Owned(_)) && shown.as_ref() != logical;
+    let resp = ui.label(style(egui::RichText::new(shown.as_ref())));
+    if reordered {
+        resp.ctx.accesskit_node_builder(resp.id, |b| {
+            b.set_value(logical);
+            b.set_label(logical);
+        });
+    }
+    resp
+}
+
+/// Render a heading (`theme::semibold(size)`) from logical text, reordering only the painted
+/// string when RTL is active while keeping the screen-reader label in logical reading order.
+pub fn heading(ui: &mut egui::Ui, logical: &str, size: f32) -> egui::Response {
+    rich_label(ui, logical, |r| r.font(crate::theme::semibold(size)))
+}
+
+/// Attach a translated tooltip from logical text, reordering for visual RTL display without
+/// altering logical string values elsewhere.
+pub fn hover_text(resp: egui::Response, logical: &str) -> egui::Response {
+    if is_rtl() && logical.chars().any(is_rtl_script) {
+        let logical = logical.to_owned();
+        resp.on_hover_ui(move |ui| {
+            wrapped_label(ui, &logical, egui::TextStyle::Body.resolve(ui.style()), |r| r);
+        })
+    } else {
+        resp.on_hover_text(logical)
+    }
+}
+
 /// Render a wrapping label from logical text for an explicit `rtl` flag, deferring RTL visual
-/// reordering until after line breaks.
+/// reordering until after line breaks while keeping the screen-reader label in logical order.
 pub fn wrapped_label_for(
     ui: &mut egui::Ui,
     rtl: bool,
@@ -683,8 +738,15 @@ pub fn wrapped_label_for(
 ) -> egui::Response {
     let needs_rtl_wrap = rtl && logical.chars().any(is_rtl_script);
     let shown = if needs_rtl_wrap { wrapped_visual_lines(ui.ctx(), rtl, logical, font_id.clone(), ui.available_width()) } else { logical.to_owned() };
-    let rich = style(egui::RichText::new(shown).font(font_id));
-    if needs_rtl_wrap { ui.add(egui::Label::new(rich).extend()) } else { ui.add(egui::Label::new(rich).wrap()) }
+    let rich = style(egui::RichText::new(&shown).font(font_id));
+    let resp = if needs_rtl_wrap { ui.add(egui::Label::new(rich).extend()) } else { ui.add(egui::Label::new(rich).wrap()) };
+    if needs_rtl_wrap && shown != logical {
+        resp.ctx.accesskit_node_builder(resp.id, |b| {
+            b.set_value(logical);
+            b.set_label(logical);
+        });
+    }
+    resp
 }
 
 /// Render a wrapping label from logical text, deferring RTL visual reordering until after egui
@@ -693,18 +755,19 @@ pub fn wrapped_label(ui: &mut egui::Ui, logical: &str, font_id: egui::FontId, st
     wrapped_label_for(ui, is_rtl(), logical, font_id, style)
 }
 
-/// Translate a UI string.
+/// Translate a UI string in logical reading order.
 pub fn tr(s: &str) -> String {
-    let (raw, rtl) = tr_snapshot(s);
-    if rtl { visual_rtl(&raw) } else { raw }
+    match current().read() {
+        Ok(g) => g.map.get(s).cloned().unwrap_or_else(|| s.to_string()),
+        Err(_) => s.to_string(),
+    }
 }
 
-/// Translate, then fill `{name}` placeholders in one pass (`platform::text::fill`), so an inserted
-/// value stays literal even when it looks like a placeholder.
+/// Translate, then fill `{name}` placeholders in one pass (`platform::text::fill`), in logical
+/// reading order so inserted values stay literal even when they look like placeholders.
 pub fn trf(s: &str, args: &[(&str, &str)]) -> String {
-    let (template, rtl) = tr_snapshot(s);
-    let filled = if template.contains('{') { craft_anything_platform::text::fill(&template, args) } else { template };
-    if rtl { visual_rtl(&filled) } else { filled }
+    let template = tr(s);
+    if template.contains('{') { craft_anything_platform::text::fill(&template, args) } else { template }
 }
 
 #[cfg(test)]
@@ -719,7 +782,7 @@ Open {name}\tפתיחת {name}
 ";
 
 #[cfg(test)]
-pub(crate) fn tr_logical_for(code: &str, s: &str) -> String {
+pub(crate) fn tr_for(code: &str, s: &str) -> String {
     let source = LANGUAGES.iter().find(|l| l.code == code).map(|l| l.source).or_else(|| (code == "he").then_some(TEST_HE_CATALOG)).unwrap_or_default();
     let map = parse(source);
     map.get(s).cloned().unwrap_or_else(|| s.to_string())
@@ -731,13 +794,13 @@ mod tests {
 
     static LANG_LOCK: craft_anything_platform::sync::Mutex<()> = craft_anything_platform::sync::Mutex::new(());
 
-    fn tr_for(code: &str, s: &str) -> String {
-        let raw = tr_logical_for(code, s);
+    fn display_for(code: &str, s: &str) -> String {
+        let raw = tr_for(code, s);
         if is_rtl_code(code) { visual_rtl(&raw) } else { raw }
     }
 
-    fn trf_for(code: &str, s: &str, args: &[(&str, &str)]) -> String {
-        let template = tr_logical_for(code, s);
+    fn display_trf_for(code: &str, s: &str, args: &[(&str, &str)]) -> String {
+        let template = tr_for(code, s);
         let filled = if template.contains('{') { craft_anything_platform::text::fill(&template, args) } else { template };
         if is_rtl_code(code) { visual_rtl(&filled) } else { filled }
     }
@@ -756,34 +819,42 @@ mod tests {
     }
 
     #[test]
-    fn hebrew_tr_and_trf_reorder_into_visual_rtl_order() {
+    fn hebrew_tr_stays_logical_and_display_reorders_visual_rtl() {
+        let _guard = LANG_LOCK.lock().unwrap_or_else(|e| e.into_inner());
         assert!(is_rtl_code("he"));
+        // tr/trf keep logical reading order for accessibility, search, menus, and wrapping.
+        assert_eq!(tr_for("he", "New project"), "פרויקט חדש");
+        assert_eq!(tr_for("he", "Export a report (Markdown)"), "ייצוא דוח (Markdown)");
+        set_custom_catalog("he", TEST_HE_CATALOG);
+        assert!(is_rtl());
+        assert_eq!(tr("Command palette"), "לוח פקודות");
+        assert_eq!(trf("Open {name}", &[("name", ".env")]), "פתיחת .env");
+        assert_eq!(display(&tr("Command palette")).as_ref(), "פקודות לוח");
+        set_language("en");
+        assert!(!is_rtl());
+
         // Single Hebrew word stays logical (epaint/harfrust shapes the single RTL run).
-        assert_eq!(tr_for("he", "Apply"), "החלה");
+        assert_eq!(display_for("he", "Apply"), "החלה");
         // Multi-word Hebrew reorders words for visual right-to-left display.
-        assert_eq!(tr_for("he", "Command palette"), "פקודות לוח");
+        assert_eq!(display_for("he", "Command palette"), "פקודות לוח");
         // Mixed Hebrew + Latin + numbers + parentheses keep LTR segments intact and mirror RTL brackets.
-        assert_eq!(tr_for("he", "Export a report (Markdown)"), "(Markdown) דוח ייצוא");
-        assert_eq!(tr_for("he", "Command palette (Ctrl/⌘ K)"), "(Ctrl/⌘ K) פקודות לוח");
+        assert_eq!(display_for("he", "Export a report (Markdown)"), "(Markdown) דוח ייצוא");
+        assert_eq!(display_for("he", "Command palette (Ctrl/⌘ K)"), "(Ctrl/⌘ K) פקודות לוח");
         assert_eq!(visual_rtl("תמונה 1 מתוך 3"), "3 מתוך 1 תמונה");
         assert_eq!(visual_rtl("(תמונה 1 מצורפת)"), "(מצורפת 1 תמונה)");
         // Placeholder fill keeps inserted values literal before visual RTL reordering.
-        assert_eq!(trf_for("he", "Open {name}", &[("name", "demo.exe")]), "demo.exe פתיחת");
-        assert_eq!(trf_for("he", "Open {name}", &[("name", ".env")]), ".env פתיחת");
-        assert_eq!(trf_for("he", "Open {name}", &[("name", "/tmp/demo.cany")]), "/tmp/demo.cany פתיחת");
-        assert_eq!(trf_for("he", "Open {name}", &[("name", "\u{2066}foo - אב - bar\u{2069}")]), "foo - אב - bar פתיחת");
+        assert_eq!(display_trf_for("he", "Open {name}", &[("name", "demo.exe")]), "demo.exe פתיחת");
+        assert_eq!(display_trf_for("he", "Open {name}", &[("name", ".env")]), ".env פתיחת");
+        assert_eq!(display_trf_for("he", "Open {name}", &[("name", "/tmp/demo.cany")]), "/tmp/demo.cany פתיחת");
+        assert_eq!(display_trf_for("he", "Open {name}", &[("name", "\u{2066}foo - אב - bar\u{2069}")]), "foo - אב - bar פתיחת");
         // LTR-only lines (including indentation) stay untouched in multi-line visual reordering.
         assert_eq!(visual_rtl("כותרת בעברית\n  cargo test\nעוד שורה"), "בעברית כותרת\n  cargo test\nשורה עוד");
-        // Logical helper keeps catalog order for palette matching and native macOS menus.
-        assert_eq!(tr_logical_for("he", "New project"), "פרויקט חדש");
-        assert_eq!(tr_logical_for("he", "Export a report (Markdown)"), "ייצוא דוח (Markdown)");
-        assert!(tr_logical_for("he", "Export a report (Markdown)").contains("ייצוא דוח"));
         // Wrapping reorders each display row after line breaking, so opening words stay on row 0
         // and characters inside Hebrew words stay in logical order even with a Hebrew font loaded.
         let ctx = egui::Context::default();
         crate::theme::apply(&ctx, crate::theme::ThemeKind::Studio);
         ctx.run_ui(egui::RawInput::default(), |_| {}).textures_delta.clear();
-        let logical = tr_logical_for(
+        let logical = tr_for(
             "he",
             "More memory makes Ghidra's first look at a big program faster; leave some for the rest of the computer. Used from the next time Ghidra starts.",
         );
@@ -854,6 +925,7 @@ mod tests {
         assert!(!is_rtl_code("ku-Latn-TR"));
         assert!(!is_rtl_code("sd-Deva-IN"));
         assert!(!is_rtl_code("en-x-hebr"));
+        assert!(!is_rtl_code("en-u-nu-arab"));
         assert!(!is_rtl_code("x-Arab"));
         assert!(!is_rtl_code("x-Hebr"));
         assert!(!is_rtl_code("en"));

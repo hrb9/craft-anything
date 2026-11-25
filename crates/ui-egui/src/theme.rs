@@ -249,6 +249,14 @@ include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
 /// Install Figtree (three weights: text, labels, and semibold for headings), JetBrains Mono
 /// (code), plus any craft-fonts as fallbacks.
 pub fn install_fonts(ctx: &egui::Context) {
+    #[cfg(not(target_arch = "wasm32"))]
+    let hebrew_fallback = if crate::i18n::is_rtl() && !CRAFT_FONTS.iter().any(|f| f.scripts.contains(&"Hebr")) { desktop_hebrew_fallback() } else { None };
+    #[cfg(target_arch = "wasm32")]
+    let hebrew_fallback = None;
+    install_fonts_with(ctx, hebrew_fallback);
+}
+
+fn build_font_definitions(hebrew_fallback: Option<Vec<u8>>) -> FontDefinitions {
     let mut fonts = FontDefinitions::default();
     for (name, weight) in FIGTREE_FACES {
         let tweak = FontTweak { coords: VariationCoords::new([(*b"wght", weight)]), ..Default::default() };
@@ -269,12 +277,9 @@ pub fn install_fonts(ctx: &egui::Context) {
     // Sans first: a mincho/serif fallback makes Japanese and Chinese UI text look like prose.
     let mut fallbacks = sans_first(fallbacks);
     let bold_fallbacks = sans_first(bold_fallbacks);
-    // For local desktop builds without CRAFT_FONTS_DIR, load a system Hebrew fallback font when
-    // craft-fonts did not embed one, so Hebrew text renders instead of tofu.
-    #[cfg(not(target_arch = "wasm32"))]
-    if !CRAFT_FONTS.iter().any(|f| f.scripts.contains(&"Hebr"))
-        && let Some(bytes) = desktop_hebrew_fallback()
-    {
+    // Load a desktop Hebrew fallback font only when an RTL language is active and craft-fonts did
+    // not embed one, so left-to-right rendering on Windows/macOS/Linux stays unchanged.
+    if let Some(bytes) = hebrew_fallback {
         fonts.font_data.insert("system:hebrew".to_owned(), Arc::new(FontData::from_owned(bytes)));
         fallbacks.push("system:hebrew".to_owned());
     }
@@ -287,7 +292,11 @@ pub fn install_fonts(ctx: &egui::Context) {
     for (fam, stack) in weighted_families(&base, &bold_fallbacks) {
         fonts.families.insert(fam, stack);
     }
-    ctx.set_fonts(fonts);
+    fonts
+}
+
+fn install_fonts_with(ctx: &egui::Context, hebrew_fallback: Option<Vec<u8>>) {
+    ctx.set_fonts(build_font_definitions(hebrew_fallback));
 }
 
 /// Probes common system font paths for a Hebrew fallback face on desktop builds.
@@ -397,6 +406,16 @@ pub mod space {
     pub const XL: f32 = 24.0;
     pub const XXL: f32 = 32.0;
 }
+
+/// Logical widths at which Settings can keep its rail, control rows and label columns.
+pub mod breakpoint {
+    pub const SETTINGS_RAIL: f32 = 720.0;
+    pub const SETTINGS_CONTROLS: f32 = 400.0;
+    pub const SETTINGS_LABELS: f32 = 560.0;
+}
+
+/// Extra horizontal room reserved beside the scrolling Settings content.
+pub const SETTINGS_CONTENT_INSET: f32 = 14.0;
 
 /// Icon sizes.
 pub mod icon {
@@ -950,20 +969,20 @@ mod tests {
         }
     }
 
-    #[cfg(not(target_arch = "wasm32"))]
     #[test]
-    fn desktop_hebrew_fallback_covers_hebrew_when_present() {
-        if CRAFT_FONTS.iter().any(|f| f.scripts.contains(&"Hebr")) {
-            return;
+    fn desktop_hebrew_fallback_only_installs_for_rtl_and_wires_all_families() {
+        let ltr_defs = build_font_definitions(None);
+        assert!(!ltr_defs.font_data.contains_key("system:hebrew"));
+        for fam in [FontFamily::Proportional, FontFamily::Monospace, FontFamily::Name("medium".into()), FontFamily::Name("semibold".into())] {
+            let stack = ltr_defs.families.get(&fam).unwrap_or_else(|| panic!("missing {fam:?}"));
+            assert!(!stack.iter().any(|name| name == "system:hebrew"), "unexpected Hebrew fallback in {fam:?}");
         }
-        if super::desktop_hebrew_fallback().is_none() {
-            return;
-        }
-        let ctx = egui::Context::default();
-        install_fonts(&ctx);
-        ctx.run_ui(egui::RawInput::default(), |_| {}).textures_delta.clear();
-        for font in [FontId::proportional(14.0), FontId::monospace(14.0), medium(14.0), semibold(14.0)] {
-            assert!(ctx.fonts_mut(|f| f.has_glyphs(&font, "שלום עולם")), "Hebrew fallback missing in {font:?}");
+
+        let rtl_defs = build_font_definitions(Some(FIGTREE.to_vec()));
+        assert!(rtl_defs.font_data.contains_key("system:hebrew"));
+        for fam in [FontFamily::Proportional, FontFamily::Monospace, FontFamily::Name("medium".into()), FontFamily::Name("semibold".into())] {
+            let stack = rtl_defs.families.get(&fam).unwrap_or_else(|| panic!("missing {fam:?}"));
+            assert!(stack.iter().any(|name| name == "system:hebrew"), "missing Hebrew fallback in {fam:?}");
         }
     }
 

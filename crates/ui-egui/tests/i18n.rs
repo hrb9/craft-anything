@@ -264,6 +264,7 @@ Change it\tשינוי
 Clean room\tחדר נקי
 Continue\tהמשך
 Continue where it paused\tהמשך מהנקודה שבה נעצר
+Export a report (Markdown)\tייצוא דוח (Markdown)
 General\tכללי
 Just ask\tפשוט לשאול
 Just look inside\tפשוט להציץ פנימה
@@ -292,7 +293,7 @@ fn smallest_harness(dir: &Path, lang: Option<(&str, &str)>, prepare: impl FnOnce
         }
         let mut app = demo::app(engine);
         if let Some((code, cat)) = custom {
-            i18n::set_custom_catalog(&code, &cat);
+            craft_anything_ui_egui::testing::set_custom_catalog(&code, &cat);
         } else {
             i18n::set_language("en");
         }
@@ -404,12 +405,58 @@ fn rtl_main_screens_at_smallest_window(dir: &Path) {
     settings.get_all_by_label(&i18n::tr("Plugins")).next().unwrap().click();
     settings.run_steps(3);
     assert_hebrew_shapes_inside_range(&settings, settings_min_left, width + 2.0, "rtl-settings");
+    // AccessKit keeps logical reading order while painted shapes render in visual RTL order
+    // (opening words first, and mixed LTR runs + mirrored brackets intact).
+    let plugins_logical = i18n::tr(
+        "Plugins add tools Craft Anything offers as its own: MCP servers (a command or an address; read their tools after adding) or WebAssembly components (a .wasm file, which can't touch your files or the network).",
+    );
+    settings.get_by_label(&plugins_logical);
+    let painted_texts: Vec<String> = settings
+        .output()
+        .shapes
+        .iter()
+        .filter_map(|s| match &s.shape {
+            egui::Shape::Text(t) => Some(t.galley.text().to_owned()),
+            _ => None,
+        })
+        .collect();
+    assert!(
+        painted_texts.iter().any(|t| t.contains("MCP") && t.contains("כלים")),
+        "expected visual RTL wrapped line containing Hebrew + MCP, got {painted_texts:?}"
+    );
+    drop(settings);
+
+    // Command palette keeps logical title for AccessKit/search while painting visual RTL + mirrored brackets.
+    let mut palette = smallest_harness(&dir.join("rtl-palette"), Some(("he", MINI_HE_CATALOG)), |app| {
+        demo::fill_project(app);
+        app.state.palette.open = true;
+        app.state.palette.query = "ייצוא דוח".into();
+    });
+    palette.run_steps(3);
+    palette.get_by_label("ייצוא דוח (Markdown)");
+    let has_mixed_visual = palette.output().shapes.iter().any(|s| match &s.shape {
+        egui::Shape::Text(t) => t.galley.text() == "(Markdown) דוח ייצוא",
+        _ => false,
+    });
+    assert!(has_mixed_visual, "expected painted visual RTL '(Markdown) דוח ייצוא' in palette shapes");
+    drop(palette);
 
     i18n::set_language("en");
 }
 
-/// Verify an LTR language renders identically at 760×520 and `wrapped_label_for(..., false, ...)`
-/// matches plain `egui::Label::wrap()` geometry.
+fn text_shapes(h: &Harness<'static, CraftApp>) -> Vec<(String, egui::Rect)> {
+    h.output()
+        .shapes
+        .iter()
+        .filter_map(|clipped| match &clipped.shape {
+            egui::Shape::Text(t) => Some((t.galley.text().to_owned(), t.galley.rect.translate(t.pos.to_vec2()))),
+            _ => None,
+        })
+        .collect()
+}
+
+/// Verify an LTR language renders identically at 760×520 (even after visiting RTL) and
+/// `wrapped_label_for(..., false, ...)` matches plain `egui::Label::wrap()` geometry.
 fn ltr_screens_and_wrapped_label_unchanged(dir: &Path) {
     let width = 760.0;
 
@@ -419,6 +466,7 @@ fn ltr_screens_and_wrapped_label_unchanged(dir: &Path) {
     for key in ["Make my own version", "Just look inside", "Settings", "Clean room"] {
         assert_control_inside_window(&home, key, width);
     }
+    let home_before = text_shapes(&home);
     drop(home);
 
     let mut project = smallest_harness(&dir.join("ltr-project"), None, |app| {
@@ -439,7 +487,24 @@ fn ltr_screens_and_wrapped_label_unchanged(dir: &Path) {
     for key in ["Settings", "General", "Plugins", "Language"] {
         assert_control_inside_range(&settings, key, ltr_min_left, width + 2.0);
     }
+    let settings_before = text_shapes(&settings);
     drop(settings);
+
+    // Round-trip through RTL, then verify LTR shapes are identical.
+    craft_anything_ui_egui::testing::set_custom_catalog("he", MINI_HE_CATALOG);
+    assert!(i18n::is_rtl());
+    let mut home_after_rtl = smallest_harness(&dir.join("ltr-home"), None, |_| {});
+    home_after_rtl.run_steps(3);
+    assert_eq!(text_shapes(&home_after_rtl), home_before, "LTR Home shapes changed after RTL");
+    drop(home_after_rtl);
+
+    let mut settings_after_rtl = smallest_harness(&dir.join("ltr-settings"), None, |app| {
+        demo::fill_projects(app);
+        app.state.settings_open = true;
+    });
+    settings_after_rtl.run_steps(3);
+    assert_eq!(text_shapes(&settings_after_rtl), settings_before, "LTR Settings shapes changed after RTL");
+    drop(settings_after_rtl);
 
     // Direct LTR geometry equivalence check against plain `egui::Label::new(...).wrap()`.
     let ctx = egui::Context::default();

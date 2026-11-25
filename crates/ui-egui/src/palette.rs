@@ -1,7 +1,7 @@
 //! Command palette (Ctrl/⌘ K): app commands plus every registry tool. Picking a tool opens a
 //! params form generated from its schema.
 
-use crate::i18n::{tr, tr_logical};
+use crate::i18n::tr;
 use crate::state::Screen;
 use crate::theme::{self, Tokens};
 use crate::{CraftApp, Pick, Route, icons, schema_form, widgets};
@@ -81,8 +81,8 @@ pub fn show(app: &mut CraftApp, ctx: &egui::Context) {
         .iter()
         .filter_map(|e| {
             let hay = match e {
-                Entry::App(_, title, _) => tr_logical(title),
-                Entry::Tool { id, title, .. } => format!("{} {title} {id}", tr_logical(title)),
+                Entry::App(_, title, _) => tr(title),
+                Entry::Tool { id, title, .. } => format!("{} {title} {id}", tr(title)),
             };
             score(&hay, &q).map(|s| (s, e))
         })
@@ -139,7 +139,7 @@ pub fn show(app: &mut CraftApp, ctx: &egui::Context) {
                 ui.separator();
                 egui::ScrollArea::vertical().max_height(420.0).show(ui, |ui| {
                     if ranked.is_empty() {
-                        ui.label(RichText::new(tr("Nothing matches.")).color(t.text_faint));
+                        crate::i18n::rich_label(ui, &tr("Nothing matches."), |r| r.color(t.text_faint));
                     }
                     for (i, (_, e)) in ranked.iter().enumerate() {
                         let on = i == app.state.palette.selected;
@@ -162,10 +162,16 @@ pub fn show(app: &mut CraftApp, ctx: &egui::Context) {
                             16.0,
                             if on { t.accent_ink } else { t.icon },
                         );
-                        ui.painter().text(rect.min + Vec2::new(34.0, 5.0), egui::Align2::LEFT_TOP, title, theme::medium(theme::SMALL), t.text);
+                        ui.painter().text(
+                            rect.min + Vec2::new(34.0, 5.0),
+                            egui::Align2::LEFT_TOP,
+                            crate::i18n::display(&title).as_ref(),
+                            theme::medium(theme::SMALL),
+                            t.text,
+                        );
                         let sub_g = ui.painter().layout_no_wrap(crate::evidence_ui::truncate(&sub, 90), egui::FontId::proportional(theme::TINY), t.text_faint);
                         ui.painter().with_clip_rect(rect.shrink(2.0)).galley(rect.min + Vec2::new(34.0, 23.0), sub_g, t.text_faint);
-                        let tag_g = ui.painter().layout_no_wrap(tag, egui::FontId::proportional(theme::TINY), t.text_dim);
+                        let tag_g = ui.painter().layout_no_wrap(crate::i18n::display(&tag).into_owned(), egui::FontId::proportional(theme::TINY), t.text_dim);
                         let tr_ =
                             egui::Rect::from_min_size(egui::pos2(rect.right() - tag_g.size().x - 18.0, rect.top() + 6.0), tag_g.size() + Vec2::new(10.0, 4.0));
                         ui.painter().rect_filled(tr_, t.r_sm(), t.raised);
@@ -176,7 +182,7 @@ pub fn show(app: &mut CraftApp, ctx: &egui::Context) {
                     }
                 });
                 ui.add_space(theme::space::XS);
-                ui.label(RichText::new(tr("↑↓ to move · Enter to run · Esc to close")).color(t.text_faint).size(theme::TINY));
+                crate::i18n::rich_label(ui, &tr("↑↓ to move · Enter to run · Esc to close"), |r| r.color(t.text_faint).size(theme::TINY));
             });
     });
     if enter && n > 0 {
@@ -268,7 +274,7 @@ fn form(app: &mut CraftApp, ctx: &egui::Context, tool: &str) {
             if spec.effects.needs_consent() {
                 ui.horizontal(|ui| {
                     icons::show(ui, "shield", theme::icon::SM, t.warning);
-                    ui.label(RichText::new(tr("This runs code from the target or changes a device. Clicking Run is your OK.")).color(t.warning));
+                    crate::i18n::rich_label(ui, &tr("This runs code from the target or changes a device. Clicking Run is your OK."), |r| r.color(t.warning));
                 });
             }
             ui.add_space(theme::space::SM);
@@ -321,7 +327,7 @@ mod tests {
 
     #[test]
     fn hebrew_logical_title_matches_logical_query() {
-        let title = crate::i18n::tr_logical_for("he", "Export a report (Markdown)");
+        let title = crate::i18n::tr_for("he", "Export a report (Markdown)");
         assert!(score(&title, "ייצוא דוח").is_some(), "expected logical Hebrew query to match {title:?}");
     }
 }

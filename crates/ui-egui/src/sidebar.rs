@@ -83,12 +83,9 @@ pub fn show(app: &mut CraftApp, ui: &mut Ui) {
         egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
             if app.projects.is_empty() && !fold {
                 egui::Frame::new().inner_margin(egui::Margin { left: 12, right: 8, top: 2, bottom: 2 }).show(ui, |ui| {
-                    crate::i18n::wrapped_label(
-                        ui,
-                        &crate::i18n::tr_logical("Nothing made yet. What you make shows up here."),
-                        egui::FontId::proportional(theme::SMALL),
-                        |r| r.color(t.text_faint),
-                    );
+                    crate::i18n::wrapped_label(ui, &tr("Nothing made yet. What you make shows up here."), egui::FontId::proportional(theme::SMALL), |r| {
+                        r.color(t.text_faint)
+                    });
                 });
                 return;
             }

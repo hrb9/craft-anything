@@ -2,13 +2,13 @@
 //! (`project_approvals_set`): a menu under the prompt box, and `/approvals <kind> <choice>` typed in
 //! it. A kind left on Default follows Auto mode.
 
-use crate::i18n::{tr, tr_logical, trf};
+use crate::i18n::{tr, trf};
 use crate::slash::{self, Command, Typed};
 use crate::theme::{self, Tokens};
 use crate::{CraftApp, widgets};
 use craft_anything_engine::evidence::ToolError;
 use craft_anything_engine::workspace::{ACTION_KINDS, ActionKind, Approval};
-use egui::{RichText, Ui};
+use egui::Ui;
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -106,11 +106,11 @@ impl CraftApp {
                 let chosen: Option<Approval> = serde_json::from_value(set["chosen"].clone()).ok();
                 let gets: Option<Approval> = serde_json::from_value(set["gets"].clone()).ok();
                 let choice = match chosen {
-                    Some(c) => tr_logical(choice_label(Some(c))),
+                    Some(c) => tr(choice_label(Some(c))),
                     // Default: say what that is now.
-                    None => format!("{} ({})", tr_logical(choice_label(None)), gets.map(|g| tr_logical(choice_label(Some(g)))).unwrap_or_default()),
+                    None => format!("{} ({})", tr(choice_label(None)), gets.map(|g| tr(choice_label(Some(g)))).unwrap_or_default()),
                 };
-                self.toast(trf("In this project, {kind}: {choice}.", &[("kind", &tr_logical(label(kind))), ("choice", &choice)]), false);
+                self.toast(trf("In this project, {kind}: {choice}.", &[("kind", &tr(label(kind))), ("choice", &choice)]), false);
             }
             Err(e) => {
                 // The menu showed the choice before it was saved: show what's really kept again.
@@ -129,17 +129,17 @@ pub(crate) fn menu(app: &mut CraftApp, ui: &mut Ui, root: &Path) {
     let chosen = ws.manifest.approvals.clone();
     let t = Tokens::get(ui.ctx());
     let names: Vec<&str> = CHOICES.iter().map(|(n, _)| *n).collect();
-    let button = widgets::link(ui, "Approvals").on_hover_text(tr("What the builder may do without asking you, in this project."));
+    let button = crate::i18n::hover_text(widgets::link(ui, "Approvals"), &tr("What the builder may do without asking you, in this project."));
     let mut picked = None;
     // A named id, so tests (and anything else) can tell whether it's open.
     let popup = egui::Popup::from_toggle_button_response(&button).id(egui::Id::new("project-approvals"));
     popup.close_behavior(egui::PopupCloseBehavior::CloseOnClickOutside).show(|ui| {
         egui::Grid::new("approvals").num_columns(2).spacing([12.0, 6.0]).show(ui, |ui| {
             for row in ACTION_KINDS {
-                ui.label(RichText::new(tr(label(row.kind))).size(theme::SMALL));
+                crate::i18n::rich_label(ui, &tr(label(row.kind)), |r| r.size(theme::SMALL));
                 let now = chosen.get(&row.kind).copied();
                 let sel = CHOICES.iter().position(|(_, c)| *c == now).unwrap_or(0);
-                // Every row has the same labels, which `segmented` makes its ids from.
+                // Keep the row's controls keyed to its action.
                 ui.push_id(row.name, |ui| {
                     if let Some(c) = widgets::segmented(ui, &names, sel, theme::ControlSize::Small).and_then(|i| CHOICES.get(i)) {
                         picked = Some((row.kind, c.1));
@@ -149,9 +149,7 @@ pub(crate) fn menu(app: &mut CraftApp, ui: &mut Ui, root: &Path) {
             }
         });
         ui.add_space(theme::space::XS);
-        let note = crate::i18n::tr_logical(
-            "Default follows Auto mode: with it on, what can be undone goes ahead and the rest is refused; with it off, the builder asks.",
-        );
+        let note = tr("Default follows Auto mode: with it on, what can be undone goes ahead and the rest is refused; with it off, the builder asks.");
         crate::i18n::wrapped_label(ui, &note, egui::FontId::proportional(theme::SMALL), |r| {
             r.line_height(Some(theme::leading(theme::SMALL))).color(t.text_faint)
         });
