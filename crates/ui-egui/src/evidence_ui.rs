@@ -38,13 +38,15 @@ pub fn proof_card(ui: &mut Ui, e: &Evidence, dense: bool, open: bool) {
             ui.label(RichText::new(&e.summary).size(if dense { theme::SMALL } else { theme::BODY }));
         }
         let id = ui.id().with(("proof", &e.id));
-        egui::CollapsingHeader::new(RichText::new(tr("Show me the proof")).color(t.accent_ink).font(theme::medium(theme::SMALL)))
+        let proof_logical = tr("Show me the proof");
+        let header = egui::CollapsingHeader::new(crate::i18n::rich_text(&proof_logical).color(t.accent_ink).font(theme::medium(theme::SMALL)))
             .id_salt(id)
             .default_open(open)
             .icon(widgets::disclosure_icon)
             .show(ui, |ui| {
                 details(ui, e, &t);
             });
+        crate::i18n::keep_logical_a11y(&header.header_response, &proof_logical);
     });
 }
 
@@ -106,7 +108,8 @@ fn details(ui: &mut Ui, e: &Evidence, t: &Tokens) {
         });
         ui.add_space(theme::space::SM);
     }
-    egui::CollapsingHeader::new(RichText::new(tr("The raw result")).color(t.text_dim).size(theme::CAPTION))
+    let raw_logical = tr("The raw result");
+    let raw_header = egui::CollapsingHeader::new(crate::i18n::rich_text(&raw_logical).color(t.text_dim).size(theme::CAPTION))
         .id_salt(("raw", &e.id))
         .default_open(false)
         .icon(widgets::disclosure_icon)
@@ -116,6 +119,7 @@ fn details(ui: &mut Ui, e: &Evidence, t: &Tokens) {
                 json_tree(ui, "result", &e.result, 0);
             });
         });
+    crate::i18n::keep_logical_a11y(&raw_header.header_response, &raw_logical);
 }
 
 /// `native_strings_browse` → "Native strings browse".

@@ -455,7 +455,8 @@ fn text_shapes(h: &Harness<'static, CraftApp>) -> Vec<(String, egui::Rect)> {
         .collect()
 }
 
-/// Verify an LTR language renders identically at 760×520 (even after visiting RTL) and
+/// Verify an LTR language renders identically at 760×520 (comparing shapes within this build
+/// before and after visiting RTL, rather than against a separate base-commit build) and
 /// `wrapped_label_for(..., false, ...)` matches plain `egui::Label::wrap()` geometry.
 fn ltr_screens_and_wrapped_label_unchanged(dir: &Path) {
     let width = 760.0;

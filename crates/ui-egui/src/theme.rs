@@ -246,11 +246,15 @@ pub struct CraftFont {
 
 include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
 
+pub(crate) fn has_bundled_hebrew_font() -> bool {
+    CRAFT_FONTS.iter().any(|f| f.scripts.contains(&"Hebr"))
+}
+
 /// Install Figtree (three weights: text, labels, and semibold for headings), JetBrains Mono
 /// (code), plus any craft-fonts as fallbacks.
 pub fn install_fonts(ctx: &egui::Context) {
     #[cfg(not(target_arch = "wasm32"))]
-    let hebrew_fallback = if crate::i18n::is_rtl() && !CRAFT_FONTS.iter().any(|f| f.scripts.contains(&"Hebr")) { desktop_hebrew_fallback() } else { None };
+    let hebrew_fallback = if crate::i18n::is_rtl() && !has_bundled_hebrew_font() { desktop_hebrew_fallback() } else { None };
     #[cfg(target_arch = "wasm32")]
     let hebrew_fallback = None;
     install_fonts_with(ctx, hebrew_fallback);
@@ -295,13 +299,13 @@ fn build_font_definitions(hebrew_fallback: Option<Vec<u8>>) -> FontDefinitions {
     fonts
 }
 
-fn install_fonts_with(ctx: &egui::Context, hebrew_fallback: Option<Vec<u8>>) {
+pub(crate) fn install_fonts_with(ctx: &egui::Context, hebrew_fallback: Option<Vec<u8>>) {
     ctx.set_fonts(build_font_definitions(hebrew_fallback));
 }
 
 /// Probes common system font paths for a Hebrew fallback face on desktop builds.
 #[cfg(not(target_arch = "wasm32"))]
-fn desktop_hebrew_fallback() -> Option<Vec<u8>> {
+pub(crate) fn desktop_hebrew_fallback() -> Option<Vec<u8>> {
     const CANDIDATES: &[&str] = &[
         "/System/Library/Fonts/SFHebrew.ttf",
         "/System/Library/Fonts/Supplemental/ArialHB.ttc",
@@ -566,6 +570,9 @@ const SCROLL_THUMB_AT_REST: f32 = 0.5;
 /// How far one notch of the mouse wheel scrolls, in points. egui's own step is 40, which takes
 /// two or three turns for what a browser scrolls in one; it still eases to the new place.
 pub const WHEEL_STEP: f32 = 100.0;
+
+/// The default Project prompt viewport cap in a short pane, in points.
+pub const PROMPT_VIEWPORT_FLOOR: f32 = 208.0;
 
 /// Apply a theme: its colours, and the one set of text sizes and spacing both modes use.
 pub fn apply(ctx: &egui::Context, kind: ThemeKind) {

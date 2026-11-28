@@ -126,15 +126,9 @@ pub fn rename_modal(app: &mut CraftApp, ui: &mut Ui, root: &Path, close: &mut bo
     }
     let ok = !app.state.rename_input.trim().is_empty();
     let enter = r.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter));
-    ui.add(
-        egui::Label::new(
-            RichText::new(tr("Only its name changes; its folder stays where it is."))
-                .color(t.text_faint)
-                .size(theme::SMALL)
-                .line_height(Some(theme::leading(theme::SMALL))),
-        )
-        .wrap(),
-    );
+    crate::i18n::wrapped_rich_label(ui, &tr("Only its name changes; its folder stays where it is."), |r| {
+        r.color(t.text_faint).size(theme::SMALL).line_height(Some(theme::leading(theme::SMALL)))
+    });
     ui.add_space(theme::space::MD);
     ui.horizontal(|ui| {
         if (widgets::primary_icon(ui, None, "Rename", ok).clicked() || enter) && ok {

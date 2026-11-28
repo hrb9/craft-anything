@@ -76,7 +76,7 @@ fn welcome(app: &mut CraftApp, ui: &mut Ui) {
         }
     });
     ui.add_space(theme::space::XL);
-    if widgets::link(ui, "Skip setup").on_hover_text(tr("Start with Simple mode; you can set up AI later in Settings.")).clicked() {
+    if crate::i18n::hover_text(widgets::link(ui, "Skip setup"), &tr("Start with Simple mode; you can set up AI later in Settings.")).clicked() {
         app.finish_first_run();
     }
 }

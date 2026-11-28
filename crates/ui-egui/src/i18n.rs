@@ -175,23 +175,11 @@ pub fn is_rtl() -> bool {
     current().read().map(|g| g.rtl).unwrap_or(false)
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum BidiClass {
-    L,
-    R,
-    En,
-    N,
-}
-
 fn is_rtl_script(c: char) -> bool {
     matches!(
         u32::from(c),
         0x0590..=0x05FF | 0x0600..=0x065F | 0x066E..=0x08FF | 0xFB1D..=0xFDFF | 0xFE70..=0xFEFC | 0x1_0800..=0x1_0FFF | 0x1_E800..=0x1_EFFF
     )
-}
-
-fn is_bidi_digit(c: char) -> bool {
-    c.is_ascii_digit() || matches!(u32::from(c), 0x0660..=0x0669 | 0x06F0..=0x06F9)
 }
 
 fn is_bidi_control(c: char) -> bool {
@@ -218,367 +206,91 @@ fn mirrored(c: char) -> char {
     }
 }
 
-fn bracket_close(open: char) -> Option<char> {
-    match open {
-        '(' => Some(')'),
-        '[' => Some(']'),
-        '{' => Some('}'),
-        '<' => Some('>'),
-        '«' => Some('»'),
-        _ => None,
-    }
-}
-
-fn is_closing_bracket(c: char) -> bool {
-    matches!(c, ')' | ']' | '}' | '>' | '»')
-}
-
-const PLACEHOLDER_BASE: u32 = 0xE000;
-const MAX_PLACEHOLDERS: usize = 64;
-
-fn find_isolate_end(rest: &str) -> (usize, usize) {
-    let mut depth = 1usize;
-    for (idx, ch) in rest.char_indices() {
-        match ch {
-            '\u{2066}' | '\u{2067}' | '\u{2068}' => depth = depth.saturating_add(1),
-            '\u{2069}' => {
-                depth = depth.saturating_sub(1);
-                if depth == 0 {
-                    return (idx, idx.saturating_add(ch.len_utf8()));
-                }
-            }
-            _ => {}
-        }
-    }
-    (rest.len(), rest.len())
-}
-
-fn first_strong_is_rtl(text: &str) -> bool {
-    let mut chars = text.char_indices();
-    while let Some((idx, ch)) = chars.next() {
+/// Isolate leading-punctuation LTR tokens (`.env`, `/tmp/demo.cany`, `~/x`, `-12.50`, `+3`)
+/// with Unicode `LRI`..`PDI` before running UAX #9 so the leading separator stays attached to
+/// the LTR token instead of migrating to the RTL side.
+fn isolate_leading_ltr_tokens(line: &str) -> String {
+    let chars: Vec<(usize, char)> = line.char_indices().collect();
+    let mut out = String::with_capacity(line.len().saturating_add(16));
+    let mut i = 0usize;
+    let mut isolate_depth = 0usize;
+    while let Some(&(start, ch)) = chars.get(i) {
         if matches!(ch, '\u{2066}' | '\u{2067}' | '\u{2068}') {
-            let after = idx.saturating_add(ch.len_utf8());
-            let (_, end) = find_isolate_end(text.get(after..).unwrap_or_default());
-            let skip_to = after.saturating_add(end);
-            while chars.as_str().len() > text.len().saturating_sub(skip_to) {
-                if chars.next().is_none() {
+            isolate_depth = isolate_depth.saturating_add(1);
+            out.push(ch);
+            i += 1;
+            continue;
+        }
+        if ch == '\u{2069}' {
+            isolate_depth = isolate_depth.saturating_sub(1);
+            out.push(ch);
+            i += 1;
+            continue;
+        }
+        let at_token_boundary = i == 0 || chars.get(i - 1).is_some_and(|(_, p)| p.is_whitespace() || matches!(p, '(' | '[' | '{' | '"' | '\''));
+        let is_ltr_prefix = isolate_depth == 0
+            && at_token_boundary
+            && ((matches!(ch, '.' | '/' | '~' | '\\') && chars.get(i + 1).is_some_and(|(_, next)| next.is_ascii_alphanumeric() || *next == '/'))
+                || (matches!(ch, '-' | '+') && chars.get(i + 1).is_some_and(|(_, next)| next.is_ascii_digit())));
+        if is_ltr_prefix {
+            let mut j = i + 1;
+            while let Some(&(_, c)) = chars.get(j) {
+                if c.is_ascii_alphanumeric() || matches!(c, '.' | '/' | '-' | '+' | '_' | ':' | '~' | '\\') {
+                    j += 1;
+                } else {
                     break;
                 }
             }
-            continue;
+            while j > i + 1 && chars.get(j - 1).is_some_and(|(_, c)| matches!(c, '.' | ':' | '-' | '/')) {
+                j -= 1;
+            }
+            let end = chars.get(j).map_or(line.len(), |(b, _)| *b);
+            if let Some(tok) = line.get(start..end) {
+                out.push('\u{2066}');
+                out.push_str(tok);
+                out.push('\u{2069}');
+                i = j;
+                continue;
+            }
         }
-        if is_rtl_script(ch) {
-            return true;
-        }
-        if ch.is_alphabetic() || is_bidi_digit(ch) {
-            return false;
-        }
-    }
-    false
-}
-
-fn resolve_ltr_isolate(text: &str) -> String {
-    let mut out = String::with_capacity(text.len());
-    let mut rest = text;
-    while let Some((idx, ch)) = rest.char_indices().find(|(_, c)| matches!(c, '\u{2066}' | '\u{2067}' | '\u{2068}')) {
-        let before = rest.get(..idx).unwrap_or_default();
-        for bc in before.chars().filter(|c| !is_bidi_control(*c)) {
-            out.push(bc);
-        }
-        let after = idx.saturating_add(ch.len_utf8());
-        let tail = rest.get(after..).unwrap_or_default();
-        let (close_at, after_at) = find_isolate_end(tail);
-        let inner = tail.get(..close_at).unwrap_or_default();
-        let rtl = match ch {
-            '\u{2067}' => true,
-            '\u{2068}' => first_strong_is_rtl(inner),
-            _ => false,
-        };
-        if rtl {
-            push_visual_rtl_line(inner, &mut out);
-        } else {
-            out.push_str(&resolve_ltr_isolate(inner));
-        }
-        rest = tail.get(after_at..).unwrap_or_default();
-    }
-    for bc in rest.chars().filter(|c| !is_bidi_control(*c)) {
-        out.push(bc);
+        out.push(ch);
+        i += 1;
     }
     out
 }
 
-/// Mask `{placeholder}` tokens and explicit Unicode isolates (`LRI`/`RLI`/`FSI`..`PDI`) into
-/// single-character stand-ins so their boundaries and direction stay intact across reordering.
-fn mask_atoms(text: &str) -> (String, Vec<(String, bool)>) {
-    let reserved = text.chars().any(|c| (PLACEHOLDER_BASE..PLACEHOLDER_BASE.saturating_add(MAX_PLACEHOLDERS as u32)).contains(&u32::from(c)));
-    if reserved {
-        return (text.to_owned(), Vec::new());
-    }
-    let mut masked = String::with_capacity(text.len());
-    let mut atoms = Vec::new();
-    let mut rest = text;
-    while atoms.len() < MAX_PLACEHOLDERS {
-        let next_iso = rest.char_indices().find(|(_, c)| matches!(c, '\u{2066}' | '\u{2067}' | '\u{2068}'));
-        let next_brace = rest.find('{');
-        match (next_iso, next_brace) {
-            (Some((iso_idx, iso_ch)), Some(brace_idx)) if iso_idx < brace_idx => {
-                let Some(before) = rest.get(..iso_idx) else { break };
-                let after = iso_idx.saturating_add(iso_ch.len_utf8());
-                let Some(tail) = rest.get(after..) else { break };
-                let (close_at, after_at) = find_isolate_end(tail);
-                let inner = tail.get(..close_at).unwrap_or_default();
-                let rtl = match iso_ch {
-                    '\u{2067}' => true,
-                    '\u{2068}' => first_strong_is_rtl(inner),
-                    _ => false,
-                };
-                let resolved = if rtl {
-                    let mut buf = String::new();
-                    push_visual_rtl_line(inner, &mut buf);
-                    buf
-                } else {
-                    resolve_ltr_isolate(inner)
-                };
-                let Some(stand_in) = u32::try_from(atoms.len()).ok().and_then(|i| char::from_u32(PLACEHOLDER_BASE.saturating_add(i))) else {
-                    break;
-                };
-                masked.push_str(before);
-                masked.push(stand_in);
-                atoms.push((resolved, rtl));
-                rest = tail.get(after_at..).unwrap_or_default();
-            }
-            (Some((iso_idx, iso_ch)), None) => {
-                let Some(before) = rest.get(..iso_idx) else { break };
-                let after = iso_idx.saturating_add(iso_ch.len_utf8());
-                let Some(tail) = rest.get(after..) else { break };
-                let (close_at, after_at) = find_isolate_end(tail);
-                let inner = tail.get(..close_at).unwrap_or_default();
-                let rtl = match iso_ch {
-                    '\u{2067}' => true,
-                    '\u{2068}' => first_strong_is_rtl(inner),
-                    _ => false,
-                };
-                let resolved = if rtl {
-                    let mut buf = String::new();
-                    push_visual_rtl_line(inner, &mut buf);
-                    buf
-                } else {
-                    resolve_ltr_isolate(inner)
-                };
-                let Some(stand_in) = u32::try_from(atoms.len()).ok().and_then(|i| char::from_u32(PLACEHOLDER_BASE.saturating_add(i))) else {
-                    break;
-                };
-                masked.push_str(before);
-                masked.push(stand_in);
-                atoms.push((resolved, rtl));
-                rest = tail.get(after_at..).unwrap_or_default();
-            }
-            (_, Some(start)) if rest.get(start..).and_then(|s| s.find('}')).is_some() => {
-                let len = rest.get(start..).and_then(|s| s.find('}')).unwrap_or(0);
-                let end = start.saturating_add(len).saturating_add(1);
-                let (Some(before), Some(atom), Some(after)) = (rest.get(..start), rest.get(start..end), rest.get(end..)) else {
-                    break;
-                };
-                let Some(stand_in) = u32::try_from(atoms.len()).ok().and_then(|i| char::from_u32(PLACEHOLDER_BASE.saturating_add(i))) else {
-                    break;
-                };
-                masked.push_str(before);
-                masked.push(stand_in);
-                atoms.push((atom.to_owned(), false));
-                rest = after;
-            }
-            _ => break,
-        }
-    }
-    masked.push_str(rest);
-    (masked, atoms)
-}
-
-fn push_unmasked(out: &mut String, c: char, atoms: &[(String, bool)]) {
-    let idx = u32::from(c).checked_sub(PLACEHOLDER_BASE).and_then(|i| usize::try_from(i).ok());
-    if let Some((text, _)) = idx.and_then(|i| atoms.get(i)) {
-        out.push_str(text);
-    } else {
-        out.push(c);
-    }
-}
-
 fn push_visual_rtl_line(line: &str, out: &mut String) {
-    let (masked, atoms) = mask_atoms(line);
-    // Strip any remaining unisolated directional controls outside isolate spans so raw bidi
-    // formatting characters cannot perturb egui 0.36's visual shaping.
-    let chars: Vec<char> = masked.chars().filter(|c| !is_bidi_control(*c)).collect();
-    if chars.is_empty() {
-        return;
-    }
-    let len = chars.len();
-    let mut cls: Vec<BidiClass> = chars
-        .iter()
-        .map(|&c| {
-            let atom_idx = u32::from(c).checked_sub(PLACEHOLDER_BASE).and_then(|i| usize::try_from(i).ok());
-            if let Some((_, is_rtl_atom)) = atom_idx.and_then(|i| atoms.get(i)) {
-                if *is_rtl_atom { BidiClass::R } else { BidiClass::L }
-            } else if is_rtl_script(c) {
-                BidiClass::R
-            } else if is_bidi_digit(c) {
-                BidiClass::En
-            } else if c.is_alphabetic() || matches!(c, '\u{2318}' | '\u{21E7}' | '\u{2325}' | '\u{2303}') {
-                BidiClass::L
-            } else {
-                BidiClass::N
-            }
-        })
-        .collect();
-
-    // Keep non-space separators (.,:/-+_) inside numeric and LTR tokens.
-    for i in 1..len.saturating_sub(1) {
-        if cls.get(i) == Some(&BidiClass::N)
-            && chars.get(i).is_some_and(|c| matches!(c, '.' | ',' | ':' | '/' | '-' | '+' | '_'))
-            && let (Some(prev), Some(next)) = (cls.get(i - 1), cls.get(i + 1))
-        {
-            if *prev == BidiClass::En && *next == BidiClass::En {
-                if let Some(slot) = cls.get_mut(i) {
-                    *slot = BidiClass::En;
-                }
-            } else if matches!(prev, BidiClass::L | BidiClass::En)
-                && matches!(next, BidiClass::L | BidiClass::En)
-                && let Some(slot) = cls.get_mut(i)
-            {
-                *slot = BidiClass::L;
-            }
-        }
-    }
-
-    // Attach adjacent European terminators (e.g. %, $, px units, leading sign when not attached to RTL).
-    for i in 0..len {
-        let Some(&ch) = chars.get(i) else { continue };
-        if cls.get(i) != Some(&BidiClass::N) {
-            continue;
-        }
-        let next_en = cls.get(i + 1) == Some(&BidiClass::En);
-        let prev_en = i > 0 && cls.get(i - 1) == Some(&BidiClass::En);
-        let prev_is_r = i > 0 && cls.get(i - 1) == Some(&BidiClass::R);
-        let attach = match ch {
-            '%' | '°' | '$' | '€' | '£' | '₪' => prev_en || next_en,
-            '+' | '-' => next_en && !prev_is_r,
-            _ => false,
-        };
-        if attach && let Some(slot) = cls.get_mut(i) {
-            *slot = BidiClass::En;
-        }
-    }
-
-    // Keep leading path/dot prefixes (e.g. `.env`, `/tmp/...`, `./...`, `~/...`) attached to
-    // following LTR/numeric tokens when not immediately preceded by an RTL character.
-    for i in (0..len.saturating_sub(1)).rev() {
-        if cls.get(i) == Some(&BidiClass::N)
-            && chars.get(i).is_some_and(|c| matches!(c, '/' | '.' | '~' | '\\'))
-            && matches!(cls.get(i + 1), Some(BidiClass::L | BidiClass::En))
-            && (i == 0 || cls.get(i - 1) != Some(&BidiClass::R))
-            && let Some(slot) = cls.get_mut(i)
-        {
-            *slot = BidiClass::L;
-        }
-    }
-
-    // Resolve paired brackets (simplified UAX #9 N0).
-    let mut stack: Vec<(usize, char)> = Vec::new();
-    let mut pairs: Vec<(usize, usize)> = Vec::new();
-    for (i, &c) in chars.iter().enumerate() {
-        if cls.get(i) != Some(&BidiClass::N) {
-            continue;
-        }
-        if let Some(close) = bracket_close(c) {
-            if stack.len() < 63 {
-                stack.push((i, close));
-            }
-        } else if is_closing_bracket(c)
-            && let Some(pos) = stack.iter().rposition(|(_, expected)| *expected == c)
-        {
-            let (open_idx, _) = stack.remove(pos);
-            pairs.push((open_idx, i));
-        }
-    }
-    pairs.sort_by_key(|(open, _)| *open);
-    for (open, close) in pairs {
-        let inner = cls.get(open + 1..close).unwrap_or(&[]);
-        let has_r = inner.contains(&BidiClass::R);
-        let has_l = inner.iter().any(|c| matches!(c, BidiClass::L | BidiClass::En));
-        let dir = if has_r {
-            BidiClass::R
-        } else if has_l {
-            let prev_strong = cls.get(..open).unwrap_or(&[]).iter().rev().find(|c| **c != BidiClass::N).copied();
-            if matches!(prev_strong, Some(BidiClass::L | BidiClass::En)) { BidiClass::L } else { BidiClass::R }
-        } else {
-            BidiClass::R
-        };
-        if let Some(s) = cls.get_mut(open) {
-            *s = dir;
-        }
-        if let Some(s) = cls.get_mut(close) {
-            *s = dir;
-        }
-    }
-
-    // Fold En -> L, then resolve runs of N flanked on both sides by L to L; everything else to R.
-    for c in &mut cls {
-        if *c == BidiClass::En {
-            *c = BidiClass::L;
-        }
-    }
-    let mut i = 0;
-    while i < len {
-        if cls.get(i) == Some(&BidiClass::N) {
-            let start = i;
-            while cls.get(i) == Some(&BidiClass::N) {
-                i += 1;
-            }
-            let left_l = start > 0 && cls.get(start - 1) == Some(&BidiClass::L);
-            let right_l = cls.get(i) == Some(&BidiClass::L);
-            let resolved = if left_l && right_l { BidiClass::L } else { BidiClass::R };
-            if let Some(slice) = cls.get_mut(start..i) {
-                slice.fill(resolved);
-            }
-        } else {
-            i += 1;
-        }
-    }
-
-    // Partition into maximal RTL vs LTR runs, then emit in visual RTL order (last run first).
-    let mut runs: Vec<(bool, usize, usize)> = Vec::new();
-    let mut r_start = 0;
-    while r_start < len {
-        let rtl = cls.get(r_start) == Some(&BidiClass::R);
-        let mut r_end = r_start + 1;
-        while cls.get(r_end).is_some_and(|c| (*c == BidiClass::R) == rtl) {
-            r_end += 1;
-        }
-        runs.push((rtl, r_start, r_end));
-        r_start = r_end;
-    }
-
-    for (rtl, start, end) in runs.into_iter().rev() {
-        let Some(slice) = chars.get(start..end) else { continue };
-        if rtl {
-            // Walk visually left-to-right (reverse of logical); keep each contiguous RTL-script
-            // stretch in logical order so epaint's harfrust shapes that stretch RTL.
-            let mut stretch: Vec<char> = Vec::new();
-            for &c in slice.iter().rev() {
-                if is_rtl_script(c) || is_joiner(c) {
-                    stretch.push(c);
-                } else {
-                    for sc in stretch.drain(..).rev() {
-                        push_unmasked(out, sc, &atoms);
+    let prepared = isolate_leading_ltr_tokens(line);
+    let bidi = unicode_bidi::BidiInfo::new(&prepared, Some(unicode_bidi::Level::rtl()));
+    for para in &bidi.paragraphs {
+        let (levels, runs) = bidi.visual_runs(para, para.range.clone());
+        for run in runs {
+            let Some(slice) = prepared.get(run.clone()) else { continue };
+            let rtl = levels.get(run.start).is_some_and(unicode_bidi::Level::is_rtl);
+            if rtl {
+                // Walk visually left-to-right (reverse of logical); keep each contiguous RTL-script
+                // stretch in logical order so epaint's harfrust shapes that stretch RTL.
+                let mut stretch: Vec<char> = Vec::new();
+                for c in slice.chars().rev() {
+                    if is_bidi_control(c) {
+                        continue;
                     }
-                    push_unmasked(out, mirrored(c), &atoms);
+                    if is_rtl_script(c) || is_joiner(c) {
+                        stretch.push(c);
+                    } else {
+                        for sc in stretch.drain(..).rev() {
+                            out.push(sc);
+                        }
+                        out.push(mirrored(c));
+                    }
                 }
-            }
-            for sc in stretch.drain(..).rev() {
-                push_unmasked(out, sc, &atoms);
-            }
-        } else {
-            for &c in slice {
-                push_unmasked(out, c, &atoms);
+                for sc in stretch.drain(..).rev() {
+                    out.push(sc);
+                }
+            } else {
+                for c in slice.chars().filter(|c| !is_bidi_control(*c)) {
+                    out.push(c);
+                }
             }
         }
     }
@@ -642,24 +354,33 @@ fn wrap_paragraph_logical<'a>(ctx: &egui::Context, paragraph: &'a str, font_id: 
     // Single-pass O(words) width measurement under one font-lock acquisition.
     let (space_w, word_widths): (f32, Vec<f32>) = ctx.fonts_mut(|f| {
         let space = f.layout_no_wrap(" ".to_owned(), font_id.clone(), Default::default()).rect.width();
-        let widths = spans.iter().map(|&(s, e)| f.layout_no_wrap(paragraph[s..e].to_owned(), font_id.clone(), Default::default()).rect.width()).collect();
+        let widths = spans
+            .iter()
+            .map(|&(s, e)| f.layout_no_wrap(paragraph.get(s..e).unwrap_or_default().to_owned(), font_id.clone(), Default::default()).rect.width())
+            .collect();
         (space, widths)
     });
     let mut rows = Vec::new();
-    let (mut line_start, mut line_end) = spans[0];
-    let mut line_w = word_widths[0];
-    for (&(span_start, span_end), &w) in spans.iter().zip(word_widths.iter()).skip(1) {
+    let mut iter = spans.into_iter().zip(word_widths);
+    let Some(((mut line_start, mut line_end), mut line_w)) = iter.next() else {
+        return vec![paragraph];
+    };
+    for ((span_start, span_end), w) in iter {
         if line_w + space_w + w <= max_w {
             line_end = span_end;
             line_w += space_w + w;
         } else {
-            rows.push(&paragraph[line_start..line_end]);
+            if let Some(row) = paragraph.get(line_start..line_end) {
+                rows.push(row);
+            }
             line_start = span_start;
             line_end = span_end;
             line_w = w;
         }
     }
-    rows.push(&paragraph[line_start..line_end]);
+    if let Some(row) = paragraph.get(line_start..line_end) {
+        rows.push(row);
+    }
     rows
 }
 
@@ -741,6 +462,45 @@ pub fn wrapped_label_for(
     let rich = style(egui::RichText::new(&shown).font(font_id));
     let resp = if needs_rtl_wrap { ui.add(egui::Label::new(rich).extend()) } else { ui.add(egui::Label::new(rich).wrap()) };
     if needs_rtl_wrap && shown != logical {
+        resp.ctx.accesskit_node_builder(resp.id, |b| {
+            b.set_value(logical);
+            b.set_label(logical);
+        });
+    }
+    resp
+}
+
+/// Create [`egui::RichText`] in visual display order for widgets (headers, windows, custom rows)
+/// that accept a `RichText` directly. Pair with [`keep_logical_a11y`] on interactive headers.
+pub fn rich_text(logical: &str) -> egui::RichText {
+    egui::RichText::new(display(logical).as_ref())
+}
+
+/// Restore `logical` reading order on a widget's AccessKit label/value when its painted text was
+/// reordered for visual RTL display.
+pub fn keep_logical_a11y(resp: &egui::Response, logical: &str) {
+    if is_rtl() && logical.chars().any(is_rtl_script) {
+        resp.ctx.accesskit_node_builder(resp.id, |b| {
+            b.set_value(logical);
+            b.set_label(logical);
+        });
+    }
+}
+
+/// Render a styled wrapping body label from logical text, deferring RTL visual reordering until
+/// after line breaks while keeping the screen-reader label in logical reading order.
+pub fn wrapped_rich_label(ui: &mut egui::Ui, logical: &str, style: impl FnOnce(egui::RichText) -> egui::RichText) -> egui::Response {
+    let font_id = egui::TextStyle::Body.resolve(ui.style());
+    wrapped_label_for(ui, is_rtl(), logical, font_id, style)
+}
+
+/// Render a single-line truncating label from logical text, reordering only the painted string
+/// when RTL is active while keeping the screen-reader label in logical reading order.
+pub fn truncated_label(ui: &mut egui::Ui, logical: &str, style: impl FnOnce(egui::RichText) -> egui::RichText) -> egui::Response {
+    let shown = display(logical);
+    let reordered = matches!(shown, std::borrow::Cow::Owned(_)) && shown.as_ref() != logical;
+    let resp = ui.add(egui::Label::new(style(egui::RichText::new(shown.as_ref()))).truncate());
+    if reordered {
         resp.ctx.accesskit_node_builder(resp.id, |b| {
             b.set_value(logical);
             b.set_label(logical);
@@ -988,5 +748,57 @@ mod tests {
                 assert_eq!(holes(k), holes(v), "{}: {k:?}", l.code);
             }
         }
+    }
+
+    /// Prevent new bare `ui.label(tr(...))`, `RichText::new(tr(...))`, etc. calls in `ui-egui`
+    /// that would bypass `i18n::display()` / RTL helpers and paint logical reading order in RTL.
+    #[test]
+    fn no_bare_tr_in_ui_egui_widgets() {
+        let src_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
+        let forbidden = [
+            "ui.label(tr(",
+            "ui.label(trf(",
+            "ui.label(&tr(",
+            "ui.label(&trf(",
+            "ui.label(crate::i18n::tr(",
+            "ui.label(crate::i18n::trf(",
+            "RichText::new(tr(",
+            "RichText::new(trf(",
+            "RichText::new(&tr(",
+            "RichText::new(&trf(",
+            "RichText::new(crate::i18n::tr(",
+            "RichText::new(crate::i18n::trf(",
+            "on_hover_text(tr(",
+            "on_hover_text(trf(",
+            "on_hover_text(crate::i18n::tr(",
+            "on_hover_text(crate::i18n::trf(",
+            "Window::new(tr(",
+            "Window::new(trf(",
+            "label_text(&tr(",
+            "label_text(&trf(",
+        ];
+        let mut violations = Vec::new();
+        let mut stack = vec![src_dir];
+        while let Some(dir) = stack.pop() {
+            for entry in std::fs::read_dir(&dir).unwrap() {
+                let path = entry.unwrap().path();
+                if path.is_dir() {
+                    stack.push(path);
+                    continue;
+                }
+                if path.extension().and_then(|e| e.to_str()) != Some("rs") || path.file_name().and_then(|n| n.to_str()) == Some("i18n.rs") {
+                    continue;
+                }
+                let raw = std::fs::read_to_string(&path).unwrap();
+                let prod = raw.split("\n#[cfg(test)]").next().unwrap_or(&raw);
+                let compact: String = prod.chars().filter(|c| !c.is_whitespace()).collect();
+                for pat in forbidden {
+                    if compact.contains(pat) {
+                        violations.push(format!("{}: contains bare `{pat}` — route through i18n::label / rich_label / rich_text / hover_text", path.display()));
+                    }
+                }
+            }
+        }
+        assert!(violations.is_empty(), "bare i18n widget calls:\n{}", violations.join("\n"));
     }
 }

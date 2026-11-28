@@ -351,7 +351,9 @@ fn composer(app: &mut CraftApp, ui: &mut Ui, width: f32, dense: bool) {
             crate::prompt_box::PromptBox {
                 name: "Ask a question",
                 hint,
-                rows: if dense { (3, 4) } else { (1, 8) },
+                min_rows: if dense { 3 } else { 1 },
+                viewport_height: if dense { crate::prompt_box::ViewportHeight::Rows(4) } else { crate::prompt_box::ViewportHeight::PaneWithRowFloor(8) },
+                text_height_limit: None,
                 attach: None,
                 previews: &[],
                 stop_button: answering.then_some("Stop"),
@@ -539,11 +541,9 @@ fn item_ui(ui: &mut Ui, item: &ChatItem, beginner: bool, dense: bool, open: bool
                     crate::i18n::rich_label(ui, &crate::i18n::trf("May I run \"{title}\"?", &[("title", title)]), |r| r.font(theme::semibold(theme::BODY)));
                 });
                 ui.label(RichText::new(explanation).color(t.text_dim));
-                ui.label(
-                    RichText::new(tr("This runs code from the target or changes a device. Nothing runs until you say so."))
-                        .color(t.text_faint)
-                        .size(theme::CAPTION),
-                );
+                crate::i18n::rich_label(ui, &tr("This runs code from the target or changes a device. Nothing runs until you say so."), |r| {
+                    r.color(t.text_faint).size(theme::CAPTION)
+                });
                 ui.add_space(theme::space::SM);
                 match answer {
                     None => {
@@ -599,9 +599,10 @@ fn item_ui(ui: &mut Ui, item: &ChatItem, beginner: bool, dense: bool, open: bool
                     icons::show(ui, "sparkles", theme::icon::LG, t.accent_ink);
                     ui.vertical(|ui| {
                         crate::i18n::rich_label(ui, &tr("Want answers in plain words?"), |r| r.font(theme::semibold(theme::BODY)));
-                        ui.label(
-                            RichText::new(tr("Add an AI brain and I'll read this evidence for you, answer follow-up questions and point at the proof."))
-                                .color(t.text_dim),
+                        crate::i18n::rich_label(
+                            ui,
+                            &tr("Add an AI brain and I'll read this evidence for you, answer follow-up questions and point at the proof."),
+                            |r| r.color(t.text_dim),
                         );
                         ui.add_space(theme::space::XS);
                         if widgets::primary_icon(ui, Some("plus"), "Add a brain", true).clicked() {

@@ -165,7 +165,7 @@ fn rail_icons(app: &mut CraftApp, ui: &mut Ui) {
 fn panel_title(ui: &mut Ui, title: &str, count: Option<usize>) {
     let t = Tokens::get(ui.ctx());
     ui.horizontal(|ui| {
-        ui.label(theme::label_text(&tr(title), theme::LABEL).color(t.text));
+        crate::i18n::rich_label(ui, &tr(title), |r| r.font(theme::medium(theme::LABEL)).color(t.text));
         if let Some(n) = count {
             widgets::pill(ui, &n.to_string(), t.text_dim, t.raised);
         }
@@ -939,7 +939,16 @@ fn jobs(app: &mut CraftApp, ui: &mut Ui) {
                     Some(Err(_)) => ("triangle-alert", t.danger),
                 };
                 icons::show(ui, icon, theme::icon::SM, col);
-                ui.add_sized(Vec2::new(220.0, 18.0), egui::Label::new(RichText::new(tr(&j.title)).font(theme::medium(theme::CAPTION))).truncate());
+                let title_logical = tr(&j.title);
+                let title_shown = crate::i18n::display(&title_logical);
+                let title_resp =
+                    ui.add_sized(Vec2::new(220.0, 18.0), egui::Label::new(RichText::new(title_shown.as_ref()).font(theme::medium(theme::CAPTION))).truncate());
+                if title_shown.as_ref() != title_logical {
+                    title_resp.ctx.accesskit_node_builder(title_resp.id, |b| {
+                        b.set_value(title_logical.clone());
+                        b.set_label(title_logical);
+                    });
+                }
                 let secs = j.finished_at.unwrap_or_else(std::time::Instant::now).duration_since(j.started).as_secs_f32();
                 ui.label(RichText::new(format!("{secs:.1}s")).font(theme::mono(theme::TINY)).color(t.text_faint));
                 match &j.outcome {
