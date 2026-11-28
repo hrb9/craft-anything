@@ -461,8 +461,16 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
     ui.add_space(theme::space::LG);
     widgets::caption(ui, "Your brains");
     ui.add_space(theme::space::XS);
+    if app.state.screen == crate::state::Screen::Project
+        && let Some(workspace) = &app.workspace
+    {
+        let builder = app.resolve_builder(workspace.manifest.builder.as_deref());
+        let label = builder.map_or_else(|| tr("No builder available for a new run."), |name| trf("Builder for a new run: {name}", &[("name", &name)]));
+        ui.label(RichText::new(label).color(t.text_dim));
+        ui.add_space(theme::space::XS);
+    }
     if app.backends.is_empty() {
-        ui.label(RichText::new(tr("No AI is set up yet. The built-in engines still work; an AI adds plain-words answers.")).color(t.text_dim));
+        crate::i18n::rich_label(ui, &tr("No AI is set up yet. The built-in engines still work; an AI adds plain-words answers."), |r| r.color(t.text_dim));
     }
     let (mut pick, mut builds, mut extracts, mut toggle, mut remove) = (None, None, None, None, None);
     let (mut choose_program, mut usual_program, mut use_program) = (None, None, None);
@@ -496,7 +504,7 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
                         ui.data_mut(|d| d.insert_temp(confirm_id, b.name.clone()));
                     }
                     if app.state.backend.as_ref() == Some(&b.name) {
-                        widgets::pill(ui, "In use", t.on_accent, t.accent);
+                        widgets::pill(ui, "Chat AI", t.on_accent, t.accent);
                     }
                     ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
                         ui.add(egui::Label::new(RichText::new(&b.name).font(theme::semibold(theme::BODY))).truncate());
@@ -556,10 +564,10 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
                         let mut text = folder_drafts.get(&b.name).cloned().unwrap_or_else(|| saved.clone());
                         ui.add_space(theme::space::XS);
                         let label = crate::i18n::rich_label(ui, &tr("Claude Code folder (CLAUDE_CONFIG_DIR)"), |r| r.size(theme::CAPTION).color(t.text_dim));
-                        ui.label(
-                            RichText::new(tr("Its own sign-in, settings and conversations: another folder is another account. Empty: its usual folder."))
-                                .color(t.text_faint)
-                                .size(theme::CAPTION),
+                        crate::i18n::rich_label(
+                            ui,
+                            &tr("Its own sign-in, settings and conversations: another folder is another account. Empty: its usual folder."),
+                            |r| r.color(t.text_faint).size(theme::CAPTION),
                         );
                         let r = ui
                             .add(
@@ -606,7 +614,7 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
                             .unwrap_or_else(|| if b.model == "opencode" { tr("OpenCode default") } else { tr("Model default") });
                         crate::i18n::label(ui, &trf("Model: {model}", &[("model", &current)]));
                         let thinking = options.and_then(|o| o.cli_thinking).map(|d| d.title().to_string()).unwrap_or_else(|| tr("Model default"));
-                        ui.label(format!("{}: {thinking}", tr("Thinking depth")));
+                        crate::i18n::label(ui, &format!("{}: {thinking}", tr("Thinking depth")));
                         if let Some(picker) = app.agent_model_picker.as_mut().filter(|p| p.context.backend.config.name == b.name) {
                             let previous = picker.model.clone();
                             let apply = crate::builders::agent_model_picker(ui, picker);
@@ -628,10 +636,7 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
                         }
                     } else if let Some(current) = model_in_use {
                         controls(ui, |ui| {
-                            ui.add(
-                                egui::Label::new(RichText::new(trf("Model: {model}", &[("model", &current)])).color(t.text_faint).size(theme::CAPTION))
-                                    .truncate(),
-                            );
+                            crate::i18n::truncated_label(ui, &trf("Model: {model}", &[("model", &current)]), |r| r.color(t.text_faint).size(theme::CAPTION));
                             match app.model_picker.as_ref().filter(|(n, _)| *n == b.name) {
                                 None => {
                                     if widgets::caption_link(ui, "Change…").clicked() {
@@ -834,7 +839,7 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
             }
             ui.add_space(theme::space::MD);
             controls(ui, |ui| {
-                if app.state.backend.as_ref() != Some(&b.name) && widgets::secondary(ui, None, "Use").clicked() {
+                if app.state.backend.as_ref() != Some(&b.name) && widgets::secondary(ui, None, "Use for chat").clicked() {
                     pick = Some(b.name.clone());
                 }
                 // Who builds: the chosen one says so (click to go back to automatic).
@@ -1000,9 +1005,12 @@ fn ai(app: &mut CraftApp, ui: &mut Ui) {
         .inner;
     ui.add_space(theme::space::XS);
     if detected.is_empty() && !app.detecting {
-        ui.label(
-            RichText::new(tr("Nothing found yet. We look for API keys, local model servers (Ollama, LM Studio) and agent apps you already have. One on another port or computer can be added by its address below."))
-                .color(t.text_faint),
+        crate::i18n::rich_label(
+            ui,
+            &tr(
+                "Nothing found yet. We look for API keys, local model servers (Ollama, LM Studio) and agent apps you already have. One on another port or computer can be added by its address below.",
+            ),
+            |r| r.color(t.text_faint),
         );
     }
     let shown = detected.iter().filter(|d| crate::detect_tabs::tab_of(d) == tab).count();
@@ -1165,9 +1173,9 @@ pub(crate) fn server_form(app: &mut CraftApp, ui: &mut Ui) {
         let seconds = started.elapsed().as_secs().to_string();
         ui.horizontal(|ui| {
             ui.add(widgets::Spinner::new().size(theme::CAPTION).color(t.accent));
-            ui.label(
-                RichText::new(trf("Connecting to {name}… {seconds} s", &[("name", name), ("seconds", &seconds)])).color(t.text_faint).size(theme::CAPTION),
-            );
+            crate::i18n::rich_label(ui, &trf("Connecting to {name}… {seconds} s", &[("name", name), ("seconds", &seconds)]), |r| {
+                r.color(t.text_faint).size(theme::CAPTION)
+            });
             // Waiting out the minute isn't the only way: what was typed stays to fix and add again.
             if widgets::secondary(ui, Some("x"), "Stop").clicked() {
                 stop = Some(*job);
@@ -1353,12 +1361,12 @@ fn plugins(app: &mut CraftApp, ui: &mut Ui) {
     });
     if app.state.plugin_form.args_refused() {
         ui.add_space(theme::space::XS);
-        ui.label(
-            RichText::new(tr(
+        crate::i18n::rich_label(
+            ui,
+            &tr(
                 r#"Arguments in square brackets must be a list of quoted words, like ["--port", "8080"]. Or leave out the brackets and separate them with spaces."#,
-            ))
-            .color(t.warning)
-            .size(theme::CAPTION),
+            ),
+            |r| r.color(t.warning).size(theme::CAPTION),
         );
     }
     ui.add_space(theme::space::SM);
@@ -1570,6 +1578,50 @@ mod tests {
             .join("\n");
         assert!(text.contains("Check"));
         assert!(text.contains("Agent test is installed but is not signed in."));
+    }
+
+    #[test]
+    fn settings_distinguishes_chat_from_the_open_projects_builder() {
+        use craft_anything_engine::workspace::{TargetRef, Workspace};
+
+        let dir = tempfile::tempdir().unwrap();
+        let mut workspace = Workspace::create(dir.path(), "Notes", "Notes app", TargetRef::None).unwrap();
+        workspace.manifest.builder = Some("Project builder".into());
+        let mut app = demo::app(demo::engine(craft_anything_engine::Mode::Beginner, true));
+        app.workspace = Some(workspace);
+        app.state.screen = crate::state::Screen::Project;
+        app.state.backend = Some("Chat backend".into());
+        app.builder = Some("Chat backend".into());
+        app.detected = None;
+        app.backends = ["Chat backend", "Project builder"]
+            .map(|name| BackendConfig { name: name.into(), kind: BackendKind::Openai, model: "gpt-test".into(), base_url: None, ssh_host: None, enabled: true })
+            .to_vec();
+
+        let context = egui::Context::default();
+        theme::install_fonts(&context);
+        let settings_text = |app: &mut CraftApp| {
+            let mut output = context.run_ui(Default::default(), |ui| ai(app, ui));
+            output.textures_delta.clear();
+            output
+                .shapes
+                .iter()
+                .filter_map(|shape| match &shape.shape {
+                    egui::epaint::Shape::Text(text) => Some(text.galley.text()),
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+                .join("\n")
+        };
+        let text = settings_text(&mut app);
+        assert!(text.contains("Chat AI"));
+        assert!(text.contains("Project builder"));
+        assert!(text.contains("Builder for a new run: Project builder"));
+
+        app.backends[1].enabled = false;
+        assert!(settings_text(&mut app).contains("Builder for a new run: Chat backend"));
+        app.backends[0].enabled = false;
+        assert!(settings_text(&mut app).contains("No builder available for a new run."));
+        assert_eq!(app.workspace.as_ref().unwrap().manifest.builder.as_deref(), Some("Project builder"));
     }
 
     /// #1358: an API backend with a saved key can have it replaced or forgotten in place, while an
@@ -1859,9 +1911,9 @@ mod tests {
         };
         let engine = app.engine.clone();
         let session = engine.session();
-        app.handle_done(Finished { job: 0, result: Ok(Done::AgentModelChoices { request: 1, context: context.clone(), result: Ok(Vec::new()) }) });
+        app.handle_done(Finished { job: 0, result: Ok(Done::AgentModelChoices { request: 1, context: Box::new(context.clone()), result: Ok(Vec::new()) }) });
         assert!(app.agent_model_picker.as_ref().unwrap().result.is_none(), "an older reload must still be ignored");
-        app.handle_done(Finished { job: 0, result: Ok(Done::AgentModelChoices { request: 2, context, result: Ok(Vec::new()) }) });
+        app.handle_done(Finished { job: 0, result: Ok(Done::AgentModelChoices { request: 2, context: Box::new(context), result: Ok(Vec::new()) }) });
         draw(&mut app);
         assert!(app.agent_model_picker.as_ref().unwrap().result.as_ref().unwrap().is_ok(), "a busy frame must keep the completed catalogue");
         drop(session);

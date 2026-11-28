@@ -261,7 +261,7 @@ fn form(app: &mut CraftApp, ctx: &egui::Context, tool: &str) {
     let mut run = false;
     let mut back = false;
     let mut open = true;
-    egui::Window::new(RichText::new(tr(spec.title)).font(theme::semibold(theme::BODY)))
+    egui::Window::new(crate::i18n::rich_text(&tr(spec.title)).font(theme::semibold(theme::BODY)))
         .id(egui::Id::new("tool-form"))
         .open(&mut open)
         .collapsible(false)

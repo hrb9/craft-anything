@@ -149,7 +149,7 @@ impl Updates {
             let mut open = true;
             let mut install = false;
             let mut again = false;
-            egui::Window::new(tr("Check for Updates"))
+            egui::Window::new(crate::i18n::display(&tr("Check for Updates")).as_ref())
                 .open(&mut open)
                 .collapsible(false)
                 .resizable(false)

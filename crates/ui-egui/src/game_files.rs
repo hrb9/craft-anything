@@ -38,10 +38,10 @@ pub fn show(app: &mut CraftApp, ui: &mut Ui) {
                 ui.set_width(w);
                 crate::i18n::heading(ui, &tr("Game files"), theme::TITLE);
                 ui.add_space(theme::space::XS);
-                ui.label(
-                    RichText::new(tr("See what a game packs and save its pictures as PNG files. Only for games you made, or whose owner lets you."))
-                        .size(theme::BODY)
-                        .color(t.text_dim),
+                crate::i18n::rich_label(
+                    ui,
+                    &tr("See what a game packs and save its pictures as PNG files. Only for games you made, or whose owner lets you."),
+                    |r| r.size(theme::BODY).color(t.text_dim),
                 );
                 ui.add_space(theme::space::LG);
                 // Every look at a game's files reads them, which Clean room never does.
@@ -211,7 +211,9 @@ fn contents(app: &mut CraftApp, ui: &mut Ui) {
         return;
     }
     if g.open_kind == "unreal_iostore" {
-        ui.label(RichText::new(tr("Pictures can't be saved from IoStore containers yet; you can see what's inside.")).color(t.text_faint).size(theme::CAPTION));
+        crate::i18n::rich_label(ui, &tr("Pictures can't be saved from IoStore containers yet; you can see what's inside."), |r| {
+            r.color(t.text_faint).size(theme::CAPTION)
+        });
         ui.add_space(theme::space::SM);
     }
     let r = ui.add(
@@ -244,9 +246,9 @@ fn contents(app: &mut CraftApp, ui: &mut Ui) {
     }
     let total = app.state.game.rows.len();
     if total > rows.len() && needle.is_empty() {
-        ui.label(
-            RichText::new(format!("{} {} {}", tr("Showing"), rows.len(), tr("— use the filter to find the rest."))).color(t.text_faint).size(theme::CAPTION),
-        );
+        crate::i18n::rich_label(ui, &format!("{} {} {}", tr("Showing"), rows.len(), tr("— use the filter to find the rest.")), |r| {
+            r.color(t.text_faint).size(theme::CAPTION)
+        });
     }
     if let Some(item) = save {
         ask_to_save(app, open, item);
@@ -290,11 +292,10 @@ pub fn permission_modal(app: &mut CraftApp, ui: &mut Ui, close: &mut bool) {
     ui.add_space(theme::space::MD);
     crate::i18n::heading(ui, &tr("Do you have permission?"), theme::SECTION);
     ui.add_space(theme::space::XS);
-    ui.label(
-        RichText::new(tr(
-            "Only take pictures out of games you made, or whose owner allows it. A game's art is usually protected by copyright and by the game's licence.",
-        ))
-        .color(t.text_dim),
+    crate::i18n::rich_label(
+        ui,
+        &tr("Only take pictures out of games you made, or whose owner allows it. A game's art is usually protected by copyright and by the game's licence."),
+        |r| r.color(t.text_dim),
     );
     ui.add_space(theme::space::LG);
     ui.horizontal(|ui| {

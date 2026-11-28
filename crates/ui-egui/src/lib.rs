@@ -189,7 +189,8 @@ pub enum Done {
     },
     AgentModelChoices {
         request: u64,
-        context: craft_anything_ai::ModelContext,
+        // Boxed: a model context is far larger than the other variants (clippy::large_enum_variant on Windows).
+        context: Box<craft_anything_ai::ModelContext>,
         result: Result<Vec<craft_anything_ai::AgentModel>, ToolError>,
     },
     ModelTuning {
@@ -247,6 +248,8 @@ pub enum Done {
     },
     /// Which asset providers have a key set up (provider id → stored).
     AssetKeys(std::collections::BTreeMap<String, bool>),
+    /// A system Hebrew fallback font was read off the UI thread.
+    HebrewFont(Option<Vec<u8>>),
     /// Which API backends have a key saved in the app (backend name → stored; #1358), and the
     /// check that asked: a result from before a save or another check is stale.
     BackendKeys {
@@ -568,6 +571,8 @@ pub struct CraftApp {
     open_url: Option<String>,
     /// The open project's screenshot thumbnails (dropped when another project opens).
     pub thumbs: std::collections::HashMap<PathBuf, project::Thumb>,
+    /// How tall each item of the open conversation was last drawn.
+    feed_heights: project::FeedHeights,
     /// Pictures of the attachments in the prompt boxes (`CraftApp::previews`).
     pub previews: std::collections::HashMap<PathBuf, project::Thumb>,
     /// The kinds of thing this app can make; a fork registers its own here.
@@ -604,6 +609,9 @@ pub struct CraftApp {
     pub ghidra: engine_ui::GhidraFlow,
     /// When each toast appeared, in the same order (confirmations hide after a few seconds).
     toast_at: Vec<Instant>,
+    /// Whether a text field had keyboard focus as the last frame ended. egui lets go of focus on
+    /// Esc as a frame begins, before [`Self::shortcuts`] runs, so that frame can't ask (#2434).
+    text_was_focused: bool,
     /// Distinguish repeated error occurrences without changing the persisted toast representation.
     pub(crate) toast_error_revision: u64,
     settings_dirty: bool,
@@ -635,6 +643,8 @@ pub struct CraftApp {
     last_view: Option<Instant>,
     applied_theme: Option<ThemeKind>,
     applied_rtl_fonts: bool,
+    hebrew_font: Option<Option<Vec<u8>>>,
+    hebrew_font_loading: bool,
     /// The system's light or dark appearance, read each frame: the System theme follows it.
     system_theme: Option<egui::Theme>,
     started: bool,
@@ -712,6 +722,7 @@ impl CraftApp {
             pins_read_at: None,
             open_url: None,
             thumbs: Default::default(),
+            feed_heights: Default::default(),
             previews: Default::default(),
             kinds: craft_anything_ai::rebuild::KindRegistry::built_in(),
             game_engines: None,
@@ -727,6 +738,7 @@ impl CraftApp {
             engine_flow: Default::default(),
             ghidra: Default::default(),
             toast_at: Vec::new(),
+            text_was_focused: false,
             toast_error_revision: 0,
             settings_dirty: false,
             save_due: None,
@@ -744,6 +756,8 @@ impl CraftApp {
             last_view: None,
             applied_theme: None,
             applied_rtl_fonts: false,
+            hebrew_font: None,
+            hebrew_font_loading: false,
             system_theme: None,
             started: false,
         };
@@ -1150,6 +1164,7 @@ impl CraftApp {
             ("project_play", Ok(_)) => self.toast(tr("Starting… it opens in its own window."), false),
             ("project_play", Err(e)) => self.toast(format!("{} {}", tr("Couldn't start it."), e.for_people()), true),
             ("project_assets_budget" | "project_assets_allow", Ok(_)) => self.assets_changed(),
+            (craft_anything_engine::tools::project_tools::USAGE_RESET_TOOL, r) => self.usage_reset(r),
             ("rebuild_question_ask", r) => self.question_done(r),
             ("project_build_finish", Ok(v)) => {
                 if let Some(ws) = self.workspace.as_mut().filter(|w| v["project"].as_str().is_some_and(|p| w.root == std::path::Path::new(p))) {
@@ -1878,7 +1893,7 @@ impl CraftApp {
             Done::AgentModelChoices { request, context, result } => {
                 // Keep a matching result even while the engine is busy. Settings invalidates
                 // changed contexts once it can read the session again; saving rechecks too.
-                if let Some(picker) = self.agent_model_picker.as_mut().filter(|p| p.request == request && p.context == context) {
+                if let Some(picker) = self.agent_model_picker.as_mut().filter(|p| p.request == request && p.context == *context) {
                     picker.result = Some(result.map_err(|e| e.for_people()));
                 }
             }
@@ -2001,6 +2016,10 @@ impl CraftApp {
             Done::EngineGot { builder, installer } => self.engine_got(builder, installer),
             Done::GhidraGot => self.ghidra_got(),
             Done::AssetKeys(keys) => self.asset_keys = Some(keys),
+            Done::HebrewFont(bytes) => {
+                self.hebrew_font_loading = false;
+                self.hebrew_font = Some(bytes);
+            }
             Done::Wrote { what, path } => {
                 if let Some(p) = path {
                     self.toast(format!("{} {}", tr("Saved"), p.display()), false);
@@ -2096,8 +2115,22 @@ impl CraftApp {
         }
         let want_rtl = i18n::is_rtl();
         if self.applied_rtl_fonts != want_rtl {
-            theme::install_fonts(ctx);
-            self.applied_rtl_fonts = want_rtl;
+            if !want_rtl || theme::has_bundled_hebrew_font() {
+                theme::install_fonts_with(ctx, None);
+                self.applied_rtl_fonts = want_rtl;
+            } else if let Some(cached) = &self.hebrew_font {
+                theme::install_fonts_with(ctx, cached.clone());
+                self.applied_rtl_fonts = true;
+            } else if !self.hebrew_font_loading {
+                self.hebrew_font_loading = true;
+                #[cfg(not(target_arch = "wasm32"))]
+                self.jobs.spawn("Load Hebrew fonts", false, move |_| Ok(Done::HebrewFont(theme::desktop_hebrew_fallback())));
+                #[cfg(target_arch = "wasm32")]
+                {
+                    self.hebrew_font_loading = false;
+                    self.hebrew_font = Some(None);
+                }
+            }
         }
         self.take_finished_jobs();
         if let Some(url) = self.open_url.take() {
@@ -2161,6 +2194,12 @@ impl CraftApp {
 
     /// Draw the whole interface.
     pub fn show(&mut self, ui: &mut egui::Ui) {
+        self.draw(ui);
+        // Read after drawing, on every path out of it: the next frame's Esc needs it.
+        self.text_was_focused = ui.ctx().text_edit_focused();
+    }
+
+    fn draw(&mut self, ui: &mut egui::Ui) {
         let ctx = ui.ctx().clone();
         #[cfg(not(target_arch = "wasm32"))]
         {
@@ -2356,8 +2395,10 @@ impl CraftApp {
                 home::dismiss(self);
             } else if self.state.settings_open {
                 self.state.settings_open = false;
-            } else if !matches!(self.state.screen, Screen::Home | Screen::Workbench) && ctx.memory(|m| m.focused().is_none()) {
-                // Back to Home, unless Esc was meant for a text field.
+            } else if !matches!(self.state.screen, Screen::Home | Screen::Workbench) && !self.text_was_focused {
+                // Back to Home, unless Esc was meant for a text field. egui has already let go of
+                // the field's focus this frame, so ask the last one; the field keeps its text,
+                // and a second Esc, with nothing focused, goes home.
                 self.state.screen = Screen::Home;
             }
         }

@@ -370,8 +370,14 @@ only when it's green and a maintainer has fully reviewed it, code as well as wor
       time limit, through `platform::retry::when_interrupted`); the Cutter command tool, whose
       commands can change the session, calls once and says the call was interrupted
       — claimed: tanish2k09, branch bugfix/r5.2-interrupted-loopback-call
-- [ ] `mcp_client.rs`'s `post` reports an interrupted call (EINTR) as "Couldn't reach the plugin"
+- [x] The Cutter tests' stand-in session answers only one connection, so when a signal interrupts
+      the first call and `cutter::command` calls again, the stand-in writes to the dropped
+      connection and panics (BrokenPipe) and the repeated call is reset (CI run 45366943275);
+      serve connections until one request is answered, and test a dropped first call
+      — claimed: tanish2k09, branch test/r5.2-cutter-stand-in-repeated-call
+- [x] `mcp_client.rs`'s `post` reports an interrupted call (EINTR) as "Couldn't reach the plugin"
       (`EngineMissing`); a JSON-RPC POST isn't safe to send again, so say it was interrupted instead
+      — claimed: Afloat16, branch bugfix/r5.2-mcp-interrupted-post
 - [x] Every PR that adds UI strings appends them to the end of all 14 catalogs, so any two such
       PRs conflict once one merges (#1465): one folder per language (`i18n/<code>/core.tsv`),
       each PR adding its own file there, joined in name order by `build.rs`
@@ -422,9 +428,19 @@ Every round spends the person's money or quota. One that can't do anything shoul
       missing file, bad JSON, an empty file, a folder, an oversized file, no read permission (Unix),
       a valid file, the tool result and the screen's words
       — claimed: tanish2k09, branch bugfix/r5.3-unreadable-usage
-- [ ] An unreadable `usage.json` now stops a project's usage from being counted at all (every
-      update is refused and logged). Say so where the person can act on it, for example offer to
-      set the file aside and start counting again
+- [x] An unreadable `usage.json` stopped a project's usage from being counted at all (every
+      update was refused and logged). The project screen now says builds aren't counted while it
+      can't be read and offers "Set it aside and count again" (`project_usage_reset`, also named
+      by `project_show`'s `usage_note` and the refused update's remediation): the file is kept as
+      `usage.unreadable.json`, a new record counts later runs, and it is marked `restarted`, so
+      its time and cost show as "at least …" and its tokens as a lower bound, never as the whole.
+      A readable record, or one already set aside, is never replaced. Unit tests of the move, the
+      tool and the screen's words
+      — PR #2212; claimed: rmsff, branch bugfix/r5.3-unreadable-usage-json
+- [ ] A record started again stays `usage.json` version 1, where a missing `restarted` reads as
+      false, so an older build that updates it drops the field and its figures stop showing as
+      "at least …". Make it version 2, with a step that adds `restarted: false` to a version 1
+      file, so an older build refuses the record instead (`USAGE_VERSION`; #2212 review)
 - [x] Show what the last run used next to Try again. `usage.json` keeps project totals only
       (time, tokens, `cost_usd`, `api_billed_usd`); the activity log has each turn's tokens but
       no cost, since a resumed agent's figure can't be tied to one turn (`activity.rs`). Show
@@ -741,6 +757,13 @@ Owner: open · Status: todo
 - [x] Bound accumulated data across all lines of one server-sent event, so short lines cannot
       grow a streamed API response without limit
       — claimed: Afloat16, branch bugfix/r5.5-bounded-sse-events-20261103
+- [x] An API POST interrupted by a signal (EINTR) was reported as "Couldn't reach {AI}"
+      (`EngineMissing`), blaming the server or connection; it now says the call was interrupted and
+      is not retried, since a sent request may already be billed. A GET cut short the same way is
+      simply asked again, since repeating it is safe
+      — claimed: AlexJoaquimPereira, branch bugfix/r5.5-interrupted-ai-call
+- [ ] The same interrupted-call reading remains in `install.rs`'s download: say interrupted there
+      too (the MCP client is covered by #2354 and #2206; fal's paid POST and download by #2426)
 - [x] Show the provider's own reason: #369 bought $10 of credit and got only "OpenRouter answered
       400: Provider returned error". Find the reason in the response body and show it — PR #542
 - [x] A Claude build failed with 400 "Invalid `signature` in `thinking` block" once the conversation
@@ -763,6 +786,19 @@ Owner: open · Status: todo
 - [x] A saved fal.ai key reaches an API-key build's asset tools; every call said "No fal.ai key"
       (#923). Outside a project the tools now say that instead. Not checked with a real fal.ai key
       or API build
+- [x] fal.ai's paid generation POST reported a timeout, an interrupted call, a connection reset or
+      TLS failure, a disconnect before the answer or an unreadable answer as unreachable or garbled
+      and invited a retry, although the generation may already be running and billed. Only a
+      failure before anything was sent (refused or failed connection, host not found, connect or
+      resolve timeout) still says "Couldn't reach"; every later failure says it may be billed,
+      points at the dashboard, and isn't retried. A generated file that can't be downloaded after
+      that also says it was paid for, gives its address, and isn't retried. A 3D model rate-limited
+      after its picture was made says the picture is saved and paid for, and gives its `app/` path
+      as `image` so a retry doesn't pay for another picture
+      — claimed: AlexJoaquimPereira, branch bugfix/r5.5-fal-generation-timeout
+- [ ] A paid generation that may have been billed isn't counted against the project's asset budget,
+      because cost is recorded only when the file is saved: charge the estimate when the POST may
+      have been billed, so the budget matches what fal charged
 - [x] Each build has an engine of its own: sharing the app's session, whose `attach` points
       at whichever project started last, sent a build's files and asset spending to the wrong project
       (`build.parallel` is 2 by default). It takes on settings and project permissions from the
@@ -1116,6 +1152,19 @@ Owner: open · Status: in progress
 - [ ] More pins once their hashes are checked against the publisher: Chromium (no published
       checksums found yet), Rizin for Linux (the tar.xz unpacks to ~800 MB, so it needs streaming
       extraction) and macOS (a .pkg)
+- [x] Use the memory set for Ghidra (`engines.ghidra.memory_gb`, Settings → Engines) below 4 GB too:
+      a set amount was raised to the automatic amount's floor of 4 GB, so a 1-3 GB setting always
+      started Ghidra with `-Xmx4G` (#2425). A set amount is now kept within 1-31 GB
+      (`ghidra::SET_HEAP_GB`); the 4-31 GB range is for the automatic amount only. Both starts (the
+      analysis and the bridge) take it from one place; tested with a stand-in launcher that records
+      `GHIDRA_HEADLESS_MAXMEM`, not run with a real Ghidra
+      (claimed: ilijachrchev, branch bugfix/2425-ghidra-memory)
+- [ ] Ghidra before 12.1 ignores the memory setting: its `support/analyzeHeadless` fixes `MAXMEM=2G`
+      and reads no variable (checked in Ghidra's published 11.0, 11.4, 11.4.2, 12.0 and 12.0.4
+      launchers; 12.1 and 12.1.4 read `GHIDRA_HEADLESS_MAXMEM`). Say so when an older Ghidra is in
+      use, or start it another way that takes a heap
+- [ ] Live check of #2425 with a real Ghidra 12.1.4 or 12.2: `memory_gb = 1` gives `-Xmx1G` for the
+      analysis and the bridge
 
 ### R1.6 Headless first
 Owner: maintainers · Status: in progress
@@ -1295,9 +1344,10 @@ Owner: open · Status: in progress
       still resume it (#1115). Until there is a safe way to tell such a session from the person's
       own, say so where the sweep reports, with the commands to remove one by hand
       (`opencode session list`, then `opencode session delete <id>`)
-- [ ] A recorded session on an SSH host that can't be reached three times running is dropped from
+- [x] A recorded session on an SSH host that can't be reached three times running is dropped from
       the records while it may still be alive on the host (#1115). Keep the record and say which
       host still holds a session, rather than forgetting it
+      — claimed: Plastic-time, branch bugfix/r2.2-keep-unreachable-ssh-session-record
 - [ ] Removing the app through the system's own uninstaller or a launcher runs none of our
       clean-up, so recorded OpenCode sessions stay (#1115); only `craft-anything-cli uninstall`
       sweeps them. Say so in the uninstall docs, and sweep from each package's removal step
@@ -1578,6 +1628,18 @@ Owner: open · Status: in progress
       — claimed: gtxy27, branch `bugfix/r2.2-dsh-stdin`
 - [ ] DeepSeek Harness: no resume (its headless profile keeps no session), and a build on the harness's
       desktop profile is untried
+- [x] DeepSeek Harness: offer the models the person already set up in the desktop app, so Settings → AI
+      can choose one instead of only the harness's own default. The list comes from the desktop
+      profile's provider patch layer (`$DSH_HOME/profiles/desktop/cordis.patch.yml`) plus the models
+      every harness ships with; a chosen model travels in the same generated `--patch` overlay as our
+      tool server, which also brings those provider settings along and turns the key store back on
+      (the headless bundle leaves it off, so a key saved in the app was never seen: that is the
+      `MISSING_CREDENTIAL` a desktop-profile model run used to stop with). The harness has no
+      `--model` flag, so the overlay is the only route. The overlay lives in a folder of the run's
+      own and is removed with it, a stopped run included, so a key written inline in the desktop
+      profile is not left behind. Verified with adapter, model-list and overlay tests and live turns
+      on the desktop profile's own providers (DSH 0.2.2-rc.5).
+      — claimed: Walker-HK, branch feature/r2.2-dsh-model-choice
 - [x] Apply repeated client selections and aliases once, preserving their first selection order.
       — claimed: Plastic-time, branch rrfz/bugfix-r2.2-deduplicate-clients
 - [ ] `setup` writes the plain `mcp` command, so it drops an `--all-tools` an entry already has, and
@@ -1769,11 +1831,12 @@ Owner: maintainers · Status: in progress
 ### R2.9 Everyday use: typing, projects, settings
 Owner: maintainers · Status: in progress
 Gaps found while using the app for real projects.
-- [ ] The headless app the UI tests use builds its engine with `Session::new` (`ui-egui`'s
+- [x] The headless app the UI tests use builds its engine with `Session::new` (`ui-egui`'s
       `demo::engine`), not the isolated test session, so a UI test that reaches a tool which
       saves, or looks for an installed program, touches the real config folder and finds what
       this computer has. Build it from a session kept in a temp folder with
       `engines.only_configured`, as `engine::testing::session()` does
+      — claimed: Plastic-time, branch bugfix/r2.9-isolate-demo-engine-session
 - [x] `i18n::trf` filled placeholders with repeated replacements, so a value containing a later
       placeholder was rewritten. It now fills them in one pass over the template: inserted names
       and other values stay literal, and unknown names and stray braces are kept as written. The
@@ -1807,6 +1870,9 @@ Gaps found while using the app for real projects.
       — PR #2217; claimed: rmsff, branch feature/r2.9-plugin-form-checks
 - [ ] A plugin's Test lists its tools but calls none, and #2153 met a server that listed 11 tools
       and failed on use. Offer an optional call of one tool the person picks, saying it runs it
+- [x] Let the prompt box grow with the draft and scroll internally only after it reaches its height limit
+      — claimed: bimgeek, branch bugfix/r2.9-prompt-box-sizing
+- [ ] Keep the Project controls visible when a tall pinned plan fills the smallest window, even with a short draft
 - [x] Each project chooses, per kind of action, what the builder's approvals get (allow, ask or
       refuse): reading the web, commands, files outside the project, pushing and publishing,
       deleting outside the project, system changes, other tools. Unset kinds follow Auto mode as
@@ -1934,9 +2000,10 @@ Gaps found while using the app for real projects.
       regression in `session.rs` covers the switch, the target it closes and the annotation it
       keeps apart, the same-project reopen and returning to the first project
       — claimed: AlexJoaquimPereira, branch bugfix/r2.9-project-switch-targets
-- [ ] A target opened before any project keeps its empty annotations when the first project opens,
+- [x] A target opened before any project keeps its empty annotations when the first project opens,
       so a later edit can overwrite that project's stored annotations for the same target: load
       them when the first project opens (a switch closes its targets instead)
+      — claimed: Plastic-time, branch bugfix/r2.9-load-annotations-on-first-project-open
 - [ ] A build attaches its investigation to the app's engine, so starting a build closes the target
       the person had open (the app shows the project screen, and the target is gone when they go
       back), and parallel builds share one session and project: give each build its own session,
@@ -2130,6 +2197,9 @@ Gaps found while using the app for real projects.
       switcher in every README (#831)
 - [x] A Thai README (`README.th.md`) translated from `README.md` and linked from the language
       switcher in every README
+- [x] An Italian README (`README.it.md`) translated from `README.md`, with English technical
+      terminology and links from every README language switcher (#2173)
+      — claimed: arloo, branch docs/italian-translation
 - [ ] Vietnamese letters with stacked marks (ạ ả ấ ế ơ ư ữ…) aren't in the bundled Figtree or egui's
       default fonts: without craft-fonts they show as boxes, and with it each such letter comes from
       Noto Sans CJK while the rest of the word is Figtree. Bundle a build of the text font that has the
@@ -2225,8 +2295,11 @@ Gaps found while using the app for real projects.
       keeps its live feed when it is already building, and keeps a queued request with its options;
       a start that fails keeps the Make draft
       — claimed: AlexJoaquimPereira, branch bugfix/r2.9-attached-builder-feed
-- [ ] A queued run's request lives in its `RunOptions` and the in-memory queue; an app exit before
-      it starts loses it. Let the run side keep it (a queue record or a left note) across a restart
+- [x] A queued run's request is kept in `inbox/queued-request.json` before the queue accepts it.
+      Its words, shown message and picture paths survive a pause, app exit or failed start; the
+      next manual Continue or Try again restores them with the current builder and mode. The
+      waiting project offers Continue after reopening; unreadable or newer records stay unchanged
+      — claimed: Afloat16, branch bugfix/r2.9-persist-queued-request
 - [x] A config.toml that is there but can't be read (another program holds it, no permission, not
       UTF-8) loaded as defaults like a missing one, and the next save replaced it; one that couldn't
       be parsed was renamed aside with the rename's result ignored. Only "not found" is plain
@@ -2397,6 +2470,23 @@ Gaps found while using the app for real projects.
       terminal found npm (#2178): programs are looked up in a PATH whose `%VAR%` entries are
       expanded (`which::expand_vars`), and in Node.js's own install folder after it
       — claimed: justinjohn0306, branch bugfix/2178-npm-on-windows-path
+- [x] The Approvals link under a project's prompt box sat right under Send, so a click a little
+      low opened Approvals instead of sending (#2435). It now starts the row under the box, at the
+      end away from Send, in both the one-row and the two-row layout. A UI test checks the gap at
+      the smallest window, a normal one and 200% zoom, that the row holds still, and that a click
+      or Enter opens the menu
+      - claimed: ilijachrchev, branch bugfix/2435-approvals-link-gap
+- [x] At the smallest window (760 x 520) and 200% zoom the project screen is 260 points tall, and
+      the row under the prompt box (Approvals, Change it / Just ask) was drawn below the window's
+      bottom edge, out of reach (found while fixing #2435; it was so before that change too). The
+      feed keeps a few lines and the prompt box scrolls, so the row stays reachable, including with
+      a long prompt
+      — claimed: AlexJoaquimPereira, branch bugfix/r2.9-small-window-project-row
+- [x] Esc while typing in a project's prompt box stays on the project and keeps the draft; it went
+      to the new-project screen, because egui lets go of a field's focus on Esc before the app
+      looked at it (#2434). Esc with nothing focused still goes home, and still closes the palette,
+      a dialog or Settings first
+      Claimed: ilijachrchev, branch bugfix/2434-esc-in-prompt
 
 ### R2.10 Pinned builds
 Owner: maintainers · Status: in progress
@@ -2408,7 +2498,13 @@ to the project next.
       — in PR #220
 - [ ] Pins of one project sharing with each other, so a third frozen copy of the same assets
       takes no more space
-- [ ] Pin a website (a frozen copy of the built site, each served on its own port)
+- [x] Pin a website (a frozen copy of the built site, each served on its own port): a pin copies
+      the built site alone (a light one shares its media), and opening it serves that copy on a
+      free loopback port of its own until it's closed; a served pin isn't removed
+      (`a_pinned_website_is_served_from_its_copy_on_a_port_of_its_own`)
+      — in PR #2239
+- [ ] A pinned website keeps one address: each open takes a free port, so what the browser keeps
+      for a site (its storage, a sign-in) doesn't carry over to the next time it's opened
 - [ ] A pin started before the app restarted shows as running (keep its process id and start
       time in the pin, and check both), and can be stopped
 - [x] Cap a run's log (`last-run.log`, `play.log`): it grows as long as the program prints. The
@@ -2620,8 +2716,9 @@ Owner: open · Status: in progress
       — claimed: Plastic-time, branch bugfix/r3.11-pseudo-memory-write-overlap
 - [x] Preserve argument loads across implicit and multi-register writes, and limit fixed-width Win64 slot invalidation to overlapping offsets (#2124 follow-up).
       — claimed: Plastic-time, branch bugfix/r3.11-pseudo-write-footprints
-- [ ] `native_source_folder_write` uses the built-in decompiler only: use Ghidra in Deep mode when
+- [x] `native_source_folder_write` uses the built-in decompiler only: use Ghidra in Deep mode when
       it's there
+      — claimed: Afloat16, branch feature/r3.11-deep-source-folder
 - [x] Keep source registers alive when an AArch64 arithmetic result is discarded into the zero register.
       — claimed: Afloat16, branch bugfix/r3.11-a64-discarded-results-20261111
 - [x] Lift AArch64 `cmn` (`adds xzr/wzr, …`) branch conditions as `(a + b) <op> 0` and omit
@@ -3882,11 +3979,15 @@ Owner: open · Status: in progress
       decode. Other rendering (no `(extension in …)` prefix, unsupported manglings reported invalid) is unchanged.
       — claimed: Chr0mium24, branch bugfix/r3.12-swift-demangle-generic-spec
 
+- [x] `fD` on a non-class Swift type now reads `deinit` instead of `__deallocating_deinit`: non-class contexts (structs, enums, protocols and their extensions) use `deinit`, while classes keep `__deallocating_deinit`. Example: `_$s13HomeDataModel8StreamedVfD` -> `HomeDataModel.Streamed.deinit`.
+      — claimed: Chr0mium24, branch bugfix/r3.12-swift-demangle-struct-deinit
 
 - [x] Take target file signatures from the shared craft-sniff table. The app still breaks ties
       that need its own parsers (managed PE, Java class versus a universal Mach-O, APK by name
       or manifest, ASAR, text). Fat Mach-O files that start 0xCAFEBABF are now recognized.
       — claimed: FredApps, branch refactor/target-kind-craft-sniff
+- [x] Decode Swift `MS`/`WS`/`…TS` protocol self-conformance symbols: `_$ss5ErrorMS` reads `protocol self-conformance descriptor for Swift.Error`, `_$ss5ErrorWS` reads `protocol self-conformance witness table for Swift.Error`, and `_$ss5ErrorP5_codeSivgTS` reads `protocol self-conformance witness for Swift.Error._code.getter : Swift.Int`.
+      — claimed: Chr0mium24, branch bugfix/r3.12-swift-demangle-self-conformance
 - [x] Swift protocol requirements base descriptors decode. A symbol ending `TL` is the protocol
       requirements base descriptor of the protocol before it, which the demangler reported as an
       unsupported thunk; `_$s7SwiftUI10ShapeStyleTL` is

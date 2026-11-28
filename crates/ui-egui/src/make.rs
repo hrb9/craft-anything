@@ -253,7 +253,9 @@ fn request_box(app: &mut CraftApp, ui: &mut Ui, hint: &str, attach: Option<&str>
         crate::prompt_box::PromptBox {
             name: "Say what you want",
             hint: tr(hint),
-            rows: (3, 10),
+            min_rows: 3,
+            viewport_height: crate::prompt_box::ViewportHeight::PaneWithRowFloor(10),
+            text_height_limit: None,
             attach,
             previews: &previews,
             stop_button: None,
@@ -292,7 +294,7 @@ fn look(app: &mut CraftApp, ui: &mut Ui, w: f32) {
     let t = Tokens::get(ui.ctx());
     crate::i18n::heading(ui, &tr("What do you want to look inside?"), theme::TITLE);
     ui.add_space(theme::space::SM);
-    ui.label(RichText::new(tr("We only read it; nothing runs. Every answer shows how sure we are.")).size(theme::LEAD).color(t.text_dim));
+    crate::i18n::rich_label(ui, &tr("We only read it; nothing runs. Every answer shows how sure we are."), |r| r.size(theme::LEAD).color(t.text_dim));
     ui.add_space(theme::space::LG);
     widgets::card(&t).inner_margin(theme::pad::ROOMY).show(ui, |ui| {
         ui.set_width(w - 50.0);
