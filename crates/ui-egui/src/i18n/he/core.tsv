@@ -142,7 +142,7 @@ Another build is working, so this one waits its turn.	תהליך בנייה אח
 Answer a project's question	מענה לשאלה של פרויקט
 Answer any of them in a message below.	ניתן לענות על כל אחת מהן בהודעה למטה.
 Answered by {name}	נענה על ידי {name}
-Answers come from {brain}. To build, set up a coding agent in Settings → AI.	התשובות מגיעות מ-{brain}. כדי לבנות, הגדר סוכן תכנות בהגדרות › AI.
+Answers come from {brain}. To build, set up a coding agent in Settings → AI.	התשובות מגיעות מ-{brain}. כדי לבנות, יש להגדיר סוכן תכנות בהגדרות › AI.
 App	אפליקציה
 App details on device	פרטי האפליקציה במכשיר
 Apple apps	אפליקציות Apple
@@ -194,10 +194,10 @@ Build	בנייה
 Build a rebuild ledger	יצירת יומן בנייה מחדש
 Build a stand-in backend	בניית צד שרת חלופי
 Build with	בנייה עם
-Build with this	בנה עם זה
-Build with {name}	בנה עם {name}
-Build with {name} instead	בנה עם {name} במקום
-Build without it	בנה בלעדיו
+Build with this	בנייה עם זה
+Build with {name}	בנייה עם {name}
+Build with {name} instead	בנייה עם {name} במקום
+Build without it	בנייה בלעדיו
 Builder's questions:	שאלות הבונה:
 Building	בתהליך בנייה
 Building needs a coding agent on this computer (Claude Code, Codex or Gemini CLI: install one and sign in to it once in its own window), or an AI with an API key. Craft Anything never sees your account.	הבנייה דורשת סוכן תכנות במחשב זה (Claude Code, Codex או Gemini CLI: יש להתקין אחד ולהתחבר אליו פעם אחת בחלון שלו), או AI עם מפתח API. Craft Anything לעולם אינה רואה את החשבון שלך.
@@ -439,11 +439,11 @@ Follow the installer that opened. Come back here when it's done.	פעל לפי �
 Follow the steps on rustup.rs, then come back here.	פעל לפי השלבים באתר rustup.rs, ואז חזור לכאן.
 For everything you make, like the switch in the title bar.	לכל מה שנוצר, כמו המתג שבשורת הכותרת.
 For example: a website for my bakery	לדוגמה: אתר אינטרנט למאפייה שלי
-For example: recreate this website	לדוגמה: בנה מחדש את האתר הזה
+For example: recreate this website	לדוגמה: בנייה מחדש של האתר הזה
 For example: the same app, but simpler	לדוגמה: אותה אפליקציה, אבל פשוטה יותר
 For example: the same game, with a high-score table	לדוגמה: אותו משחק, עם טבלת שיאים
 Force-stop an app	עצירה מאולצת של אפליקציה
-Forget the key	שכח את המפתח
+Forget the key	שכיחת המפתח
 Found on this computer	נמצא במחשב זה
 Found {} AI option(s) on this computer	נמצאו {} אפשרויות AI במחשב זה
 Frida devices	מכשירי Frida
@@ -914,11 +914,11 @@ Reasoning	חשיבה
 Rebuild status	מצב בנייה מחדש
 Record a finding	תעד ממצא
 Record a hypothesis	תעד השערה
-Record an open question	תעד שאלה פתוחה
+Record an open question	תיעוד שאלה פתוחה
 Recover readable sources	שחזור קובצי מקור קריאים
-Recreate it with darker colours	בנה אותו מחדש בצבעים כהים יותר
-Recreate just its main feature	בנה מחדש רק את התכונה העיקרית שלו
-Recreate this website	בנה מחדש את האתר הזה
+Recreate it with darker colours	בנייה מחדש בצבעים כהים יותר
+Recreate just its main feature	בנייה מחדש של התכונה העיקרית שלו בלבד
+Recreate this website	בנייה מחדש של האתר הזה
 Recreated games are built with the original's own engine when it's here (Unity, Unreal or Godot), else Unity, and Rust as the last resort.	משחקים שנבנים מחדש נבנים באמצעות המנוע של המשחק המקורי כשהוא נמצא כאן (Unity, Unreal או Godot), אחרת באמצעות Unity, וב-Rust כמוצא אחרון.
 References to a name	הפניות לשם
 Refining rounds	סבבי ליטוש
@@ -1339,7 +1339,7 @@ number	מספר
 objdump output	פלט objdump
 or start with /btw to just ask	או להתחיל ב-/btw כדי רק לשאול
 pinned builds couldn't be read: {}	לא ניתן היה לקרוא בניות מוצמדות: {}
-say how to use the files there	ציין איך להשתמש בקבצים שם
+say how to use the files there	יש לציין איך להשתמש בקבצים שם
 scene	סצנה
 scenes	סצנות
 source map	מפת מקור
@@ -1495,7 +1495,7 @@ Updated to {version}.	עודכן לגרסה {version}.
 Use Releases or your package manager to update this installation.	יש להשתמש במהדורות (Releases) או במנהל החבילות כדי לעדכן התקנה זו.
 You're up to date.	הגרסה שלך עדכנית.
 {version} is available.	גרסה {version} זמינה.
-Forget a website sign-in	שכח התחברות לאתר
+Forget a website sign-in	שכיחת התחברות לאתר
 Sign in to a website	התחברות לאתר
 Some shared files could not be hard-linked and were copied instead ({size}).	לא ניתן היה ליצור קישור קשיח (hard link) לחלק מהקבצים המשותפים, והם הועתקו במקום זאת ({size}).
 This server lists several chat models. Choose one:	שרת זה מציג מספר מודלי צ'אט. יש לבחור אחד:
