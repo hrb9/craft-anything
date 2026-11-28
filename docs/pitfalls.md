@@ -255,6 +255,11 @@ test's child ending) during a loopback call, and every error that wasn't a timeo
 session". An interrupted system call is not an answer: decide on the error's typed kind
 (`ErrorKind::Interrupted`), call again within the same time limit when the request is safe to
 repeat (`platform::retry::when_interrupted`), and otherwise say it was interrupted.
+The fix then failed the same test in another way: its stand-in session took one connection and
+panicked on any error, so when an interrupted first call was dropped and made again, the stand-in
+failed writing to the dropped one (BrokenPipe), its listener closed and the second call was reset.
+When a client learns to call again, every stand-in it talks to must take the repeated call: serve
+connections until one request is answered, and test a first call dropped part-way.
 
 **A stand-in server that answers every request in order.** The AI tests' `mock` answered each
 request with the next scripted reply, so when the agent began asking the server for its context
@@ -618,6 +623,11 @@ anything. A test gated on `unix` must only need what every Unix build has; FreeB
 through pipes, as Windows does.
 
 ## Design
+
+**A readiness flag outlived the provider it described.** A Deep export cached success after a
+bridge failure removed its provider. The next function restarted the bridge after the startup
+budget check and decompiled past the deadline. Cache unavailable results for the call, but
+reconfirm successful readiness through the provider slot before checking the remaining budget.
 
 **A bounded modal still grew with its children.** Settings' minimum width and page height ran
 outside a 380×260 logical viewport. Removing those minima alone still let AI fields and nested
@@ -1325,6 +1335,12 @@ failed its check. Text recovery that only knows the formats seen so far ends a t
 the next one: read a model's own call format, and when it names a tool it doesn't have, tell it
 so and name the ones it has, rather than ending.
 
+**A focus check made after the library had let go of focus.** Esc on a project went home
+"unless Esc was meant for a text field", tested with `memory.focused().is_none()`. egui clears
+focus on Esc as the frame begins, before any app code runs, so the check always passed and Esc
+in the prompt box left the project (#2434). Ask about focus as the previous frame ended
+(`text_was_focused`), and test a key with a field focused, not only the key alone.
+
 **A view that asked to be scrolled on every frame.** The command palette called `scroll_to_me` on
 the selected row each frame, so the wheel's scroll was pulled back to it at once and the list
 kept jumping to the top (#584). Scroll something into view on the frame it changed (a key, a new
@@ -1393,3 +1409,9 @@ otherwise a missed click looks like a backend mutation that never completed.
 jobs, focus and cursors need layout-independent identities. Test continued typing without
 refocusing and tab activation across both rail orientations. On resize, egui keeps only the last
 scroll request: combine selection and focus when both fit, otherwise keep focus visible.
+
+**A scroll area's minimum height pushed a fixed row offscreen.** egui's `ScrollArea` keeps a
+64-point minimum even when its parent has less, so at 760 x 520 and 200% zoom the project feed's
+reserved 40 points became 64 and the row under the prompt box fell below the window. Where a
+fixed part must fit, set `min_scrolled_height(0.0)` and `max_height` on the scrolling part, and
+test the smallest window at the highest zoom.
