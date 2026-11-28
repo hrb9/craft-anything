@@ -206,7 +206,7 @@ Builds	תהליכי בנייה
 Builds and answers may use it again.	אפשר להשתמש בו שוב בתהליכי בנייה ובתשובות.
 Builds at once	מתחיל בבנייה מיד
 Builds keep going without stopping to ask you before an action. The builder still never deletes outside its project, changes system settings or publishes anything, and stays within each project's asset budget.	בניות ממשיכות לרוץ מבלי לעצור ולשאול אותך לפני פעולה. הבונה עדיין לעולם אינו מוחק מחוץ לפרויקט שלו, אינו משנה הגדרות מערכת ואינו מפרסם דבר, ונשאר במסגרת תקציב הנכסים של כל פרויקט.
-Builds use this one. Click to choose automatically again.	תהליכי הבנייה משתמשים באפשרות זו. לחצו כדי לחזור לבחירה אוטומטית.
+Builds use this one. Click to choose automatically again.	תהליכי הבנייה משתמשים באפשרות זו. יש ללחוץ כדי לחזור לבחירה אוטומטית.
 Built by	נבנה על ידי
 Built with	נבנה באמצעות
 Built with {stack}, as you asked, so no game engine is needed.	נבנה באמצעות {stack}, כפי שביקשת, כך שאין צורך במנוע משחק.
@@ -215,7 +215,7 @@ Call path	נתיב קריאות
 Call the build done	סימון הבנייה כמושלמת
 Called done. A new message carries on from here.	הוגדרה כמושלמת. הודעה חדשה ממשיכה מכאן.
 Cancel	ביטול
-Cancel: don't use this folder	ביטול: אל תשתמש בתיקייה זו
+Cancel: don't use this folder	ביטול: ללא שימוש בתיקייה זו
 Capture a website for rebuilding	לכידת אתר לצורך בנייה מחדש
 Capture inventories	לכידת מלאים
 Capture menus, dialogs and tabs	לכידת תפריטים, תיבות דו-שיח וכרטיסיות
@@ -601,9 +601,9 @@ Pick your project's folder	בחירת תיקיית הפרויקט
 That folder is empty. Pick the folder your project's files are in.	תיקייה זו ריקה. יש לבחור את התיקייה שבה נמצאים קובצי הפרויקט.
 Keep going without asking	המשך ללא בקשת אישור
 Keep it	להשאיר
-Keep it in the sidebar to open any time, whatever later builds change.	השאר בסרגל הצד כדי לפתוח בכל עת, ללא קשר למה שבניות מאוחרות יותר ישנו.
-Keep the build as it is and stop offering to carry on.	השאר את הבנייה כפי שהיא והפסק להציע להמשיך.
-Keep this version in the sidebar to open any time.	השאר גרסה זו בסרגל הצד כדי לפתוח בכל עת.
+Keep it in the sidebar to open any time, whatever later builds change.	שמירה בסרגל הצד לפתיחה בכל עת, ללא קשר למה שבניות מאוחרות יותר ישנו.
+Keep the build as it is and stop offering to carry on.	השארת הבנייה כפי שהיא והפסקת ההצעה להמשיך.
+Keep this version in the sidebar to open any time.	שמירת גרסה זו בסרגל הצד לפתיחה בכל עת.
 Keeps this version exactly as it is now. Later builds can't change or break it, and anything it saves stays with the copy.	שומר על הגרסה הזו בדיוק כפי שהיא. תהליכי בנייה עתידיים לא יוכלו לשנות או לפגוע בה, וכל מה שהיא שומרת יישאר בעותק.
 Key saved	המפתח נשמר
 Keyed archive	ארכיון מפתחות (Keyed archive)
@@ -612,8 +612,8 @@ Language	שפה
 Last: {what}	אחרון: {what}
 Launch an app	להפעיל אפליקציה
 Leave a few GB for the rest of your computer.	יש להשאיר כמה GB עבור שאר המחשב.
-Leave a path empty to use the managed install. We never need environment variables.	השאר נתיב ריק כדי להשתמש בהתקנה המנוהלת. לעולם איננו זקוקים למשתני סביבה.
-Leave empty to use the one Craft Anything sets up.	השאר ריק כדי להשתמש בזו ש-Craft Anything מגדירה.
+Leave a path empty to use the managed install. We never need environment variables.	יש להשאיר נתיב ריק כדי להשתמש בהתקנה המנוהלת. לעולם איננו זקוקים למשתני סביבה.
+Leave empty to use the one Craft Anything sets up.	יש להשאיר ריק כדי להשתמש בזו ש-Craft Anything מגדירה.
 Let a project generate assets	לאפשר לפרויקט ליצור נכסים
 Let's go	קדימה
 Lets the builder make realistic 3D models and textures for games, {model} a model, with a {budget} budget per project.	מאפשר לבנאי ליצור מודלים תלת-ממדיים וטקסטורות ריאליסטיות למשחקים, בעלות של {model} למודל, עם תקציב של {budget} לפרויקט.
@@ -771,7 +771,7 @@ One line, in plain words. It stays on this computer and is never sent anywhere.	
 One-shot instrumentation	אינסטרומנטציה חד-פעמית
 Only for Ghidra. Empty = managed.	רק ל-Ghidra. ריק = מנוהל.
 Only its name changes; its folder stays where it is.	רק השם שלו משתנה; התיקייה שלו נשארת במקומה.
-Only take pictures out of games you made, or whose owner allows it. A game's art is usually protected by copyright and by the game's licence.	הוצא תמונות רק ממשחקים שיצרת, או שהבעלים שלהם מתיר זאת. הגרפיקה של משחק מוגנת בדרך כלל בזכויות יוצרים וברישיון המשחק.
+Only take pictures out of games you made, or whose owner allows it. A game's art is usually protected by copyright and by the game's licence.	יש להוציא תמונות רק ממשחקים שנוצרו על ידך, או שהבעלים שלהם מתיר זאת. הגרפיקה של משחק מוגנת בדרך כלל בזכויות יוצרים וברישיון המשחק.
 Only the pin goes; the project and its app stay as they are.	רק ההצמדה מוסרת; הפרויקט והאפליקציה שלו נשארים כפי שהם.
 Open	פתיחה
 Open "Show me the proof" to see the exact code we found, and how sure we are.	פתחו את "הצגת הראיות" כדי לראות את הקוד המדויק שנמצא ואת רמת הוודאות של הממצאים.
@@ -799,7 +799,7 @@ Open log	פתיחת יומן
 Open one of the files inside it to see its bytes.	פתיחת אחד הקבצים שבתוכו כדי לראות את הבתים שלו.
 Open questions	שאלות פתוחות
 Open something	פתיחת פריט
-Open something first: drop a file or app here, or choose "Just look inside" on New project. Then I can look inside it.	כדי להתחיל, גררו לכאן קובץ או יישום, או בחרו "רק להציץ פנימה" בעת יצירת פרויקט חדש. כך אוכל לבדוק את התוכן.
+Open something first: drop a file or app here, or choose "Just look inside" on New project. Then I can look inside it.	כדי להתחיל, ניתן לגרור לכאן קובץ או יישום, או לבחור "רק להציץ פנימה" בעת יצירת פרויקט חדש. כך אוכל לבדוק את התוכן.
 Open something to start	כדי להתחיל, פתחו פריט
 Open the Epic Games Launcher	פתיחת Epic Games Launcher
 Open the app	פתיחת האפליקציה
@@ -864,7 +864,7 @@ Plan	תוכנית
 Plan connecting agent apps	לתכנן חיבור אפליקציות סוכנים
 Play a project's result	להפעיל את תוצר הפרויקט
 Play the game	לשחק במשחק
-Plugin added. Read its tools to start using them.	התוסף נוסף. קרא את הכלים שלו כדי להתחיל להשתמש בהם.
+Plugin added. Read its tools to start using them.	התוסף נוסף. יש לקרוא את הכלים שלו כדי להתחיל להשתמש בהם.
 Plugin arguments	ארגומנטים של התוסף
 Plugin command or address	פקודה או כתובת של התוסף
 Plugin id	מזהה תוסף
@@ -1043,7 +1043,7 @@ Simple	פשוט
 Simple: say what you want and it's handled for you. Advanced: every tool, the evidence and the logs.	פשוט: יש לתאר מה רוצים והכול מטופל אוטומטית. מתקדם: כל הכלים, הראיות והיומנים.
 Since Craft Anything opened.	מאז ש-Craft Anything נפתח.
 Size	גודל
-Skip setup	דלג על ההגדרה
+Skip setup	דילוג על ההגדרה
 Smart contract interface	ממשק חוזה חכם
 Software I made, bought, or have permission to examine.	תוכנה שיצרתי, קניתי או שיש לי רשות לבדוק.
 Solana program (sBPF)	תוכנית Solana (sBPF)
@@ -1424,8 +1424,8 @@ Providers	ספקים
 Harnesses	סוכנים
 Nothing of this kind was found.	לא נמצא דבר מסוג זה.
 Another model	מודל אחר
-Fold a project's plan	קפל את תוכנית הפרויקט
-Fold the plan	קפל את התוכנית
+Fold a project's plan	קיפול תוכנית הפרויקט
+Fold the plan	קיפול התוכנית
 The Claude desktop app is installed, but building needs Claude Code, its separate command-line tool. Install Claude Code, sign in to it once in a terminal, then look again.	אפליקציית שולחן העבודה של Claude מותקנת, אבל הבנייה דורשת את Claude Code, כלי שורת הפקודה הנפרד שלה. יש להתקין את Claude Code, להתחבר אליו פעם אחת במסוף, ולאחר מכן לבדוק שוב.
 Unreal is here, but its bundled Clang C++ toolchain wasn't found.	Unreal קיים כאן, אך שרשרת הכלים Clang C++ המצורפת שלו לא נמצאה.
 Add Unreal's Linux C++ toolchain	הוספת שרשרת הכלים C++ ל-Linux של Unreal
@@ -1439,7 +1439,7 @@ Help	עזרה
 Command palette	לוח פקודות
 Craft Anything on GitHub	Craft Anything ב-GitHub
 Report a problem…	דווח על בעיה…
-Quit Craft Anything	צא מ-Craft Anything
+Quit Craft Anything	יציאה מ-Craft Anything
 About Craft Anything	אודות Craft Anything
 Services	שירותים
 Hide Craft Anything	הסתרת Craft Anything
@@ -1462,7 +1462,7 @@ System changes	שינויים במערכת
 Other tools	כלים אחרים
 Allow	אישור
 Ask	בקשת אישור
-Refuse	דחה
+Refuse	דחייה
 After /approvals, type a kind and allow, ask, refuse or default, like /approvals publish ask. Kinds: {kinds}.	אחרי /approvals, יש להקליד סוג ואת allow, ask, refuse או default, לדוגמה /approvals publish ask. סוגים: {kinds}.
 There's no kind called {name}. Kinds: {kinds}.	אין סוג בשם {name}. סוגים: {kinds}.
 Approvals	אישורים
